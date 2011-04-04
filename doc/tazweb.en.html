@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<title>TazWeb Documentation</title>
+	<meta charset="utf-8" />
+	<style type="text/css">
+	body { font: 88% sans-serif, vernada, arial; margin: 0; }
+	#header { background: #351a0a; height: 40px; border-bottom: 8px solid #d66018; }
+	#content { margin: 40px 80px; text-align: justify; }
+	#footer { text-align: center; padding: 20px; border-top: 1px solid #ddd; }
+	h1 { margin: 0; padding: 8px; color: #fff; font-size: 20px; }
+	h2 { color: #444; } h3 { color: #666; font-size: 140%; }
+	pre { background-color: #f8f8f8; border: 1px solid #ddd; padding: 10px;
+		-moz-border-radius: 4px; -webkit-border-radius: 4px; border-radius: 4px;}
+	</style>
+</head>
+<body>
+	
+<div id="header">
+	<h1>TazWeb Documentation</h1>
+</div>
+
+<!-- Start content -->
+<div id="content">
+
+<h2>SliTaz Web Browser</h2>
+
+<p>
+	TazWeb is radically simple and very light web browser provinding a
+	single window without any toolbar, menubar or tabs. Navigation is
+	done with a right click anywhere in the browser window.
+</p>
+<p>
+	SliTaz Web Browser was created for the needs of TazPanel who is
+	the SliTaz administration and packages manager panel all done with
+	latest technology such as xHTML 5 and CSS 3 for the graphical user
+	interface. The content is powered by CGI scripts and the prefered
+	web servre is Busybox httpd.
+</p>
+<p>
+	The browser is small, very small, the binary is about 12 Kb and
+	use Webkit engine for page rendering and so support all latest web
+	standard as well as Javascript.
+</p>
+
+<h3>Home page and url in argument</h3>
+
+<p>
+	The default start page as been defined is source code and can't be
+	changed and it is the default SliTaz WebHome, but TazWeb accept an
+	URL as first argument, example: http://www.slitaz.org/. In this way
+	you can for example create your own and custom home page in a pretty
+	xHTML document and start tazweb with a standard desktop file or from
+	the command line: tazweb file://$HOME/file.html
+</p>
+<p>
+	If you want a custom home page for your Live system or all system users,
+	you can create your own slitaz-configs package or edit the xHTML file
+	located in /usr/share/webhome/index.html. If you modify it, make sure
+	to block slitaz-configs or make a backup because it will be overwrite
+	with a slitaz-configs package update.
+</p>
+
+<h3>Web applications</h3>
+<p>
+	TazWeb browser is perfect to launch web applications via a simple
+	desktop file. Once created with a simple text editor, the desktop
+	file can stand on the desktop with a nice icon or in the standard
+	SliTaz menu. Example of a web application launcher:
+</p>
+<pre>
+[Desktop Entry]
+Type=Application
+Name=SliTaz SCN
+Icon=slitaz-menu
+Exec=tazweb http://scn.slitaz.org/
+</pre>
+
+<!-- End content -->
+</div>
+
+<div id="footer">
+	Copyright (C)  2011  SliTaz GNU/Linux
+</div>
+
+</body>
+</html>
+
