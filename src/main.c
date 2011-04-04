@@ -54,6 +54,24 @@ destroy_cb (GtkWidget* widget, gpointer data)
     gtk_main_quit ();
 }
 
+/* Home button function */
+static void
+go_home (GtkWidget* widget, gpointer data)
+{
+    const gchar* uri = ("file:///usr/share/webhome/index.html");
+    g_assert (uri);
+    webkit_web_view_load_uri (web_view, uri);
+}
+
+/* TazWeb doc function */
+static void
+tazweb_doc (GtkWidget* widget, gpointer data)
+{
+    const gchar* uri = ("file:///usr/share/doc/slitaz/tazweb.html");
+    g_assert (uri);
+    webkit_web_view_load_uri (web_view, uri);
+}
+
 static GtkWidget*
 create_browser ()
 {
@@ -67,6 +85,34 @@ create_browser ()
     g_signal_connect (web_view, "notify::progress", G_CALLBACK (notify_progress_cb), web_view);
 
     return scrolled_window;
+}
+
+static GtkWidget*
+create_toolbar ()
+{
+    GtkWidget* toolbar = gtk_toolbar_new ();
+
+    gtk_toolbar_set_orientation (GTK_TOOLBAR (toolbar), GTK_ORIENTATION_HORIZONTAL);
+    gtk_toolbar_set_style (GTK_TOOLBAR (toolbar), GTK_TOOLBAR_BOTH_HORIZ);
+
+    GtkToolItem* item;
+
+    /* The Home button */
+    item = gtk_tool_button_new_from_stock (GTK_STOCK_HOME);
+    g_signal_connect (G_OBJECT (item), "clicked", G_CALLBACK (go_home), NULL);
+    gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
+    
+    /* Expand to have help icon on the right */
+    item = gtk_tool_item_new ();
+    gtk_tool_item_set_expand (item, TRUE);
+    gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1); 
+    
+    /* The TazWeb doc button */
+    item = gtk_tool_button_new_from_stock (GTK_STOCK_INFO);
+    g_signal_connect (G_OBJECT (item), "clicked", G_CALLBACK (tazweb_doc), NULL);
+    gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
+
+    return toolbar;
 }
 
 /* Create an icon */
@@ -102,6 +148,7 @@ main (int argc, char* argv[])
 
     GtkWidget* vbox = gtk_vbox_new (FALSE, 0);
     gtk_box_pack_start (GTK_BOX (vbox), create_browser (), TRUE, TRUE, 0);
+    gtk_box_pack_start (GTK_BOX (vbox), create_toolbar (), FALSE, FALSE, 0);
 
     main_window = create_window ();
     gtk_container_add (GTK_CONTAINER (main_window), vbox);
