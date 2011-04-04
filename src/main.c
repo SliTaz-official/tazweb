@@ -67,7 +67,7 @@ go_home (GtkWidget* widget, gpointer data)
 static void
 tazweb_doc (GtkWidget* widget, gpointer data)
 {
-    const gchar* uri = ("file:///usr/share/doc/slitaz/tazweb.html");
+    const gchar* uri = ("file:///usr/share/doc/tazweb/tazweb.html");
     g_assert (uri);
     webkit_web_view_load_uri (web_view, uri);
 }
