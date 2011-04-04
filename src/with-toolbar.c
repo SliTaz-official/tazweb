@@ -91,6 +91,15 @@ slitaz_panel (GtkWidget* widget, gpointer data)
     webkit_web_view_load_uri (web_view, uri);
 }
 
+/* TazWeb doc function */
+static void
+tazweb_doc (GtkWidget* widget, gpointer data)
+{
+    const gchar* uri = ("file:///usr/share/doc/slitaz/tazweb.html");
+    g_assert (uri);
+    webkit_web_view_load_uri (web_view, uri);
+}
+
 static void
 go_back_cb (GtkWidget* widget, gpointer data)
 {
@@ -159,6 +168,11 @@ create_toolbar ()
     uri_entry = gtk_entry_new ();
     gtk_container_add (GTK_CONTAINER (item), uri_entry);
     g_signal_connect (G_OBJECT (uri_entry), "activate", G_CALLBACK (activate_uri_entry_cb), NULL);
+    gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
+
+    /* The TazWeb doc button */
+    item = gtk_tool_button_new_from_stock (GTK_STOCK_INFO);
+    g_signal_connect (G_OBJECT (item), "clicked", G_CALLBACK (tazweb_doc), NULL);
     gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
 
     return toolbar;
