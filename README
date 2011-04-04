@@ -3,21 +3,17 @@ TazWeb - SliTaz Web Browser
 
 
 TazWeb is radically simple and very light web browser provinding a single
-window without any toolbar, menubar or tabs. Please keep the code simple
-and clean, if you are motivated and want to add some entry in the context
-menu, please talk to the AUTHOR before commiting anything in the repo.
+window with one small bottom toolbar, but no menubar or tabs. Please keep
+the code simple and clean, if you are motivated and want to add some entry
+in the context menu, please talk to the AUTHOR before commiting anything
+in the repo.
 
 This application have been crated for Tazpanel and future SliTaz integrated
 Web applications. The goal is by far to have a full featured web browser. But
-if you have a way to provind a simple plugins mechanism, it would be great.
+if you have a way to provinde a simple plugins mechanism, it would be great.
 
-In the src/ directory you find a version of tazweb with a toolbar for a
-go-home, go-back, go-next, url entry. The idea with TazWeb is to dont
-have a toolbar by default, but we could have one in option from the
-context menu or the cmdline: tazweb --toolbar. Or just, some button
-icons in the right left of the screen for go-home, go back and go-next.
-That said, the aproach is to build all the GUI with xHTML and CSS like
-in TazPanel.
+The idea with TazWeb is to have a minimal interface, the aproache is to
+build all the GUI with xHTML and CSS like in TazPanel.
 
 For general and end-user documentation have a look at doc/tazweb.html.
 TazWeb is published, like webkit source under a free BSD license
@@ -38,6 +34,31 @@ $ make toolbar
 $ ./tazweb-toolbar
 
 Install with 'make install' (PREFIX and DESTDIR are supported for packaging)
+
+
+URL in the toolbar
+------------------
+Like said above Tazdev must keep a simple interface and only one small toolbar
+with a few buttons. In the first stage of the project I hesitate to put an URL
+entry in the bar, but finally came to the conclusion that it is not usefull and
+not the goal of tazweb. But here is the code for posterity:
+
+static void
+activate_uri_entry_cb (GtkWidget* entry, gpointer data)
+{
+	const gchar* uri = gtk_entry_get_text (GTK_ENTRY (entry));
+	g_assert (uri);
+	webkit_web_view_load_uri (web_view, uri);
+}
+
+/* The URL entry */
+item = gtk_tool_item_new ();
+gtk_tool_item_set_expand (item, TRUE);
+uri_entry = gtk_entry_new ();
+gtk_container_add (GTK_CONTAINER (item), uri_entry);
+g_signal_connect (G_OBJECT (uri_entry), "activate",
+	G_CALLBACK (activate_uri_entry_cb), NULL);
+gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
 
 
 ================================================================================
