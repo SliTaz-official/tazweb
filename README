@@ -1,0 +1,43 @@
+TazWeb - SliTaz Web Browser
+================================================================================
+
+
+TazWeb is radically simple and very light web browser provinding a single
+window without any toolbar, menubar or tabs. Please keep the code simple
+and clean, if you are motivated and want to add some entry in the context
+menu, please talk to the AUTHOR before commiting anything in the repo.
+
+This application have been crated for Tazpanel and future SliTaz integrated
+Web applications. The goal is by far to have a full featured web browser. But
+if you have a way to provind a simple plugins mechanism, it would be great.
+
+In the src/ directory you find a version of tazweb with a toolbar for a
+go-home, go-back, go-next, url entry. The idea with TazWeb is to dont
+have a toolbar by default, but we could have one in option from the
+context menu or the cmdline: tazweb --toolbar. Or just, some button
+icons in the right left of the screen for go-home, go back and go-next.
+That said, the aproach is to build all the GUI with xHTML and CSS like
+in TazPanel.
+
+For general and end-user documentation have a look at doc/tazweb.html.
+TazWeb is published, like webkit source under a free BSD license
+
+BUG: When right on on link the "Open Link in New Window dont work 
+
+
+Build and install
+-----------------
+TazWeb depends on GTK and libwebkit. To build and test, simply:
+
+$ make
+$ ./tazweb
+
+For the version with a toolbar:
+
+$ make toolbar
+$ ./tazweb-toolbar
+
+Install with 'make install' (PREFIX and DESTDIR are supported for packaging)
+
+
+================================================================================
