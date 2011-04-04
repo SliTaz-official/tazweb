@@ -69,12 +69,23 @@ create_browser ()
     return scrolled_window;
 }
 
+/* Create an icon */
+static GdkPixbuf *create_pixbuf (const gchar * image)
+{
+   GdkPixbuf *pixbuf;
+   pixbuf = gdk_pixbuf_new_from_file (image, NULL);
+
+   return pixbuf;
+}
+
 static GtkWidget*
 create_window ()
 {
     GtkWidget* window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
     /* Default tazweb window size ratio to 3/4 ?? --> 720, 540*/
     gtk_window_set_default_size (GTK_WINDOW (window), 800, 600);
+    gtk_window_set_icon (GTK_WINDOW(window),
+		create_pixbuf ("/usr/share/pixmaps/tazweb.png"));
     gtk_widget_set_name (window, "TazWeb");
     g_signal_connect (window, "destroy", G_CALLBACK (destroy_cb), NULL);
 
