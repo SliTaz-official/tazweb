@@ -84,7 +84,7 @@ create_window ()
     GtkWidget* window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
     /* Default tazweb window size ratio to 3/4 ?? --> 720, 540*/
     gtk_window_set_default_size (GTK_WINDOW (window), 800, 600);
-    gtk_window_set_icon (GTK_WINDOW(window),
+    gtk_window_set_icon (GTK_WINDOW (window),
 		create_pixbuf ("/usr/share/pixmaps/tazweb.png"));
     gtk_widget_set_name (window, "TazWeb");
     g_signal_connect (window, "destroy", G_CALLBACK (destroy_cb), NULL);
