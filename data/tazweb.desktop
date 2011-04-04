@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+Name=TazWeb Browser
+Icon=tazweb
+Exec=tazweb %u
+Categories=Network;
+MimeType=text/html;text/xml;text/plain;application/xhtml+xml;application/xml;
