@@ -10,10 +10,7 @@ VERSION=1.0
 all:
 	gcc src/main.c -o $(PACKAGE) \
 		`pkg-config --cflags --libs gtk+-2.0 webkit-1.0`
-
-toolbar:
-	gcc src/with-toolbar.c -o $(PACKAGE)-toolbar \
-		`pkg-config --cflags --libs gtk+-2.0 webkit-1.0`
+	@du -sh $(PACKAGE)
 
 install:
 	mkdir -p \
@@ -30,4 +27,3 @@ install:
 
 clean:
 	rm -f $(PACKAGE)
-	rm -f $(PACKAGE)-toolbar 
