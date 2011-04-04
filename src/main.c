@@ -74,6 +74,19 @@ go_forward_cb (GtkWidget* widget, gpointer data)
     webkit_web_view_go_forward (web_view);
 }
 
+/* Fullscreen and unfullscreen action */
+static void 
+fullscreen_cb (GtkWindow* window, gpointer data)
+{
+    GdkWindowState state;
+    state = gdk_window_get_state (gtk_widget_get_window (GTK_WIDGET (main_window)));
+
+    if (state & GDK_WINDOW_STATE_FULLSCREEN)
+        gtk_window_unfullscreen (GTK_WINDOW (main_window));
+    else
+        gtk_window_fullscreen (GTK_WINDOW (main_window));
+}
+
 /* TazWeb doc function */
 static void
 tazweb_doc_cb (GtkWidget* widget, gpointer data)
@@ -131,6 +144,11 @@ create_toolbar ()
     /* The TazWeb doc button */
     item = gtk_tool_button_new_from_stock (GTK_STOCK_INFO);
     g_signal_connect (G_OBJECT (item), "clicked", G_CALLBACK (tazweb_doc_cb), NULL);
+    gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
+
+    /* The Fullscreen button */
+    item = gtk_tool_button_new_from_stock (GTK_STOCK_FULLSCREEN);
+    g_signal_connect (G_OBJECT (item), "clicked", G_CALLBACK (fullscreen_cb), NULL);
     gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
 
     return toolbar;
