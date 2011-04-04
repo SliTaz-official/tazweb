@@ -82,6 +82,15 @@ go_home (GtkWidget* widget, gpointer data)
     webkit_web_view_load_uri (web_view, uri);
 }
 
+/* TazPanel function */
+static void
+slitaz_panel (GtkWidget* widget, gpointer data)
+{
+    const gchar* uri = ("http://tazpanel:8080/");
+    g_assert (uri);
+    webkit_web_view_load_uri (web_view, uri);
+}
+
 static void
 go_back_cb (GtkWidget* widget, gpointer data)
 {
@@ -120,20 +129,29 @@ create_toolbar ()
 
     GtkToolItem* item;
 
-    /* The home button */
+    /* The Home button */
     item = gtk_tool_button_new_from_stock (GTK_STOCK_HOME);
     g_signal_connect (G_OBJECT (item), "clicked", G_CALLBACK (go_home), NULL);
     gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
 
-    /* The back button */
-    item = gtk_tool_button_new_from_stock (GTK_STOCK_GO_BACK);
-    g_signal_connect (G_OBJECT (item), "clicked", G_CALLBACK (go_back_cb), NULL);
+    /* The TazPanel button */
+    item = gtk_tool_button_new_from_stock (GTK_STOCK_PREFERENCES);
+    g_signal_connect (G_OBJECT (item), "clicked", G_CALLBACK (slitaz_panel), NULL);
     gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
 
+    /* The back button */
+    /*
+     * item = gtk_tool_button_new_from_stock (GTK_STOCK_GO_BACK);
+     * g_signal_connect (G_OBJECT (item), "clicked", G_CALLBACK (go_back_cb), NULL);
+     * gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
+     */
+    
     /* The forward button */
-    item = gtk_tool_button_new_from_stock (GTK_STOCK_GO_FORWARD);
-    g_signal_connect (G_OBJECT (item), "clicked", G_CALLBACK (go_forward_cb), NULL);
-    gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
+    /*
+     * item = gtk_tool_button_new_from_stock (GTK_STOCK_GO_FORWARD);
+     * g_signal_connect (G_OBJECT (item), "clicked", G_CALLBACK (go_forward_cb), NULL);
+     * gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
+     */
 
     /* The URL entry */
     item = gtk_tool_item_new ();
@@ -146,12 +164,23 @@ create_toolbar ()
     return toolbar;
 }
 
+/* Create an icon */
+static GdkPixbuf *create_pixbuf (const gchar * image)
+{
+   GdkPixbuf *pixbuf;
+   pixbuf = gdk_pixbuf_new_from_file (image, NULL);
+
+   return pixbuf;
+}
+
 static GtkWidget*
 create_window ()
 {
     GtkWidget* window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
     /* Default tazweb window size ratio to 3/4 --> 720, 540 */
     gtk_window_set_default_size (GTK_WINDOW (window), 800, 600);
+    gtk_window_set_icon (GTK_WINDOW(window),
+		create_pixbuf ("/usr/share/pixmaps/tazweb.png"));
     gtk_widget_set_name (window, "TazWeb");
     g_signal_connect (window, "destroy", G_CALLBACK (destroy_cb), NULL);
 
