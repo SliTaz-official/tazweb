@@ -1,7 +1,7 @@
 # Makefile for TazLauncher.
 #
 PREFIX?=/usr
-DOCDIR?=$(PREFIX)/share/doc/slitaz
+DOCDIR?=$(PREFIX)/share/doc
 DESTDIR?=
 
 PACKAGE=tazweb
@@ -14,12 +14,12 @@ all:
 
 install:
 	mkdir -p \
-		$(DESTDIR)$(DOCDIR)/slitaz \
+		$(DESTDIR)$(DOCDIR)/$(PACKAGE) \
 		$(DESTDIR)$(PREFIX)/bin \
 		$(DESTDIR)$(PREFIX)/share/pixmaps \
 		$(DESTDIR)$(PREFIX)/share/applications
 	install -m 0777 $(PACKAGE) $(DESTDIR)$(PREFIX)/bin
-	cp -f doc/*.html $(DESTDIR)$(DOCDIR)
+	cp -a doc/*.html $(DESTDIR)$(DOCDIR)/$(PACKAGE)
 	cp -f data/tazweb-icon.png \
 		$(DESTDIR)$(PREFIX)/share/pixmaps/tazweb.png
 	install -m 0644 data/tazweb.desktop \
