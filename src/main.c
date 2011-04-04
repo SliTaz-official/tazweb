@@ -12,7 +12,6 @@
 #include <webkit/webkit.h>
 
 static GtkWidget* main_window;
-static GtkWidget* uri_entry;
 static WebKitWebView* web_view;
 static gchar* main_title;
 static gdouble load_progress;
@@ -56,16 +55,28 @@ destroy_cb (GtkWidget* widget, gpointer data)
 
 /* Home button function */
 static void
-go_home (GtkWidget* widget, gpointer data)
+go_home_cb (GtkWidget* widget, gpointer data)
 {
     const gchar* uri = ("file:///usr/share/webhome/index.html");
     g_assert (uri);
     webkit_web_view_load_uri (web_view, uri);
 }
 
+static void
+go_back_cb (GtkWidget* widget, gpointer data)
+{
+    webkit_web_view_go_back (web_view);
+}
+
+static void
+go_forward_cb (GtkWidget* widget, gpointer data)
+{
+    webkit_web_view_go_forward (web_view);
+}
+
 /* TazWeb doc function */
 static void
-tazweb_doc (GtkWidget* widget, gpointer data)
+tazweb_doc_cb (GtkWidget* widget, gpointer data)
 {
     const gchar* uri = ("file:///usr/share/doc/tazweb/tazweb.html");
     g_assert (uri);
@@ -99,7 +110,17 @@ create_toolbar ()
 
     /* The Home button */
     item = gtk_tool_button_new_from_stock (GTK_STOCK_HOME);
-    g_signal_connect (G_OBJECT (item), "clicked", G_CALLBACK (go_home), NULL);
+    g_signal_connect (G_OBJECT (item), "clicked", G_CALLBACK (go_home_cb), NULL);
+    gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
+
+    /* The back button */
+    item = gtk_tool_button_new_from_stock (GTK_STOCK_GO_BACK);
+    g_signal_connect (G_OBJECT (item), "clicked", G_CALLBACK (go_back_cb), NULL);
+    gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
+
+    /* The forward button */
+    item = gtk_tool_button_new_from_stock (GTK_STOCK_GO_FORWARD);
+    g_signal_connect (G_OBJECT (item), "clicked", G_CALLBACK (go_forward_cb), NULL);
     gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
     
     /* Expand to have help icon on the right */
@@ -109,7 +130,7 @@ create_toolbar ()
     
     /* The TazWeb doc button */
     item = gtk_tool_button_new_from_stock (GTK_STOCK_INFO);
-    g_signal_connect (G_OBJECT (item), "clicked", G_CALLBACK (tazweb_doc), NULL);
+    g_signal_connect (G_OBJECT (item), "clicked", G_CALLBACK (tazweb_doc_cb), NULL);
     gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
 
     return toolbar;

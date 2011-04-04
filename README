@@ -43,6 +43,8 @@ with a few buttons. In the first stage of the project I hesitate to put an URL
 entry in the bar, but finally came to the conclusion that it is not usefull and
 not the goal of tazweb. But here is the code for posterity:
 
+static GtkWidget* uri_entry;
+
 static void
 activate_uri_entry_cb (GtkWidget* entry, gpointer data)
 {
