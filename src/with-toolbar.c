@@ -179,7 +179,8 @@ create_toolbar ()
 }
 
 /* Create an icon */
-static GdkPixbuf *create_pixbuf (const gchar * image)
+static GdkPixbuf*
+create_pixbuf (const gchar * image)
 {
    GdkPixbuf *pixbuf;
    pixbuf = gdk_pixbuf_new_from_file (image, NULL);
