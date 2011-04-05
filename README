@@ -38,7 +38,7 @@ Install with 'make install' (PREFIX and DESTDIR are supported for packaging)
 
 URL in the toolbar
 ------------------
-Like said above Tazdev must keep a simple interface and only one small toolbar
+Like said above Tazweb must keep a simple interface and only one small toolbar
 with a few buttons. In the first stage of the project I hesitate to put an URL
 entry in the bar, but finally came to the conclusion that it is not usefull and
 not the goal of tazweb. But here is the code for posterity:
