@@ -18,7 +18,7 @@ install:
 		$(DESTDIR)$(PREFIX)/bin \
 		$(DESTDIR)$(PREFIX)/share/pixmaps \
 		$(DESTDIR)$(PREFIX)/share/applications
-	install -m 0777 $(PACKAGE) $(DESTDIR)$(PREFIX)/bin
+	install -m 0755 $(PACKAGE) $(DESTDIR)$(PREFIX)/bin
 	cp -a doc/*.html $(DESTDIR)$(DOCDIR)/$(PACKAGE)
 	cp -f data/tazweb-icon.png \
 		$(DESTDIR)$(PREFIX)/share/pixmaps/tazweb.png
