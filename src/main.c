@@ -237,6 +237,13 @@ main (int argc, char* argv[])
     if (!g_thread_supported ())
         g_thread_init (NULL);
 
+    /* Get a default bookmark.html if missing */
+	const gchar* config = g_strdup_printf ("%s/.config/tazweb", g_get_home_dir ());
+    if (!g_file_test(config, G_FILE_TEST_EXISTS)) {
+	    g_mkdir(config, 0700);
+        system("cp /usr/share/tazweb/bookmarks.html $HOME/.config/tazweb");
+    }
+
     GtkWidget* vbox = gtk_vbox_new (FALSE, 2);
     gtk_box_pack_start (GTK_BOX (vbox), create_browser (), TRUE, TRUE, 0);
     gtk_box_pack_start (GTK_BOX (vbox), create_toolbar (), FALSE, FALSE, 0);
