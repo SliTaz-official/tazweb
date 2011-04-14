@@ -237,7 +237,7 @@ main (int argc, char* argv[])
     if (!g_thread_supported ())
         g_thread_init (NULL);
 
-    GtkWidget* vbox = gtk_vbox_new (FALSE, 0);
+    GtkWidget* vbox = gtk_vbox_new (FALSE, 2);
     gtk_box_pack_start (GTK_BOX (vbox), create_browser (), TRUE, TRUE, 0);
     gtk_box_pack_start (GTK_BOX (vbox), create_toolbar (), FALSE, FALSE, 0);
 

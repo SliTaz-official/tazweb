@@ -29,14 +29,15 @@
 	TazWeb is radically simple and very light web browser providing a
 	single window with a small toolbar, but without any menubar or tabs. 
 	Navigation is done with a right click anywhere in the browser window 
-	or from the toolbar. Also a fullscreen mode and this documentation file 
-	are accessible from the right-hand side of the toolbar.
+	or from the toolbar. Also a fullscreen mode, bookmarks, home page
+	and this documentation file are accessible from the right-hand side
+	of the toolbar.
 </p>
 <p>
 	SliTaz Web Browser was created for the needs of TazPanel which is
 	the SliTaz administration and packages manager panel and made with 
-	the latest technologies such as xHTML 5 and CSS 3 for the graphical user
-	interface. The content is powered by CGI scripts and the prefered
+	the latest technologies such as xHTML 5 and CSS 3 for the graphical
+	user interface. The content is powered by CGI scripts and the prefered
 	web server is Busybox httpd.
 </p>
 <p>
@@ -44,6 +45,24 @@
 	uses the Webkit engine for page rendering and therefore, supports 
 	all latest web standards as well as Javascript.
 </p>
+
+<h3>Bookmarks</h3>
+<p>
+	TazWeb can handle a bookmarks file located in your Freedesktop standard
+	configuration directory, the path is: $HOME/.config/tazweb/bookmarks.html
+</p>
+<p>
+	The file is a simple xHTML 5 document with, by default, a list of links.
+	You can edit this file with you favorite editor and add bookmarks entries
+	or change the look and feel as you want. You will find the default
+	bookmarks.html in: /usr/share/tazweb. You can get an original copy
+	with the following commands in a terminal:
+</p>
+<pre>
+$ mkdir -p $HOME/.config/tazweb
+$ cp /usr/share/tazweb/bookmarks.html $HOME/.config/tazweb
+</pre>
+
 
 <h3>Home page and url in argument</h3>
 
@@ -53,7 +72,7 @@
 	URL as a first argument, example: http://www.slitaz.org/. In this way
 	you can for example create your own and custom home page in a pretty
 	xHTML document and start tazweb with a standard desktop file or from
-	the command line: tazweb file://$HOME/file.html
+	the command line: tazweb file://$HOME/.config/tazweb/home.html
 </p>
 <p>
 	If you want a custom home page for your Live system or all system users,
@@ -68,7 +87,8 @@
 	TazWeb browser is perfect to launch web applications via a simple
 	desktop file. Once created with a simple text editor, the desktop
 	file can stand on the desktop with a nice icon or in the standard
-	SliTaz menu. Example of a web application launcher:
+	SliTaz menu. Example of a web application launcher that you could
+	name scn.desktop:
 </p>
 <pre>
 [Desktop Entry]
