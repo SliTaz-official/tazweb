@@ -3,10 +3,10 @@ TazWeb - SliTaz Web Browser
 
 
 TazWeb is radically simple and very light web browser providing a single
-window with one small bottom toolbar, but no menubar or tabs. Please keep
-the code simple and clean, if you are motivated and want to add some entries
-to the context menu, please talk to the AUTHOR before commiting anything
-in the repos.
+window with one small bottom toolbar with buttons and URL entry, but no
+menubar or tabs. Please keep the code simple and clean, if you are
+motivated and want to add some entries to the context menu, please talk
+to the AUTHOR before commiting anything in the repos.
 
 This application have been created for Tazpanel and future SliTaz integrated
 Web applications. The goal is by far to have a fully-featured web browser. But
@@ -28,39 +28,7 @@ TazWeb depends on GTK and libwebkit. To build and test, simply:
 $ make
 $ ./tazweb
 
-For the version with a toolbar:
-
-$ make toolbar
-$ ./tazweb-toolbar
-
 Install with 'make install' (PREFIX and DESTDIR are supported for packaging)
-
-
-URL in the toolbar
-------------------
-Like said above, Tazweb must keep a simple interface and only one small toolbar
-with a few buttons. In the first stage of the project I hesitated to put an URL
-entry in the bar, but finally came to the conclusion that it is not useful and
-not the goal of tazweb. But here is the code for posterity:
-
-static GtkWidget* uri_entry;
-
-static void
-activate_uri_entry_cb (GtkWidget* entry, gpointer data)
-{
-	const gchar* uri = gtk_entry_get_text (GTK_ENTRY (entry));
-	g_assert (uri);
-	webkit_web_view_load_uri (web_view, uri);
-}
-
-/* The URL entry */
-item = gtk_tool_item_new ();
-gtk_tool_item_set_expand (item, TRUE);
-uri_entry = gtk_entry_new ();
-gtk_container_add (GTK_CONTAINER (item), uri_entry);
-g_signal_connect (G_OBJECT (uri_entry), "activate",
-	G_CALLBACK (activate_uri_entry_cb), NULL);
-gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
 
 
 ================================================================================

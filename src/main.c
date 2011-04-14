@@ -1,6 +1,6 @@
 /*
  * TazWeb is a radicaly simple web browser providing a single window
- * with no toolbar, menu or tabs.
+ * with a single toolbar with buttons and URL entry but no menu or tabs.
  *
  * 
  * Copyright (C) 2011 SliTaz GNU/Linux <devel@slitaz.org>
@@ -16,6 +16,7 @@ static WebKitWebView* web_view;
 static gchar* main_title;
 static gdouble load_progress;
 static guint status_context_id;
+static GtkWidget* uri_entry;
 
 /* Page title to window title */
 static void
@@ -45,6 +46,14 @@ notify_progress_cb (WebKitWebView* web_view, GParamSpec* pspec, gpointer data)
 {
     load_progress = webkit_web_view_get_progress (web_view) * 100;
     update_title (GTK_WINDOW (main_window));
+}
+
+static void
+activate_uri_entry_cb (GtkWidget* entry, gpointer data)
+{
+	const gchar* uri = gtk_entry_get_text (GTK_ENTRY (entry));
+	g_assert (uri);
+	webkit_web_view_load_uri (web_view, uri);
 }
 
 static void
@@ -136,10 +145,20 @@ create_toolbar ()
     g_signal_connect (G_OBJECT (item), "clicked", G_CALLBACK (go_forward_cb), NULL);
     gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
     
-    /* Expand to have help icon on the right */
-    item = gtk_tool_item_new ();
-    gtk_tool_item_set_expand (item, TRUE);
-    gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1); 
+    /* Expand to have help icon on the right 
+    * item = gtk_tool_item_new ();
+    * gtk_tool_item_set_expand (item, TRUE);
+    * gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1); 
+    */
+
+	/* The URL entry */
+	item = gtk_tool_item_new ();
+	gtk_tool_item_set_expand (item, TRUE);
+	uri_entry = gtk_entry_new ();
+	gtk_container_add (GTK_CONTAINER (item), uri_entry);
+	g_signal_connect (G_OBJECT (uri_entry), "activate",
+		G_CALLBACK (activate_uri_entry_cb), NULL);
+	gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
     
     /* The TazWeb doc button */
     item = gtk_tool_button_new_from_stock (GTK_STOCK_INFO);
