@@ -13,10 +13,10 @@
 
 static GtkWidget* main_window;
 static WebKitWebView* web_view;
+static GtkWidget* uri_entry;
 static gchar* main_title;
 static gdouble load_progress;
 static guint status_context_id;
-static GtkWidget* uri_entry;
 
 /* Page title to window title */
 static void
@@ -29,6 +29,14 @@ update_title (GtkWindow* window)
     gchar* title = g_string_free (string, FALSE);
     gtk_window_set_title (window, title);
     g_free (title);
+}
+
+static void
+activate_uri_entry_cb (GtkWidget* entry, gpointer data)
+{
+	const gchar* uri = gtk_entry_get_text (GTK_ENTRY (entry));
+	g_assert (uri);
+	webkit_web_view_load_uri (web_view, uri);
 }
 
 static void
@@ -49,11 +57,14 @@ notify_progress_cb (WebKitWebView* web_view, GParamSpec* pspec, gpointer data)
 }
 
 static void
-activate_uri_entry_cb (GtkWidget* entry, gpointer data)
+notify_load_status_cb (WebKitWebView* web_view, GParamSpec* pspec, gpointer data)
 {
-	const gchar* uri = gtk_entry_get_text (GTK_ENTRY (entry));
-	g_assert (uri);
-	webkit_web_view_load_uri (web_view, uri);
+    if (webkit_web_view_get_load_status (web_view) == WEBKIT_LOAD_COMMITTED) {
+        WebKitWebFrame* frame = webkit_web_view_get_main_frame (web_view);
+        const gchar* uri = webkit_web_frame_get_uri (frame);
+        if (uri)
+            gtk_entry_set_text (GTK_ENTRY (uri_entry), uri);
+    }
 }
 
 static void
@@ -81,6 +92,12 @@ static void
 go_forward_cb (GtkWidget* widget, gpointer data)
 {
     webkit_web_view_go_forward (web_view);
+}
+
+static void
+refresh_cb (GtkWidget* widget, gpointer data)
+{
+    webkit_web_view_reload (web_view);
 }
 
 /* Fullscreen and unfullscreen action */
@@ -116,6 +133,7 @@ create_browser ()
 
     g_signal_connect (web_view, "notify::title", G_CALLBACK (notify_title_cb), web_view);
     g_signal_connect (web_view, "notify::progress", G_CALLBACK (notify_progress_cb), web_view);
+    g_signal_connect (web_view, "notify::load-status", G_CALLBACK (notify_load_status_cb), web_view);
 
     return scrolled_window;
 }
@@ -130,11 +148,6 @@ create_toolbar ()
 
     GtkToolItem* item;
 
-    /* The Home button */
-    item = gtk_tool_button_new_from_stock (GTK_STOCK_HOME);
-    g_signal_connect (G_OBJECT (item), "clicked", G_CALLBACK (go_home_cb), NULL);
-    gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
-
     /* The back button */
     item = gtk_tool_button_new_from_stock (GTK_STOCK_GO_BACK);
     g_signal_connect (G_OBJECT (item), "clicked", G_CALLBACK (go_back_cb), NULL);
@@ -143,6 +156,11 @@ create_toolbar ()
     /* The forward button */
     item = gtk_tool_button_new_from_stock (GTK_STOCK_GO_FORWARD);
     g_signal_connect (G_OBJECT (item), "clicked", G_CALLBACK (go_forward_cb), NULL);
+    gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
+
+    /* The Reload button */
+    item = gtk_tool_button_new_from_stock (GTK_STOCK_REFRESH);
+    g_signal_connect (G_OBJECT (item), "clicked", G_CALLBACK (refresh_cb), NULL);
     gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
     
     /* Expand to have help icon on the right 
@@ -159,15 +177,20 @@ create_toolbar ()
 	g_signal_connect (G_OBJECT (uri_entry), "activate",
 		G_CALLBACK (activate_uri_entry_cb), NULL);
 	gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
-    
-    /* The TazWeb doc button */
-    item = gtk_tool_button_new_from_stock (GTK_STOCK_INFO);
-    g_signal_connect (G_OBJECT (item), "clicked", G_CALLBACK (tazweb_doc_cb), NULL);
+
+	/* The Home button */
+    item = gtk_tool_button_new_from_stock (GTK_STOCK_HOME);
+    g_signal_connect (G_OBJECT (item), "clicked", G_CALLBACK (go_home_cb), NULL);
     gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
 
     /* The Fullscreen button */
     item = gtk_tool_button_new_from_stock (GTK_STOCK_FULLSCREEN);
     g_signal_connect (G_OBJECT (item), "clicked", G_CALLBACK (fullscreen_cb), NULL);
+    gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
+    
+    /* The TazWeb doc button */
+    item = gtk_tool_button_new_from_stock (GTK_STOCK_INFO);
+    g_signal_connect (G_OBJECT (item), "clicked", G_CALLBACK (tazweb_doc_cb), NULL);
     gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
 
     return toolbar;
