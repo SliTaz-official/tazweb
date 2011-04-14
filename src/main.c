@@ -82,6 +82,17 @@ go_home_cb (GtkWidget* widget, gpointer data)
     webkit_web_view_load_uri (web_view, uri);
 }
 
+/* Bookmarks button function */
+static void
+bookmarks_cb (GtkWidget* widget, gpointer data)
+{
+    const gchar* uri = g_strdup_printf ("file://%s/.config/tazweb/bookmarks.html",
+        g_get_home_dir ());
+    g_assert (uri);
+    webkit_web_view_load_uri (web_view, uri);
+}
+
+/* Navigation button function */
 static void
 go_back_cb (GtkWidget* widget, gpointer data)
 {
@@ -138,6 +149,16 @@ create_browser ()
     return scrolled_window;
 }
 
+/* Create an icon */
+static GdkPixbuf*
+create_pixbuf (const gchar * image)
+{
+   GdkPixbuf *pixbuf;
+   pixbuf = gdk_pixbuf_new_from_file (image, NULL);
+
+   return pixbuf;
+}
+
 static GtkWidget*
 create_toolbar ()
 {
@@ -162,12 +183,6 @@ create_toolbar ()
     item = gtk_tool_button_new_from_stock (GTK_STOCK_REFRESH);
     g_signal_connect (G_OBJECT (item), "clicked", G_CALLBACK (refresh_cb), NULL);
     gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
-    
-    /* Expand to have help icon on the right 
-    * item = gtk_tool_item_new ();
-    * gtk_tool_item_set_expand (item, TRUE);
-    * gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1); 
-    */
 
 	/* The URL entry */
 	item = gtk_tool_item_new ();
@@ -183,27 +198,22 @@ create_toolbar ()
     g_signal_connect (G_OBJECT (item), "clicked", G_CALLBACK (go_home_cb), NULL);
     gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
 
-    /* The Fullscreen button */
-    item = gtk_tool_button_new_from_stock (GTK_STOCK_FULLSCREEN);
-    g_signal_connect (G_OBJECT (item), "clicked", G_CALLBACK (fullscreen_cb), NULL);
+    /* The Bookmarks button */
+    item = gtk_tool_button_new_from_stock (GTK_STOCK_PREFERENCES);
+    g_signal_connect (G_OBJECT (item), "clicked", G_CALLBACK (bookmarks_cb), NULL);
     gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
-    
+
     /* The TazWeb doc button */
     item = gtk_tool_button_new_from_stock (GTK_STOCK_INFO);
     g_signal_connect (G_OBJECT (item), "clicked", G_CALLBACK (tazweb_doc_cb), NULL);
     gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
 
+    /* The Fullscreen button */
+    item = gtk_tool_button_new_from_stock (GTK_STOCK_FULLSCREEN);
+    g_signal_connect (G_OBJECT (item), "clicked", G_CALLBACK (fullscreen_cb), NULL);
+    gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
+
     return toolbar;
-}
-
-/* Create an icon */
-static GdkPixbuf*
-create_pixbuf (const gchar * image)
-{
-   GdkPixbuf *pixbuf;
-   pixbuf = gdk_pixbuf_new_from_file (image, NULL);
-
-   return pixbuf;
 }
 
 static GtkWidget*
@@ -235,7 +245,8 @@ main (int argc, char* argv[])
     gtk_container_add (GTK_CONTAINER (main_window), vbox);
 
 	/* Home page url or file */
-    gchar* uri = (gchar*) (argc > 1 ? argv[1] : "file:///usr/share/webhome/index.html");
+    gchar* uri = (gchar*) (argc > 1 ? argv[1] :
+		"file:///usr/share/webhome/index.html");
     webkit_web_view_load_uri (web_view, uri);
 
     gtk_widget_grab_focus (GTK_WIDGET (web_view));
