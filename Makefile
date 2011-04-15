@@ -5,7 +5,7 @@ DOCDIR?=$(PREFIX)/share/doc
 DESTDIR?=
 
 PACKAGE=tazweb
-VERSION=1.0
+VERSION=1.2
 
 all:
 	gcc src/main.c -o $(PACKAGE) \
