@@ -20,14 +20,14 @@ install:
 		$(DESTDIR)$(PREFIX)/share/pixmaps \
 		$(DESTDIR)$(PREFIX)/share/applications
 	install -m 0755 $(PACKAGE) $(DESTDIR)$(PREFIX)/bin
-	cp -d doc/*.html $(DESTDIR)$(DOCDIR)/$(PACKAGE)
+	cp -d doc/* $(DESTDIR)$(DOCDIR)/$(PACKAGE)
 	install -m 0644 data/tazweb-icon.png \
 		$(DESTDIR)$(PREFIX)/share/pixmaps/tazweb.png
 	install -m 0644 data/tazweb.desktop \
 		$(DESTDIR)$(PREFIX)/share/applications
-	install -m 0644 data/bookmarks.html \
+	install -m 0644 data/page.html \
 		$(DESTDIR)$(PREFIX)/share/tazweb
-	install -m 0644 data/bookmarks.html \
+	install -m 0644 data/style.css \
 		$(DESTDIR)$(PREFIX)/share/tazweb
 
 clean:

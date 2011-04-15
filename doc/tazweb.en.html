@@ -3,16 +3,7 @@
 <head>
 	<title>TazWeb Documentation</title>
 	<meta charset="utf-8" />
-	<style type="text/css">
-	body { font: 88% sans-serif, vernada, arial; margin: 0; }
-	#header { background: #351a0a; height: 40px; border-bottom: 8px solid #d66018; }
-	#content { margin: 40px 80px; text-align: justify; }
-	#footer { text-align: center; padding: 20px; border-top: 1px solid #ddd; }
-	h1 { margin: 0; padding: 8px; color: #fff; font-size: 20px; }
-	h2 { color: #444; } h3 { color: #666; font-size: 140%; }
-	pre { background-color: #f8f8f8; border: 1px solid #ddd; padding: 10px;
-		-moz-border-radius: 4px; -webkit-border-radius: 4px; border-radius: 4px;}
-	</style>
+	<link rel="stylesheet" type="text/css" href="style.css" />
 </head>
 <body>
 	
@@ -46,23 +37,29 @@
 	all latest web standards as well as Javascript.
 </p>
 
-<h3>Bookmarks</h3>
+<h3>My TazWeb Page</h3>
 <p>
-	TazWeb can handle a bookmarks file located in your Freedesktop standard
-	configuration directory, the path is: $HOME/.config/tazweb/bookmarks.html
+	TazWeb handle a personnal page located in your Freedesktop standard
+	configuration directory, the path is: $HOME/.config/tazweb/page.html
+	It let you have a custom page with bookmarks and other content. The
+	CSS style is defined in $HOME/.config/tazweb/style.css
 </p>
 <p>
-	The file is a simple xHTML 5 document with, by default, a list of links.
-	You can edit this file with you favorite editor and add bookmarks entries
-	or change the look and feel as you want. You will find the default
-	bookmarks.html in: /usr/share/tazweb. You can get an original copy
-	with the following commands in a terminal:
+	The file is a simple xHTML 5 document with, by default, a list of
+	links and a box. You can edit this file with you favorite editor
+	and add content such as bookmarks entries or change the look and
+	feel as you want. At first start TazWeb will create and copy your
+	personnal page and style in your config directory.
+</p>
+<p>
+Note: You will find the default page.html in: /usr/share/tazweb and
+can get an original copy with the following commands in a terminal:
 </p>
 <pre>
 $ mkdir -p $HOME/.config/tazweb
-$ cp /usr/share/tazweb/bookmarks.html $HOME/.config/tazweb
+$ cp /usr/share/tazweb/*.html $HOME/.config/tazweb
+$ cp /usr/share/tazweb/*.css $HOME/.config/tazweb
 </pre>
-
 
 <h3>Home page and url in argument</h3>
 

@@ -23,7 +23,7 @@ static void
 update_title (GtkWindow* window)
 {
     GString* string = g_string_new (main_title);
-    g_string_append (string, " - TazWeb");
+    /* g_string_append (string, " - TazWeb"); */
     if (load_progress < 100)
         g_string_append_printf (string, " (%f%%)", load_progress);
     gchar* title = g_string_free (string, FALSE);
@@ -77,7 +77,7 @@ destroy_cb (GtkWidget* widget, gpointer data)
 static void
 go_home_cb (GtkWidget* widget, gpointer data)
 {
-    const gchar* uri = ("file:///usr/share/webhome/index.html");
+	const gchar* uri = ("file:///usr/share/webhome/index.html");	
     g_assert (uri);
     webkit_web_view_load_uri (web_view, uri);
 }
@@ -86,8 +86,8 @@ go_home_cb (GtkWidget* widget, gpointer data)
 static void
 bookmarks_cb (GtkWidget* widget, gpointer data)
 {
-    const gchar* uri = g_strdup_printf ("file://%s/.config/tazweb/bookmarks.html",
-        g_get_home_dir ());
+    const gchar* uri = g_strdup_printf ("file://%s/.config/tazweb/page.html",
+                                         g_get_home_dir ());
     g_assert (uri);
     webkit_web_view_load_uri (web_view, uri);
 }
@@ -163,11 +163,10 @@ static GtkWidget*
 create_toolbar ()
 {
     GtkWidget* toolbar = gtk_toolbar_new ();
+    GtkToolItem* item;
 
     gtk_toolbar_set_orientation (GTK_TOOLBAR (toolbar), GTK_ORIENTATION_HORIZONTAL);
     gtk_toolbar_set_style (GTK_TOOLBAR (toolbar), GTK_TOOLBAR_BOTH_HORIZ);
-
-    GtkToolItem* item;
 
     /* The back button */
     item = gtk_tool_button_new_from_stock (GTK_STOCK_GO_BACK);
@@ -190,7 +189,7 @@ create_toolbar ()
 	uri_entry = gtk_entry_new ();
 	gtk_container_add (GTK_CONTAINER (item), uri_entry);
 	g_signal_connect (G_OBJECT (uri_entry), "activate",
-		G_CALLBACK (activate_uri_entry_cb), NULL);
+		              G_CALLBACK (activate_uri_entry_cb), NULL);
 	gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
 
 	/* The Home button */
@@ -223,7 +222,7 @@ create_window ()
     /* Default tazweb window size ratio to 3/4 ?? --> 720, 540*/
     gtk_window_set_default_size (GTK_WINDOW (window), 800, 600);
     gtk_window_set_icon (GTK_WINDOW (window),
-		create_pixbuf ("/usr/share/pixmaps/tazweb.png"));
+		                 create_pixbuf ("/usr/share/pixmaps/tazweb.png"));
     gtk_widget_set_name (window, "TazWeb");
     g_signal_connect (window, "destroy", G_CALLBACK (destroy_cb), NULL);
 
@@ -241,7 +240,8 @@ main (int argc, char* argv[])
 	const gchar* config = g_strdup_printf ("%s/.config/tazweb", g_get_home_dir ());
     if (!g_file_test(config, G_FILE_TEST_EXISTS)) {
 	    g_mkdir(config, 0700);
-        system("cp /usr/share/tazweb/bookmarks.html $HOME/.config/tazweb");
+        system("cp /usr/share/tazweb/*.html $HOME/.config/tazweb");
+        system("cp /usr/share/tazweb/*.css $HOME/.config/tazweb");
     }
 
     GtkWidget* vbox = gtk_vbox_new (FALSE, 2);
@@ -253,7 +253,7 @@ main (int argc, char* argv[])
 
 	/* Home page url or file */
     gchar* uri = (gchar*) (argc > 1 ? argv[1] :
-		"file:///usr/share/webhome/index.html");
+		                   "file:///usr/share/webhome/index.html");
     webkit_web_view_load_uri (web_view, uri);
 
     gtk_widget_grab_focus (GTK_WIDGET (web_view));
