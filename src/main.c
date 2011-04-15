@@ -1,7 +1,7 @@
 /*
- * TazWeb is a radicaly simple web browser providing a single window
- * with a single toolbar with buttons and URL entry but no menu or tabs.
- *
+ * TazWeb is a radically simple web browser providing a single window
+ * with a single toolbar with buttons and an URL entry, but no menu or
+ * tabs.
  * 
  * Copyright (C) 2011 SliTaz GNU/Linux <devel@slitaz.org>
  * 

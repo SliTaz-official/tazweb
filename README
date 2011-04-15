@@ -2,15 +2,15 @@ TazWeb - SliTaz Web Browser
 ================================================================================
 
 
-TazWeb is radically simple and very light web browser providing a single
-window with one small bottom toolbar with buttons and URL entry, but no
+TazWeb is a radically simple and very light web browser providing a single
+window with one small bottom toolbar using buttons and an URL entry, but no
 menubar or tabs. Please keep the code simple and clean, if you are
 motivated and want to add some entries to the context menu, please talk
 to the AUTHOR before commiting anything in the repos.
 
-TazWeb use a custom page in user Freedesktop directory to let user add
-any content in it and get with one click from the toolbar. We may have
-a external apps/script to handle that file for user who dont manage to
+TazWeb uses a custom page in the user Freedesktop directory to let users add
+any content to it and get with one click from the toolbar. We may have
+an external apps/script to handle that file for users who can't manage to
 edit pure xHTML.
 
 This application have been created for Tazpanel and future SliTaz integrated
