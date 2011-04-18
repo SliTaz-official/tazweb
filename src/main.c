@@ -32,14 +32,6 @@ update_title (GtkWindow* window)
 }
 
 static void
-activate_uri_entry_cb (GtkWidget* entry, gpointer data)
-{
-    const gchar* uri = gtk_entry_get_text (GTK_ENTRY (entry));
-    g_assert (uri);
-    webkit_web_view_load_uri (web_view, uri);
-}
-
-static void
 notify_title_cb (WebKitWebView* web_view, GParamSpec* pspec, gpointer data)
 {
     if (main_title)
@@ -65,6 +57,15 @@ notify_load_status_cb (WebKitWebView* web_view, GParamSpec* pspec, gpointer data
         if (uri)
             gtk_entry_set_text (GTK_ENTRY (uri_entry), uri);
     }
+}
+
+/* URL entry callback function */
+static void
+activate_uri_entry_cb (GtkWidget* entry, gpointer data)
+{
+    const gchar* uri = gtk_entry_get_text (GTK_ENTRY (entry));
+    g_assert (uri);
+    webkit_web_view_load_uri (web_view, uri);
 }
 
 static void
@@ -111,7 +112,7 @@ refresh_cb (GtkWidget* widget, gpointer data)
     webkit_web_view_reload (web_view);
 }
 
-/* Fullscreen and unfullscreen action */
+/* Fullscreen and unfullscreen function */
 static void
 fullscreen_cb (GtkWindow* window, gpointer data)
 {
@@ -237,7 +238,7 @@ create_window ()
 {
     GtkWidget* window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 
-    /* Default tazweb window size ratio to 3/4 ?? --> 720, 540*/
+    /* Default tazweb window size ratio to 3/4 --> 720, 540*/
     gtk_window_set_default_size (GTK_WINDOW (window), 800, 600);
     gtk_window_set_icon (GTK_WINDOW (window),
                          create_pixbuf ("/usr/share/pixmaps/tazweb.png"));
