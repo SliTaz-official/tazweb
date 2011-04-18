@@ -36,4 +36,15 @@ $ ./tazweb
 Install with 'make install' (PREFIX and DESTDIR are supported for packaging)
 
 
+Coding notes
+------------
+
+    * To get the filename of a WebKitDownload
+      const gchar* file = webkit_download_get_suggested_filename (download);
+      
+    * Check mime-type before download (needs a callback function)
+      g_signal_connect (web_view, "mime-type-policy-decision-requested",
+                        G_CALLBACK (mime_type_decision_cb), web_view);
+
+
 ================================================================================
