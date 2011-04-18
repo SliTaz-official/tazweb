@@ -82,9 +82,9 @@ go_home_cb (GtkWidget* widget, gpointer data)
     webkit_web_view_load_uri (web_view, uri);
 }
 
-/* Bookmarks button function */
+/* My page button function */
 static void
-bookmarks_cb (GtkWidget* widget, gpointer data)
+my_page_cb (GtkWidget* widget, gpointer data)
 {
     const gchar* uri = g_strdup_printf ("file://%s/.config/tazweb/page.html",
                                          g_get_home_dir ());
@@ -214,9 +214,9 @@ create_toolbar ()
     g_signal_connect (G_OBJECT (item), "clicked", G_CALLBACK (go_home_cb), NULL);
     gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
 
-    /* The Bookmarks button */
+    /* The personal page button */
     item = gtk_tool_button_new_from_stock (GTK_STOCK_PREFERENCES);
-    g_signal_connect (G_OBJECT (item), "clicked", G_CALLBACK (bookmarks_cb), NULL);
+    g_signal_connect (G_OBJECT (item), "clicked", G_CALLBACK (my_page_cb), NULL);
     gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
 
     /* The TazWeb doc button */
@@ -258,8 +258,7 @@ main (int argc, char* argv[])
     const gchar* config = g_strdup_printf ("%s/.config/tazweb", g_get_home_dir ());
     if (!g_file_test(config, G_FILE_TEST_EXISTS)) {
         g_mkdir (config, 0700);
-        system ("cp /usr/share/tazweb/*.html $HOME/.config/tazweb");
-        system ("cp /usr/share/tazweb/*.css $HOME/.config/tazweb");
+        system ("cp /usr/share/tazweb/* $HOME/.config/tazweb");
     }
 
     GtkWidget* vbox = gtk_vbox_new (FALSE, 2);
