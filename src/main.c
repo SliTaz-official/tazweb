@@ -141,7 +141,7 @@ download_requested_cb (WebKitWebView *web_view, WebKitDownload *download,
 {
     const gchar* uri = webkit_download_get_uri (download);
     gchar *buffer;
-    asprintf (&buffer, "xterm -e \"wget -P $HOME/Downloads %s\"", uri);
+    asprintf (&buffer, "tazbox dl-out %s", uri);
     system (buffer);
 }
 
