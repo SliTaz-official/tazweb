@@ -161,9 +161,10 @@ create_pixbuf (const gchar * image)
 static GtkWidget*
 create_toolbar ()
 {
-    GtkWidget* toolbar = gtk_toolbar_new ();
     GtkToolItem* item;
-
+    
+    GtkWidget* toolbar = gtk_toolbar_new ();
+    gtk_widget_set_size_request (toolbar, 0, 31);
     gtk_toolbar_set_orientation (GTK_TOOLBAR (toolbar), GTK_ORIENTATION_HORIZONTAL);
     gtk_toolbar_set_style (GTK_TOOLBAR (toolbar), GTK_TOOLBAR_BOTH_HORIZ);
 
@@ -228,7 +229,7 @@ main (int argc, char* argv[])
         system ("cp /usr/share/tazweb/* $HOME/.config/tazweb");
     }
 
-    GtkWidget* vbox = gtk_vbox_new (FALSE, 2);
+    GtkWidget* vbox = gtk_vbox_new (FALSE, 0);
     gtk_box_pack_start (GTK_BOX (vbox), create_browser (), TRUE, TRUE, 0);
     gtk_box_pack_start (GTK_BOX (vbox), create_toolbar (), FALSE, FALSE, 0);
 
