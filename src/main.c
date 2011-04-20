@@ -93,25 +93,6 @@ my_page_cb (GtkWidget* widget, gpointer data)
     webkit_web_view_load_uri (web_view, uri);
 }
 
-/* Navigation button function */
-static void
-go_back_cb (GtkWidget* widget, gpointer data)
-{
-    webkit_web_view_go_back (web_view);
-}
-
-static void
-go_forward_cb (GtkWidget* widget, gpointer data)
-{
-    webkit_web_view_go_forward (web_view);
-}
-
-static void
-refresh_cb (GtkWidget* widget, gpointer data)
-{
-    webkit_web_view_reload (web_view);
-}
-
 /* Fullscreen and unfullscreen function */
 static void
 fullscreen_cb (GtkWindow* window, gpointer data)
@@ -186,30 +167,6 @@ create_toolbar ()
     gtk_toolbar_set_orientation (GTK_TOOLBAR (toolbar), GTK_ORIENTATION_HORIZONTAL);
     gtk_toolbar_set_style (GTK_TOOLBAR (toolbar), GTK_TOOLBAR_BOTH_HORIZ);
 
-    /* The back button */
-    item = gtk_tool_button_new_from_stock (GTK_STOCK_GO_BACK);
-    g_signal_connect (G_OBJECT (item), "clicked", G_CALLBACK (go_back_cb), NULL);
-    gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
-
-    /* The forward button */
-    item = gtk_tool_button_new_from_stock (GTK_STOCK_GO_FORWARD);
-    g_signal_connect (G_OBJECT (item), "clicked", G_CALLBACK (go_forward_cb), NULL);
-    gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
-
-    /* The Reload button */
-    item = gtk_tool_button_new_from_stock (GTK_STOCK_REFRESH);
-    g_signal_connect (G_OBJECT (item), "clicked", G_CALLBACK (refresh_cb), NULL);
-    gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
-
-    /* The URL entry */
-    item = gtk_tool_item_new ();
-    gtk_tool_item_set_expand (item, TRUE);
-    uri_entry = gtk_entry_new ();
-    gtk_container_add (GTK_CONTAINER (item), uri_entry);
-    g_signal_connect (G_OBJECT (uri_entry), "activate",
-                      G_CALLBACK (activate_uri_entry_cb), NULL);
-    gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
-
     /* The Home button */
     item = gtk_tool_button_new_from_stock (GTK_STOCK_HOME);
     g_signal_connect (G_OBJECT (item), "clicked", G_CALLBACK (go_home_cb), NULL);
@@ -218,6 +175,15 @@ create_toolbar ()
     /* The personal page button */
     item = gtk_tool_button_new_from_stock (GTK_STOCK_PREFERENCES);
     g_signal_connect (G_OBJECT (item), "clicked", G_CALLBACK (my_page_cb), NULL);
+    gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
+    
+    /* The URL entry */
+    item = gtk_tool_item_new ();
+    gtk_tool_item_set_expand (item, TRUE);
+    uri_entry = gtk_entry_new ();
+    gtk_container_add (GTK_CONTAINER (item), uri_entry);
+    g_signal_connect (G_OBJECT (uri_entry), "activate",
+                      G_CALLBACK (activate_uri_entry_cb), NULL);
     gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
 
     /* The TazWeb doc button */

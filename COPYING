@@ -5,11 +5,12 @@ TazWeb Copyright License
 Copyright (C)  2011  SliTaz GNU/Linux <devel@slitaz.org>
 
 
-When TazWeb started, some code had been taken from GtkLauncher example browser
-found in the GTKWebkit source tarball and is:
+When TazWeb started, some code had been taken from the GTKWebkit source
+tarball as well as code from the surf web browser and is:
 
 	Copyright (C) 2006, 2007 Apple Inc.
 	Copyright (C) 2007 Alp Toker <alp@atoker.com>
+	Copyright (C) 2009 Enno Boland <g s01 de>
 
 BSD License
 -----------
