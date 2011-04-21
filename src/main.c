@@ -13,6 +13,7 @@
 
 static GtkWidget* main_window;
 static WebKitWebView* web_view;
+static WebKitWebFrame* frame;
 static GtkWidget* uri_entry;
 static GtkWidget* search_entry;
 static gchar* main_title;
@@ -75,7 +76,7 @@ static void
 notify_load_status_cb (WebKitWebView* web_view, GParamSpec* pspec, gpointer data)
 {
 	if (webkit_web_view_get_load_status (web_view) == WEBKIT_LOAD_COMMITTED) {
-		WebKitWebFrame* frame = webkit_web_view_get_main_frame (web_view);
+		frame = webkit_web_view_get_main_frame (web_view);
 		uri = webkit_web_frame_get_uri (frame);
 		if (uri)
 			gtk_entry_set_text (GTK_ENTRY (uri_entry), uri);
@@ -87,6 +88,20 @@ destroy_cb (GtkWidget* widget, gpointer data)
 {
 	gtk_main_quit ();
 }
+
+/* Show page source 
+static void
+view_source_cb ()
+{
+	gboolean source;
+	
+	frame = webkit_web_view_get_main_frame (web_view);
+	uri = webkit_web_frame_get_uri (frame);
+	source = webkit_web_view_get_view_source_mode (web_view);
+	
+	webkit_web_view_set_view_source_mode(web_view, !source);
+	webkit_web_view_load_uri (web_view, uri);
+}*/
 
 /* URL entry callback function */
 static void
@@ -218,6 +233,12 @@ create_toolbar ()
 			G_CALLBACK (tazweb_doc_cb), NULL);
 	gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
 
+	/* The View source button 
+	item = gtk_tool_button_new_from_stock (GTK_STOCK_PROPERTIES);
+	g_signal_connect (G_OBJECT (item), "clicked",
+			G_CALLBACK (view_source_cb), NULL);
+	gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);*/
+
 	/* The Fullscreen button */
 	item = gtk_tool_button_new_from_stock (GTK_STOCK_FULLSCREEN);
 	g_signal_connect (G_OBJECT (item), "clicked",
@@ -261,8 +282,8 @@ main (int argc, char* argv[])
 	/* Start page url or file */
 	uri = (gchar*) (argc > 1 ? argv[1] :
 			"file:///usr/share/webhome/index.html");
+	
 	webkit_web_view_load_uri (web_view, uri);
-
 	gtk_widget_grab_focus (GTK_WIDGET (web_view));
 	gtk_widget_show_all (main_window);
 	gtk_main ();
