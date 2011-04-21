@@ -176,6 +176,7 @@ static GtkWidget*
 create_toolbar ()
 {
 	GtkToolItem* item;
+	GtkToolItem* sep;
 
 	GtkWidget* toolbar = gtk_toolbar_new ();
 	gtk_widget_set_size_request (toolbar, 0, 31);
@@ -198,6 +199,10 @@ create_toolbar ()
 	g_signal_connect (G_OBJECT (uri_entry), "activate",
 					  G_CALLBACK (activate_uri_entry_cb), NULL);
 	gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
+
+	/* Separator */
+	sep = gtk_separator_tool_item_new ();
+	gtk_toolbar_insert (GTK_TOOLBAR (toolbar), sep, -1); 
 	
 	/* The Search entry */
 	item = gtk_tool_item_new ();
