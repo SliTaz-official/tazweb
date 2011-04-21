@@ -5,20 +5,18 @@
  *
  * Copyright (C) 2011 SliTaz GNU/Linux <devel@slitaz.org>
  *
- *
  */
 
 #include <gtk/gtk.h>
 #include <webkit/webkit.h>
 
-static GtkWidget* main_window;
+static GtkWidget *main_window, *uri_entry, *search_entry;
 static WebKitWebView* web_view;
 static WebKitWebFrame* frame;
-static GtkWidget* uri_entry;
-static GtkWidget* search_entry;
-static gchar* main_title;
 static gdouble load_progress;
 static guint status_context_id;
+static gchar* main_title;
+
 const gchar* config;
 const gchar* uri;
 
@@ -89,7 +87,7 @@ destroy_cb (GtkWidget* widget, gpointer data)
 	gtk_main_quit ();
 }
 
-/* Show page source 
+/* Show page source */
 static void
 view_source_cb ()
 {
@@ -101,7 +99,7 @@ view_source_cb ()
 	
 	webkit_web_view_set_view_source_mode(web_view, !source);
 	webkit_web_view_load_uri (web_view, uri);
-}*/
+}
 
 /* URL entry callback function */
 static void
@@ -165,6 +163,26 @@ download_requested_cb (WebKitWebView *web_view, WebKitDownload *download,
 	system (buffer);
 }
 
+/* Add items to WebKit contextual menu */
+static void
+populate_menu_cb (WebKitWebView *web_view, GtkMenu *menu, gpointer data)
+{
+	GtkWidget *item;
+	
+	/* separator */
+	item = gtk_separator_menu_item_new ();
+	gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
+	
+	/* View source mode */
+	item = gtk_image_menu_item_new_with_label ("View source");
+	gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (item),
+	gtk_image_new_from_stock (GTK_STOCK_PROPERTIES, GTK_ICON_SIZE_MENU));
+	gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
+	g_signal_connect (item, "activate", G_CALLBACK (view_source_cb), NULL);
+	
+	gtk_widget_show_all (GTK_WIDGET (menu));
+}
+
 static GtkWidget*
 create_browser ()
 {
@@ -175,6 +193,7 @@ create_browser ()
 	web_view = WEBKIT_WEB_VIEW (webkit_web_view_new ());
 	gtk_container_add (GTK_CONTAINER (scrolled_window), GTK_WIDGET (web_view));
 
+	/* Connect events */
 	g_signal_connect (web_view, "notify::title",
 			G_CALLBACK (notify_title_cb), web_view);
 	g_signal_connect (web_view, "notify::progress",
@@ -184,6 +203,10 @@ create_browser ()
 	g_signal_connect (web_view, "download-requested",
 			G_CALLBACK (download_requested_cb), NULL);
 
+	/* Connect WebKit contextual menu items */
+	g_object_connect (G_OBJECT (web_view), "signal::populate-popup",
+		G_CALLBACK (populate_menu_cb), web_view, NULL);
+
 	return scrolled_window;
 }
 
@@ -191,7 +214,6 @@ static GtkWidget*
 create_toolbar ()
 {
 	GtkToolItem* item;
-	GtkToolItem* sep;
 
 	GtkWidget* toolbar = gtk_toolbar_new ();
 	gtk_widget_set_size_request (toolbar, 0, 31);
@@ -200,13 +222,13 @@ create_toolbar ()
 	gtk_toolbar_set_style (GTK_TOOLBAR (toolbar),
 			GTK_TOOLBAR_BOTH_HORIZ);
 
-	/* The Home button */
+	/* Home button */
 	item = gtk_tool_button_new_from_stock (GTK_STOCK_HOME);
 	g_signal_connect (G_OBJECT (item), "clicked",
 			G_CALLBACK (go_home_cb), NULL);
 	gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
 
-	/* The URL entry */
+	/* URL entry */
 	item = gtk_tool_item_new ();
 	gtk_tool_item_set_expand (item, TRUE);
 	uri_entry = gtk_entry_new ();
@@ -216,10 +238,10 @@ create_toolbar ()
 	gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
 
 	/* Separator */
-	sep = gtk_separator_tool_item_new ();
-	gtk_toolbar_insert (GTK_TOOLBAR (toolbar), sep, -1); 
+	item = gtk_separator_tool_item_new ();
+	gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1); 
 	
-	/* The Search entry */
+	/* Search entry */
 	item = gtk_tool_item_new ();
 	search_entry = gtk_entry_new ();
 	gtk_container_add (GTK_CONTAINER (item), search_entry);
@@ -227,17 +249,11 @@ create_toolbar ()
 					  G_CALLBACK (activate_search_entry_cb), NULL);
 	gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
 
-	/* The TazWeb doc button */
+	/* TazWeb doc button */
 	item = gtk_tool_button_new_from_stock (GTK_STOCK_INFO);
 	g_signal_connect (G_OBJECT (item), "clicked",
 			G_CALLBACK (tazweb_doc_cb), NULL);
 	gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
-
-	/* The View source button 
-	item = gtk_tool_button_new_from_stock (GTK_STOCK_PROPERTIES);
-	g_signal_connect (G_OBJECT (item), "clicked",
-			G_CALLBACK (view_source_cb), NULL);
-	gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);*/
 
 	/* The Fullscreen button */
 	item = gtk_tool_button_new_from_stock (GTK_STOCK_FULLSCREEN);
