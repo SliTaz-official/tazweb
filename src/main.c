@@ -17,6 +17,27 @@ static GtkWidget* uri_entry;
 static gchar* main_title;
 static gdouble load_progress;
 static guint status_context_id;
+const char* config;
+
+/* Create an icon */
+static GdkPixbuf*
+create_pixbuf (const gchar * image)
+{
+	GdkPixbuf *pixbuf;
+	pixbuf = gdk_pixbuf_new_from_file (image, NULL);
+	return pixbuf;
+}
+
+/* Get a default page.html if missing */
+static void
+get_config ()
+{
+	config = g_strdup_printf ("%s/.config/tazweb", g_get_home_dir ());
+	if (!g_file_test(config, G_FILE_TEST_EXISTS)) {
+		g_mkdir (config, 0700);
+		system ("cp /usr/share/tazweb/* $HOME/.config/tazweb");
+	}
+}
 
 /* Page title to window title */
 static void
@@ -148,15 +169,7 @@ create_browser ()
     return scrolled_window;
 }
 
-/* Create an icon */
-static GdkPixbuf*
-create_pixbuf (const gchar * image)
-{
-   GdkPixbuf *pixbuf;
-   pixbuf = gdk_pixbuf_new_from_file (image, NULL);
 
-   return pixbuf;
-}
 
 static GtkWidget*
 create_toolbar ()
@@ -222,12 +235,7 @@ main (int argc, char* argv[])
     if (!g_thread_supported ())
         g_thread_init (NULL);
 
-    /* Get a default page.html if missing */
-    const gchar* config = g_strdup_printf ("%s/.config/tazweb", g_get_home_dir ());
-    if (!g_file_test(config, G_FILE_TEST_EXISTS)) {
-        g_mkdir (config, 0700);
-        system ("cp /usr/share/tazweb/* $HOME/.config/tazweb");
-    }
+    get_config ();
 
     GtkWidget* vbox = gtk_vbox_new (FALSE, 0);
     gtk_box_pack_start (GTK_BOX (vbox), create_browser (), TRUE, TRUE, 0);
