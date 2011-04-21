@@ -14,10 +14,12 @@
 static GtkWidget* main_window;
 static WebKitWebView* web_view;
 static GtkWidget* uri_entry;
+static GtkWidget* search_entry;
 static gchar* main_title;
 static gdouble load_progress;
 static guint status_context_id;
-const char* config;
+const gchar* config;
+const gchar* uri;
 
 /* Create an icon */
 static GdkPixbuf*
@@ -33,7 +35,7 @@ static void
 get_config ()
 {
 	config = g_strdup_printf ("%s/.config/tazweb", g_get_home_dir ());
-	if (!g_file_test(config, G_FILE_TEST_EXISTS)) {
+	if (! g_file_test(config, G_FILE_TEST_EXISTS)) {
 		g_mkdir (config, 0700);
 		system ("cp /usr/share/tazweb/* $HOME/.config/tazweb");
 	}
@@ -74,19 +76,10 @@ notify_load_status_cb (WebKitWebView* web_view, GParamSpec* pspec, gpointer data
 {
 	if (webkit_web_view_get_load_status (web_view) == WEBKIT_LOAD_COMMITTED) {
 		WebKitWebFrame* frame = webkit_web_view_get_main_frame (web_view);
-		const gchar* uri = webkit_web_frame_get_uri (frame);
+		uri = webkit_web_frame_get_uri (frame);
 		if (uri)
 			gtk_entry_set_text (GTK_ENTRY (uri_entry), uri);
 	}
-}
-
-/* URL entry callback function */
-static void
-activate_uri_entry_cb (GtkWidget* entry, gpointer data)
-{
-	const gchar* uri = gtk_entry_get_text (GTK_ENTRY (entry));
-	g_assert (uri);
-	webkit_web_view_load_uri (web_view, uri);
 }
 
 static void
@@ -95,26 +88,36 @@ destroy_cb (GtkWidget* widget, gpointer data)
 	gtk_main_quit ();
 }
 
-/* Home button function */
+/* URL entry callback function */
 static void
-go_home_cb (GtkWidget* widget, gpointer data)
+activate_uri_entry_cb (GtkWidget* entry, gpointer data)
 {
-	const gchar* uri = ("file:///usr/share/webhome/index.html");
+	uri = gtk_entry_get_text (GTK_ENTRY (entry));
 	g_assert (uri);
 	webkit_web_view_load_uri (web_view, uri);
 }
 
-/* My page button function */
+/* Search entry callback function */
 static void
-my_page_cb (GtkWidget* widget, gpointer data)
+activate_search_entry_cb (GtkWidget* entry, gpointer data)
 {
-	const gchar* uri = g_strdup_printf ("file://%s/.config/tazweb/page.html",
+	uri = g_strdup_printf ("http://www.google.com/search?q=%s",
+			gtk_entry_get_text (GTK_ENTRY (entry)));
+	g_assert (uri);
+	webkit_web_view_load_uri (web_view, uri);
+}
+
+/* Home button callback function */
+static void
+go_home_cb (GtkWidget* widget, gpointer data)
+{
+	uri = g_strdup_printf ("file://%s/.config/tazweb/home.html",
 			g_get_home_dir ());
 	g_assert (uri);
 	webkit_web_view_load_uri (web_view, uri);
 }
 
-/* Fullscreen and unfullscreen function */
+/* Fullscreen and unfullscreen callback function */
 static void
 fullscreen_cb (GtkWindow* window, gpointer data)
 {
@@ -127,11 +130,11 @@ fullscreen_cb (GtkWindow* window, gpointer data)
 		gtk_window_fullscreen (GTK_WINDOW (main_window));
 }
 
-/* TazWeb doc function */
+/* TazWeb doc callback function */
 static void
 tazweb_doc_cb (GtkWidget* widget, gpointer data)
 {
-	const gchar* uri = ("file:///usr/share/doc/tazweb/tazweb.html");
+	uri = ("file:///usr/share/doc/tazweb/tazweb.html");
 	g_assert (uri);
 	webkit_web_view_load_uri (web_view, uri);
 }
@@ -141,7 +144,7 @@ static gboolean
 download_requested_cb (WebKitWebView *web_view, WebKitDownload *download,
 		gpointer user_data)
 {
-	const gchar* uri = webkit_download_get_uri (download);
+	uri = webkit_download_get_uri (download);
 	gchar *buffer;
 	asprintf (&buffer, "tazbox dl-out %s", uri);
 	system (buffer);
@@ -187,12 +190,6 @@ create_toolbar ()
 			G_CALLBACK (go_home_cb), NULL);
 	gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
 
-	/* The personal page button */
-	item = gtk_tool_button_new_from_stock (GTK_STOCK_PREFERENCES);
-	g_signal_connect (G_OBJECT (item), "clicked",
-			G_CALLBACK (my_page_cb), NULL);
-	gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
-
 	/* The URL entry */
 	item = gtk_tool_item_new ();
 	gtk_tool_item_set_expand (item, TRUE);
@@ -200,6 +197,14 @@ create_toolbar ()
 	gtk_container_add (GTK_CONTAINER (item), uri_entry);
 	g_signal_connect (G_OBJECT (uri_entry), "activate",
 					  G_CALLBACK (activate_uri_entry_cb), NULL);
+	gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
+	
+	/* The Search entry */
+	item = gtk_tool_item_new ();
+	search_entry = gtk_entry_new ();
+	gtk_container_add (GTK_CONTAINER (item), search_entry);
+	g_signal_connect (G_OBJECT (search_entry), "activate",
+					  G_CALLBACK (activate_search_entry_cb), NULL);
 	gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
 
 	/* The TazWeb doc button */
@@ -248,8 +253,8 @@ main (int argc, char* argv[])
 	main_window = create_window ();
 	gtk_container_add (GTK_CONTAINER (main_window), vbox);
 
-	/* Home page url or file */
-	gchar* uri = (gchar*) (argc > 1 ? argv[1] :
+	/* Start page url or file */
+	uri = (gchar*) (argc > 1 ? argv[1] :
 			"file:///usr/share/webhome/index.html");
 	webkit_web_view_load_uri (web_view, uri);
 
