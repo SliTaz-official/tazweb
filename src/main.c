@@ -163,12 +163,43 @@ download_requested_cb (WebKitWebView *web_view, WebKitDownload *download,
 	system (buffer);
 }
 
+/* Zoom ou and in callback function */
+static void
+zoom_out_cb (GtkWidget *main_window)
+{
+	webkit_web_view_zoom_out (web_view);
+}
+
+static void
+zoom_in_cb (GtkWidget *main_window)
+{
+	webkit_web_view_zoom_in (web_view);
+}
+
 /* Add items to WebKit contextual menu */
 static void
 populate_menu_cb (WebKitWebView *web_view, GtkMenu *menu, gpointer data)
 {
 	GtkWidget *item;
 	
+	/* separator */
+	item = gtk_separator_menu_item_new ();
+	gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
+
+	/* Zoom in */
+	item = gtk_image_menu_item_new_with_label ("Zoom in");
+	gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (item),
+	gtk_image_new_from_stock (GTK_STOCK_ZOOM_IN, GTK_ICON_SIZE_MENU));
+	gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
+	g_signal_connect (item, "activate", G_CALLBACK (zoom_in_cb), NULL);
+	
+	/* Zoom out */
+	item = gtk_image_menu_item_new_with_label ("Zoom out");
+	gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (item),
+	gtk_image_new_from_stock (GTK_STOCK_ZOOM_OUT, GTK_ICON_SIZE_MENU));
+	gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
+	g_signal_connect (item, "activate", G_CALLBACK (zoom_out_cb), NULL);
+
 	/* separator */
 	item = gtk_separator_menu_item_new ();
 	gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
