@@ -2,17 +2,8 @@ TazWeb Copyright License
 ===============================================================================
 
 
-Copyright (C)  2011  SliTaz GNU/Linux <devel@slitaz.org>
+Copyright (C) 2011  SliTaz GNU/Linux - BSD License
 
-
-When TazWeb started, some code had been taken from the GTKWebkit source
-tarball:
-
-	Copyright (C) 2006, 2007 Apple Inc.
-	Copyright (C) 2007 Alp Toker <alp@atoker.com>
-
-BSD License
------------
 
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions
