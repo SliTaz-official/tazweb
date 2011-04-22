@@ -172,9 +172,16 @@ populate_menu_cb (WebKitWebView *web_view, GtkMenu *menu, gpointer data)
 	/* separator */
 	item = gtk_separator_menu_item_new ();
 	gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
-	
+
+	/* TazWeb documentation */
+	item = gtk_image_menu_item_new_with_label ("TazWeb manual");
+	gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (item),
+	gtk_image_new_from_stock (GTK_STOCK_INFO, GTK_ICON_SIZE_MENU));
+	gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
+	g_signal_connect (item, "activate", G_CALLBACK (tazweb_doc_cb), NULL);
+
 	/* View source mode */
-	item = gtk_image_menu_item_new_with_label ("View source");
+	item = gtk_image_menu_item_new_with_label ("View source mode");
 	gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (item),
 	gtk_image_new_from_stock (GTK_STOCK_PROPERTIES, GTK_ICON_SIZE_MENU));
 	gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
@@ -248,12 +255,6 @@ create_toolbar ()
 	gtk_container_add (GTK_CONTAINER (item), search_entry);
 	g_signal_connect (G_OBJECT (search_entry), "activate",
 			G_CALLBACK (search_entry_cb), NULL);
-	gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
-
-	/* TazWeb doc button */
-	item = gtk_tool_button_new_from_stock (GTK_STOCK_INFO);
-	g_signal_connect (G_OBJECT (item), "clicked",
-			G_CALLBACK (tazweb_doc_cb), NULL);
 	gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
 
 	/* The Fullscreen button */
