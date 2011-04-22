@@ -10,7 +10,7 @@
 #include <gtk/gtk.h>
 #include <webkit/webkit.h>
 
-static GtkWidget *main_window, *uri_entry, *search_entry;
+static GtkWidget *main_window, *scrolled, *toolbar, *uri_entry, *search_entry;
 static WebKitWebView* web_view;
 static WebKitWebFrame* frame;
 static gdouble load_progress;
@@ -103,7 +103,7 @@ view_source_cb ()
 
 /* URL entry callback function */
 static void
-activate_uri_entry_cb (GtkWidget* entry, gpointer data)
+uri_entry_cb (GtkWidget* entry, gpointer data)
 {
 	uri = gtk_entry_get_text (GTK_ENTRY (entry));
 	g_assert (uri);
@@ -112,7 +112,7 @@ activate_uri_entry_cb (GtkWidget* entry, gpointer data)
 
 /* Search entry callback function */
 static void
-activate_search_entry_cb (GtkWidget* entry, gpointer data)
+search_entry_cb (GtkWidget* entry, gpointer data)
 {
 	uri = g_strdup_printf ("http://www.google.com/search?q=%s",
 			gtk_entry_get_text (GTK_ENTRY (entry)));
@@ -183,15 +183,16 @@ populate_menu_cb (WebKitWebView *web_view, GtkMenu *menu, gpointer data)
 	gtk_widget_show_all (GTK_WIDGET (menu));
 }
 
+/* Scrolled window for the web_view */
 static GtkWidget*
 create_browser ()
 {
-	GtkWidget* scrolled_window = gtk_scrolled_window_new (NULL, NULL);
-	gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_window),
+	scrolled = gtk_scrolled_window_new (NULL, NULL);
+	gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled),
 			GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
 
 	web_view = WEBKIT_WEB_VIEW (webkit_web_view_new ());
-	gtk_container_add (GTK_CONTAINER (scrolled_window), GTK_WIDGET (web_view));
+	gtk_container_add (GTK_CONTAINER (scrolled), GTK_WIDGET (web_view));
 
 	/* Connect events */
 	g_signal_connect (web_view, "notify::title",
@@ -207,7 +208,7 @@ create_browser ()
 	g_object_connect (G_OBJECT (web_view), "signal::populate-popup",
 		G_CALLBACK (populate_menu_cb), web_view, NULL);
 
-	return scrolled_window;
+	return scrolled;
 }
 
 static GtkWidget*
@@ -215,7 +216,7 @@ create_toolbar ()
 {
 	GtkToolItem* item;
 
-	GtkWidget* toolbar = gtk_toolbar_new ();
+	toolbar = gtk_toolbar_new ();
 	gtk_widget_set_size_request (toolbar, 0, 31);
 	gtk_toolbar_set_orientation (GTK_TOOLBAR (toolbar),
 			GTK_ORIENTATION_HORIZONTAL);
@@ -234,7 +235,7 @@ create_toolbar ()
 	uri_entry = gtk_entry_new ();
 	gtk_container_add (GTK_CONTAINER (item), uri_entry);
 	g_signal_connect (G_OBJECT (uri_entry), "activate",
-					  G_CALLBACK (activate_uri_entry_cb), NULL);
+			G_CALLBACK (uri_entry_cb), NULL);
 	gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
 
 	/* Separator */
@@ -246,7 +247,7 @@ create_toolbar ()
 	search_entry = gtk_entry_new ();
 	gtk_container_add (GTK_CONTAINER (item), search_entry);
 	g_signal_connect (G_OBJECT (search_entry), "activate",
-					  G_CALLBACK (activate_search_entry_cb), NULL);
+			G_CALLBACK (search_entry_cb), NULL);
 	gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
 
 	/* TazWeb doc button */
@@ -264,19 +265,26 @@ create_toolbar ()
 	return toolbar;
 }
 
+/* Main window */
 static GtkWidget*
 create_window ()
 {
 	GtkWidget* window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-
-	/* Default tazweb window size ratio to 3/4 --> 720, 540*/
+	GtkWidget* vbox = gtk_vbox_new (FALSE, 0);
+	
+	gtk_box_pack_start (GTK_BOX (vbox), create_browser (), TRUE, TRUE, 0);
+	gtk_box_pack_start (GTK_BOX (vbox), create_toolbar (), FALSE, FALSE, 0);
+	
+	/* Default TazWeb window size ratio to 3/4 --> 720, 540*/
 	gtk_window_set_default_size (GTK_WINDOW (window), 800, 600);
 	gtk_window_set_icon (GTK_WINDOW (window),
 			create_pixbuf ("/usr/share/pixmaps/tazweb.png"));
 	gtk_widget_set_name (window, "TazWeb");
 	g_signal_connect (window, "destroy", G_CALLBACK (destroy_cb), NULL);
+	gtk_container_add (GTK_CONTAINER (window), vbox);
 
-	return window;
+	main_window = window;
+	gtk_widget_show_all (main_window);
 }
 
 int
@@ -287,22 +295,15 @@ main (int argc, char* argv[])
 		g_thread_init (NULL);
 
 	get_config ();
-
-	GtkWidget* vbox = gtk_vbox_new (FALSE, 0);
-	gtk_box_pack_start (GTK_BOX (vbox), create_browser (), TRUE, TRUE, 0);
-	gtk_box_pack_start (GTK_BOX (vbox), create_toolbar (), FALSE, FALSE, 0);
-
-	main_window = create_window ();
-	gtk_container_add (GTK_CONTAINER (main_window), vbox);
-
+	create_window ();
+	
 	/* Start page url or file */
 	uri = (gchar*) (argc > 1 ? argv[1] :
 			"file:///usr/share/webhome/index.html");
 	
 	webkit_web_view_load_uri (web_view, uri);
 	gtk_widget_grab_focus (GTK_WIDGET (web_view));
-	gtk_widget_show_all (main_window);
+	
 	gtk_main ();
-
 	return 0;
 }
