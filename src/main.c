@@ -1,23 +1,25 @@
 /*
  * TazWeb is a radically simple web browser providing a single window
- * with a single toolbar with buttons and an URL entry, but no menu or
- * tabs.
+ * with a single toolbar with buttons, an URL entry and search as well
+ * as a contextual menu, but no menu bar or tabs.
  *
  * Copyright (C) 2011 SliTaz GNU/Linux <devel@slitaz.org>
- *
+ * See AUTHORS and LICENSE for detailed information
+ * 
  */
 
 #include <gtk/gtk.h>
 #include <webkit/webkit.h>
 
-static GtkWidget *main_window, *scrolled, *toolbar, *uri_entry, *search_entry;
+#define CONFIG g_strdup_printf ("%s/.config/tazweb", g_get_home_dir ())
+
+static GtkWidget *main_window, *scrolled, *toolbar;
+static GtkWidget *uri_entry, *search_entry;
 static WebKitWebView* web_view;
 static WebKitWebFrame* frame;
 static gdouble load_progress;
 static guint status_context_id;
 static gchar* main_title;
-
-const gchar* config;
 const gchar* uri;
 
 /* Create an icon */
@@ -29,14 +31,12 @@ create_pixbuf (const gchar * image)
 	return pixbuf;
 }
 
-/* Get a default page.html if missing */
+/* Get a default home.html if missing */
 static void
 get_config ()
 {
-	config = g_strdup_printf ("%s/.config/tazweb", g_get_home_dir ());
-	if (! g_file_test(config, G_FILE_TEST_EXISTS)) {
-		g_mkdir (config, 0700);
-		system ("cp /usr/share/tazweb/* $HOME/.config/tazweb");
+	if (! g_file_test (CONFIG, G_FILE_TEST_EXISTS)) {
+		system ("cp -r /usr/share/tazweb $HOME/.config/tazweb");
 	}
 }
 
@@ -124,8 +124,7 @@ search_entry_cb (GtkWidget* entry, gpointer data)
 static void
 go_home_cb (GtkWidget* widget, gpointer data)
 {
-	uri = g_strdup_printf ("file://%s/.config/tazweb/home.html",
-			g_get_home_dir ());
+	uri = g_strdup_printf ("file://%s/home.html", CONFIG);
 	g_assert (uri);
 	webkit_web_view_load_uri (web_view, uri);
 }

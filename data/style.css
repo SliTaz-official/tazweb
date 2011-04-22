@@ -5,7 +5,8 @@ body {
 	margin: 0;
 }
 
-h1 { margin: 0; padding: 8px; color: #fff; font-size: 20px; }
+h1 { margin: 0; padding: 8px;
+	color: #fff; font-size: 20px; font-style: italic; }
 h2 { color: #444; }
 h3 { color: #666; font-size: 140%; }
 ul { list-style-type: square; line-height: 140%; }
