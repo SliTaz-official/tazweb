@@ -11,8 +11,8 @@
 #include <gtk/gtk.h>
 #include <webkit/webkit.h>
 
-#define CONFIG		g_strdup_printf ("%s/.config/tazweb", g_get_home_dir ())
-#define START		"file:///usr/share/webhome/index.html"
+#define CONFIG   g_strdup_printf ("%s/.config/tazweb", g_get_home_dir ())
+#define START    "file:///usr/share/webhome/index.html"
 
 /* Loader color - #d66018 #7b705c */
 static gchar *loader_color = "#351a0a";
@@ -263,6 +263,13 @@ populate_menu_cb (WebKitWebView *web_view, GtkMenu *menu, gpointer data)
 	gtk_widget_show_all (GTK_WIDGET (menu));
 }
 
+/* Open in a new window from menu */
+static WebKitWebView*
+create_web_view_cb (WebKitWebView* web_view, GtkWidget* window)
+{
+	return WEBKIT_WEB_VIEW (web_view);
+}
+
 /* Scrolled window for the web_view */
 static GtkWidget*
 create_browser ()
@@ -283,6 +290,8 @@ create_browser ()
 			G_CALLBACK (notify_load_status_cb), web_view);
 	g_signal_connect (web_view, "download-requested",
 			G_CALLBACK (download_requested_cb), NULL);
+	g_signal_connect (web_view, "create-web-view",
+			G_CALLBACK (create_web_view_cb), web_view);
 
 	/* Connect WebKit contextual menu items */
 	g_object_connect (G_OBJECT (web_view), "signal::populate-popup",
@@ -296,7 +305,7 @@ static GtkWidget*
 create_loader ()
 {
 	loader = gtk_drawing_area_new ();
-	gtk_widget_set_size_request (loader, 0, 1);
+	gtk_widget_set_size_request (loader, 0, 2);
 	g_signal_connect (G_OBJECT (loader), "expose_event",
 		G_CALLBACK (expose_loader_cb), NULL);
 	
@@ -373,8 +382,7 @@ create_window ()
 	gtk_box_pack_start (GTK_BOX (vbox), create_toolbar (), FALSE, FALSE, 0);
 	gtk_container_add (GTK_CONTAINER (window), vbox);
 
-	main_window = window;
-	gtk_widget_show_all (main_window);
+	return window;	
 }
 
 int
@@ -392,12 +400,11 @@ main (int argc, char* argv[])
 	uri = (char*) (argc > 1 ? argv[1] : START);
 	if (argv[1])
 		check_requested_uri ();
-	
-	
-	create_window ();
+		
+	main_window = create_window ();
+	gtk_widget_show_all (main_window);
 	webkit_web_view_load_uri (web_view, uri);
 	gtk_widget_grab_focus (GTK_WIDGET (web_view));
 	gtk_main ();
-	
 	return 0;
 }
