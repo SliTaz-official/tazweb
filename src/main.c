@@ -36,17 +36,9 @@ create_pixbuf (const gchar * image)
 	return pixbuf;
 }
 
-/* Get a default home.html if missing */
-static void
-get_config ()
-{
-	if (! g_file_test (CONFIG, G_FILE_TEST_EXISTS))
-		system ("cp -r /usr/share/tazweb $HOME/.config/tazweb");
-}
-
 /* Loader area */
 static void
-draw_loader_cb ()
+draw_loader ()
 {
 	GdkGC *gc = gdk_gc_new (loader->window);
 	GdkColor fg;
@@ -64,6 +56,14 @@ draw_loader_cb ()
 	g_object_unref (gc);
 }
 
+/* Loader progress */
+static gboolean
+expose_loader_cb (GtkWidget *area, GdkEventExpose *event, gpointer data)
+{
+	draw_loader();
+	return TRUE;
+}
+
 /* Update title and loader */
 static void
 update ()
@@ -71,14 +71,14 @@ update ()
 	title = g_strdup (main_title);
 	if (! main_title)
 		title = g_strdup_printf ("Unknow - TazWeb", main_title);
-	draw_loader_cb ();
+	draw_loader ();
 	gtk_window_set_title (GTK_WINDOW (main_window), title);
 	g_free (title);
 }
 
 /* Get the page title */
 static void
-notify_title_cb (WebKitWebView *web_view, WebKitWebFrame *frame)
+notify_title_cb (WebKitWebView* web_view, GParamSpec* pspec, gpointer data)
 {
 	main_title = g_strdup (webkit_web_view_get_title (web_view));
 	update ();
@@ -90,14 +90,6 @@ notify_progress_cb (WebKitWebView* web_view, GParamSpec* pspec, gpointer data)
 {
 	progress = webkit_web_view_get_progress (web_view) * 100;
 	update ();
-}
-
-/* Loader progress */
-static gboolean
-expose_loader_cb (GtkWidget *area, GdkEventExpose *event, gpointer data)
-{
-	draw_loader_cb();
-	return TRUE;
 }
 
 /* Notify loader and url entry */
@@ -360,7 +352,7 @@ create_window ()
 	gtk_widget_set_name (window, "TazWeb");
 	g_signal_connect (window, "destroy", G_CALLBACK (destroy_cb), NULL);
 
-	/* Pack box and caontainer */
+	/* Pack box and container */
 	gtk_box_pack_start (GTK_BOX (vbox), create_browser (), TRUE, TRUE, 0);
 	gtk_container_add (GTK_CONTAINER (vbox), create_loader());
 	gtk_box_set_child_packing (GTK_BOX (vbox), loader,
@@ -379,16 +371,18 @@ main (int argc, char* argv[])
 	if (!g_thread_supported ())
 		g_thread_init (NULL);
 
-	get_config ();
-	create_window ();
-	
-	/* Start page url or file */
+	/* Get a default home.html if missing */
+	if (! g_file_test (CONFIG, G_FILE_TEST_EXISTS))
+		system ("cp -r /usr/share/tazweb $HOME/.config/tazweb");
+
+	/* Load the start page file or the url in argument */
 	uri = (gchar*) (argc > 1 ? argv[1] :
 			"file:///usr/share/webhome/index.html");
 	
+	create_window ();
 	webkit_web_view_load_uri (web_view, uri);
 	gtk_widget_grab_focus (GTK_WIDGET (web_view));
-	
 	gtk_main ();
+	
 	return 0;
 }
