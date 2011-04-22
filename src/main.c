@@ -170,6 +170,19 @@ go_home_cb (GtkWidget* widget, gpointer data)
 	webkit_web_view_load_uri (web_view, uri);
 }
 
+/* Navigation button function */
+static void
+go_back_cb (GtkWidget* widget, gpointer data)
+{
+    webkit_web_view_go_back (web_view);
+}
+
+static void
+go_forward_cb (GtkWidget* widget, gpointer data)
+{
+    webkit_web_view_go_forward (web_view);
+}
+
 /* Fullscreen and unfullscreen callback function */
 static void
 fullscreen_cb (GtkWindow* window, gpointer data)
@@ -318,11 +331,14 @@ create_toolbar ()
 	GtkToolItem* item;
 
 	toolbar = gtk_toolbar_new ();
-	gtk_widget_set_size_request (toolbar, 0, 33);
+	gtk_widget_set_size_request (toolbar, 0, 31);
 	gtk_toolbar_set_orientation (GTK_TOOLBAR (toolbar),
 			GTK_ORIENTATION_HORIZONTAL);
 	gtk_toolbar_set_style (GTK_TOOLBAR (toolbar),
 			GTK_TOOLBAR_BOTH_HORIZ);
+	GdkColor bg;
+	gdk_color_parse ("#f1efeb", &bg);
+	gtk_widget_modify_bg (toolbar, GTK_STATE_NORMAL, &bg);
 
 	/* Home button */
 	item = gtk_tool_button_new_from_stock (GTK_STOCK_HOME);
@@ -330,10 +346,26 @@ create_toolbar ()
 			G_CALLBACK (go_home_cb), NULL);
 	gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
 
+	/* The back button */
+    item = gtk_tool_button_new_from_stock (GTK_STOCK_GO_BACK);
+    g_signal_connect (G_OBJECT (item), "clicked", G_CALLBACK (go_back_cb), NULL);
+    gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
+
+    /* The forward button */
+    item = gtk_tool_button_new_from_stock (GTK_STOCK_GO_FORWARD);
+    g_signal_connect (G_OBJECT (item), "clicked", G_CALLBACK (go_forward_cb), NULL);
+    gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
+
 	/* URL entry */
 	item = gtk_tool_item_new ();
 	gtk_tool_item_set_expand (item, TRUE);
+	
 	uri_entry = gtk_entry_new ();
+	gtk_widget_modify_base ( GTK_WIDGET (uri_entry),
+			GTK_STATE_NORMAL, &bg);
+	gtk_entry_set_inner_border (GTK_ENTRY (uri_entry), NULL);
+	gtk_entry_set_has_frame (GTK_ENTRY (uri_entry), FALSE);
+	
 	gtk_container_add (GTK_CONTAINER (item), uri_entry);
 	g_signal_connect (G_OBJECT (uri_entry), "activate",
 			G_CALLBACK (uri_entry_cb), NULL);

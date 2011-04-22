@@ -47,7 +47,7 @@ Coding notes
                         G_CALLBACK (mime_type_decision_cb), web_view);
 
     * Get user config directory path in $HOME
-      config = g_strdup_printf ("%s/.config/tazweb", g_get_home_dir ());
+      config = g_strdup_printf ("%s/.config/tazweb", g_get_home_dir ());      
 
 
 ================================================================================
