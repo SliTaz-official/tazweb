@@ -11,7 +11,8 @@
 #include <gtk/gtk.h>
 #include <webkit/webkit.h>
 
-#define CONFIG g_strdup_printf ("%s/.config/tazweb", g_get_home_dir ())
+#define CONFIG		g_strdup_printf ("%s/.config/tazweb", g_get_home_dir ())
+#define START		"file:///usr/share/webhome/index.html"
 
 /* Loader color - #d66018 #7b705c */
 static gchar *loader_color = "#351a0a";
@@ -34,6 +35,14 @@ create_pixbuf (const gchar * image)
 	GdkPixbuf *pixbuf;
 	pixbuf = gdk_pixbuf_new_from_file (image, NULL);
 	return pixbuf;
+}
+
+/* Can be: http://hg.slitaz.org or hg.slitaz.org */
+static void
+check_requested_uri ()
+{
+	uri = g_strrstr (uri, "://") ? g_strdup (uri)
+		: g_strdup_printf ("http://%s", uri);
 }
 
 /* Loader area */
@@ -137,6 +146,7 @@ uri_entry_cb (GtkWidget* entry, gpointer data)
 {
 	uri = gtk_entry_get_text (GTK_ENTRY (entry));
 	g_assert (uri);
+	check_requested_uri ();
 	webkit_web_view_load_uri (web_view, uri);
 }
 
@@ -211,7 +221,7 @@ populate_menu_cb (WebKitWebView *web_view, GtkMenu *menu, gpointer data)
 {
 	GtkWidget *item;
 	
-	/* separator */
+	/* Separator */
 	item = gtk_separator_menu_item_new ();
 	gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
 
@@ -229,7 +239,7 @@ populate_menu_cb (WebKitWebView *web_view, GtkMenu *menu, gpointer data)
 	gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
 	g_signal_connect (item, "activate", G_CALLBACK (zoom_out_cb), NULL);
 
-	/* separator */
+	/* Separator */
 	item = gtk_separator_menu_item_new ();
 	gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
 
@@ -376,8 +386,10 @@ main (int argc, char* argv[])
 		system ("cp -r /usr/share/tazweb $HOME/.config/tazweb");
 
 	/* Load the start page file or the url in argument */
-	uri = (gchar*) (argc > 1 ? argv[1] :
-			"file:///usr/share/webhome/index.html");
+	uri = (char*) (argc > 1 ? argv[1] : START);
+	if (argv[1])
+		check_requested_uri ();
+	
 	
 	create_window ();
 	webkit_web_view_load_uri (web_view, uri);
