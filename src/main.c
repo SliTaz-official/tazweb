@@ -122,7 +122,7 @@ notify_load_status_cb (WebKitWebView* web_view, GParamSpec* pspec, gpointer data
 }
 
 static void
-destroy_cb (GtkWidget* widget, gpointer data)
+destroy_cb (GtkWidget* widget, GtkWindow* window)
 {
 	gtk_main_quit ();
 }
@@ -199,7 +199,9 @@ download_requested_cb (WebKitWebView *web_view, WebKitDownload *download,
 {
 	uri = webkit_download_get_uri (download);
 	const gchar* buffer;
-	asprintf (&buffer, "tazbox dl-out %s", uri);
+	asprintf (&buffer,
+			"xterm -T 'Download' -geom 72x10+0-24 -e 'cd $HOME/Downloads && \
+				wget -c %s; sleep 2' &", uri);
 	system (buffer);
 }
 
