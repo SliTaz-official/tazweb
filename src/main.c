@@ -24,13 +24,14 @@ static WebKitWebFrame* frame;
 static gdouble load_progress;
 static guint status_context_id;
 static gchar* main_title;
-static gchar *title;
+static gchar* title;
 static gint progress;
+static gint loader_width;
 const gchar* uri;
 
 /* Create an icon */
 static GdkPixbuf*
-create_pixbuf (const gchar * image)
+create_pixbuf (const gchar* image)
 {
 	GdkPixbuf *pixbuf;
 	pixbuf = gdk_pixbuf_new_from_file (image, NULL);
@@ -49,27 +50,27 @@ check_requested_uri ()
 static void
 draw_loader ()
 {
-	GdkGC *gc = gdk_gc_new (loader->window);
+	GdkGC* gc = gdk_gc_new (loader->window);
 	GdkColor fg;
 
 	uri = webkit_web_view_get_uri (web_view);
-	const gint width = progress * loader->allocation.width / 100;
+	loader_width = progress * loader->allocation.width / 100;
 	
 	gdk_color_parse (loader_color, &fg);
 	gdk_gc_set_rgb_fg_color (gc, &fg);
 	gdk_draw_rectangle (loader->window,
 			loader->style->bg_gc [GTK_WIDGET_STATE (loader)],
 			TRUE, 0, 0, loader->allocation.width, loader->allocation.height);
-	gdk_draw_rectangle (loader->window, gc, TRUE, 0, 0, width,
+	gdk_draw_rectangle (loader->window, gc, TRUE, 0, 0, loader_width,
 			loader->allocation.height);
 	g_object_unref (gc);
 }
 
 /* Loader progress */
 static gboolean
-expose_loader_cb (GtkWidget *area, GdkEventExpose *event, gpointer data)
+expose_loader_cb (GtkWidget *loader, GdkEventExpose *event, gpointer data)
 {
-	draw_loader();
+	draw_loader ();
 	return TRUE;
 }
 
@@ -197,7 +198,7 @@ download_requested_cb (WebKitWebView *web_view, WebKitDownload *download,
 		gpointer user_data)
 {
 	uri = webkit_download_get_uri (download);
-	const gchar *buffer;
+	const gchar* buffer;
 	asprintf (&buffer, "tazbox dl-out %s", uri);
 	system (buffer);
 }
@@ -219,7 +220,7 @@ zoom_in_cb (GtkWidget *main_window)
 static void
 populate_menu_cb (WebKitWebView *web_view, GtkMenu *menu, gpointer data)
 {
-	GtkWidget *item;
+	GtkWidget* item;
 	
 	/* Separator */
 	item = gtk_separator_menu_item_new ();
