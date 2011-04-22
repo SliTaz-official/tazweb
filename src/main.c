@@ -3,7 +3,7 @@
  * with a single toolbar with buttons, an URL entry and search as well
  * as a contextual menu, but no menu bar or tabs.
  *
- * Copyright (C) 2011 SliTaz GNU/Linux <devel@slitaz.org>
+ * Copyright (C) 2011 SliTaz GNU/Linux - BSD License
  * See AUTHORS and LICENSE for detailed information
  * 
  */
@@ -13,13 +13,18 @@
 
 #define CONFIG g_strdup_printf ("%s/.config/tazweb", g_get_home_dir ())
 
-static GtkWidget *main_window, *scrolled, *toolbar;
+/* Loader color - #d66018 #7b705c */
+static gchar *loader_color = "#351a0a";
+
+static GtkWidget *main_window, *scrolled, *loader, *toolbar;
 static GtkWidget *uri_entry, *search_entry;
 static WebKitWebView* web_view;
 static WebKitWebFrame* frame;
 static gdouble load_progress;
 static guint status_context_id;
 static gchar* main_title;
+static gchar *title;
+static gint progress;
 const gchar* uri;
 
 /* Create an icon */
@@ -35,50 +40,83 @@ create_pixbuf (const gchar * image)
 static void
 get_config ()
 {
-	if (! g_file_test (CONFIG, G_FILE_TEST_EXISTS)) {
+	if (! g_file_test (CONFIG, G_FILE_TEST_EXISTS))
 		system ("cp -r /usr/share/tazweb $HOME/.config/tazweb");
-	}
 }
 
-/* Page title to window title */
+/* Loader area */
 static void
-update_title (GtkWindow* window)
+draw_loader_cb ()
 {
-	GString* string = g_string_new (main_title);
-	/* g_string_append (string, " - TazWeb"); */
-	if (load_progress < 100)
-		g_string_append_printf (string, " [ %f%% ] ", load_progress);
-	gchar* title = g_string_free (string, FALSE);
-	gtk_window_set_title (window, title);
+	GdkGC *gc = gdk_gc_new (loader->window);
+	GdkColor fg;
+
+	uri = webkit_web_view_get_uri (web_view);
+	const gint width = progress * loader->allocation.width / 100;
+	
+	gdk_color_parse (loader_color, &fg);
+	gdk_gc_set_rgb_fg_color (gc, &fg);
+	gdk_draw_rectangle (loader->window,
+			loader->style->bg_gc [GTK_WIDGET_STATE (loader)],
+			TRUE, 0, 0, loader->allocation.width, loader->allocation.height);
+	gdk_draw_rectangle (loader->window, gc, TRUE, 0, 0, width,
+			loader->allocation.height);
+	g_object_unref (gc);
+}
+
+/* Update title and loader */
+static void
+update ()
+{
+	title = g_strdup (main_title);
+	if (! main_title)
+		title = g_strdup_printf ("Unknow - TazWeb", main_title);
+	draw_loader_cb ();
+	gtk_window_set_title (GTK_WINDOW (main_window), title);
 	g_free (title);
 }
 
+/* Get the page title */
 static void
-notify_title_cb (WebKitWebView* web_view, GParamSpec* pspec, gpointer data)
+notify_title_cb (WebKitWebView *web_view, WebKitWebFrame *frame)
 {
-	if (main_title)
-		g_free (main_title);
-	main_title = g_strdup (webkit_web_view_get_title(web_view));
-	update_title (GTK_WINDOW (main_window));
+	main_title = g_strdup (webkit_web_view_get_title (web_view));
+	update ();
 }
 
 /* Request progress in window title */
 static void
 notify_progress_cb (WebKitWebView* web_view, GParamSpec* pspec, gpointer data)
 {
-	load_progress = webkit_web_view_get_progress (web_view) * 100;
-	update_title (GTK_WINDOW (main_window));
+	progress = webkit_web_view_get_progress (web_view) * 100;
+	update ();
 }
 
+/* Loader progress */
+static gboolean
+expose_loader_cb (GtkWidget *area, GdkEventExpose *event, gpointer data)
+{
+	draw_loader_cb();
+	return TRUE;
+}
+
+/* Notify loader and url entry */
 static void
 notify_load_status_cb (WebKitWebView* web_view, GParamSpec* pspec, gpointer data)
 {
-	if (webkit_web_view_get_load_status (web_view) == WEBKIT_LOAD_COMMITTED) {
-		frame = webkit_web_view_get_main_frame (web_view);
-		uri = webkit_web_frame_get_uri (frame);
+	switch (webkit_web_view_get_load_status (web_view))
+	{
+	case WEBKIT_LOAD_COMMITTED:
+		break;
+	case WEBKIT_LOAD_FINISHED:
+		progress = 0;
+		update ();
+		break;
+	}
+	frame = webkit_web_view_get_main_frame (web_view);
+	uri = webkit_web_frame_get_uri (frame);
 		if (uri)
 			gtk_entry_set_text (GTK_ENTRY (uri_entry), uri);
-	}
 }
 
 static void
@@ -157,7 +195,7 @@ download_requested_cb (WebKitWebView *web_view, WebKitDownload *download,
 		gpointer user_data)
 {
 	uri = webkit_download_get_uri (download);
-	gchar *buffer;
+	const gchar *buffer;
 	asprintf (&buffer, "tazbox dl-out %s", uri);
 	system (buffer);
 }
@@ -248,13 +286,25 @@ create_browser ()
 	return scrolled;
 }
 
+/* Loader area */
+static GtkWidget*
+create_loader ()
+{
+	loader = gtk_drawing_area_new ();
+	gtk_widget_set_size_request (loader, 0, 1);
+	g_signal_connect (G_OBJECT (loader), "expose_event",
+		G_CALLBACK (expose_loader_cb), NULL);
+	
+	return loader;
+}
+
 static GtkWidget*
 create_toolbar ()
 {
 	GtkToolItem* item;
 
 	toolbar = gtk_toolbar_new ();
-	gtk_widget_set_size_request (toolbar, 0, 31);
+	gtk_widget_set_size_request (toolbar, 0, 33);
 	gtk_toolbar_set_orientation (GTK_TOOLBAR (toolbar),
 			GTK_ORIENTATION_HORIZONTAL);
 	gtk_toolbar_set_style (GTK_TOOLBAR (toolbar),
@@ -302,16 +352,20 @@ create_window ()
 {
 	GtkWidget* window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 	GtkWidget* vbox = gtk_vbox_new (FALSE, 0);
-	
-	gtk_box_pack_start (GTK_BOX (vbox), create_browser (), TRUE, TRUE, 0);
-	gtk_box_pack_start (GTK_BOX (vbox), create_toolbar (), FALSE, FALSE, 0);
-	
+
 	/* Default TazWeb window size ratio to 3/4 --> 720, 540*/
 	gtk_window_set_default_size (GTK_WINDOW (window), 800, 600);
 	gtk_window_set_icon (GTK_WINDOW (window),
 			create_pixbuf ("/usr/share/pixmaps/tazweb.png"));
 	gtk_widget_set_name (window, "TazWeb");
 	g_signal_connect (window, "destroy", G_CALLBACK (destroy_cb), NULL);
+
+	/* Pack box and caontainer */
+	gtk_box_pack_start (GTK_BOX (vbox), create_browser (), TRUE, TRUE, 0);
+	gtk_container_add (GTK_CONTAINER (vbox), create_loader());
+	gtk_box_set_child_packing (GTK_BOX (vbox), loader,
+		FALSE, FALSE, 0, GTK_PACK_START);
+	gtk_box_pack_start (GTK_BOX (vbox), create_toolbar (), FALSE, FALSE, 0);
 	gtk_container_add (GTK_CONTAINER (window), vbox);
 
 	main_window = window;
