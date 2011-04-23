@@ -329,22 +329,18 @@ static GtkWidget*
 create_toolbar ()
 {
 	GtkToolItem* item;
-
+	PangoFontDescription *font;
+	GdkColor bg;
+	
 	toolbar = gtk_toolbar_new ();
-	gtk_widget_set_size_request (toolbar, 0, 31);
+	
 	gtk_toolbar_set_orientation (GTK_TOOLBAR (toolbar),
 			GTK_ORIENTATION_HORIZONTAL);
 	gtk_toolbar_set_style (GTK_TOOLBAR (toolbar),
 			GTK_TOOLBAR_BOTH_HORIZ);
-	GdkColor bg;
+	
 	gdk_color_parse ("#f1efeb", &bg);
 	gtk_widget_modify_bg (toolbar, GTK_STATE_NORMAL, &bg);
-
-	/* Home button */
-	item = gtk_tool_button_new_from_stock (GTK_STOCK_HOME);
-	g_signal_connect (G_OBJECT (item), "clicked",
-			G_CALLBACK (go_home_cb), NULL);
-	gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
 
 	/* The back button */
     item = gtk_tool_button_new_from_stock (GTK_STOCK_GO_BACK);
@@ -355,6 +351,12 @@ create_toolbar ()
     item = gtk_tool_button_new_from_stock (GTK_STOCK_GO_FORWARD);
     g_signal_connect (G_OBJECT (item), "clicked", G_CALLBACK (go_forward_cb), NULL);
     gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
+
+    /* Home button */
+	item = gtk_tool_button_new_from_stock (GTK_STOCK_HOME);
+	g_signal_connect (G_OBJECT (item), "clicked",
+			G_CALLBACK (go_home_cb), NULL);
+	gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
 
 	/* URL entry */
 	item = gtk_tool_item_new ();
@@ -378,6 +380,7 @@ create_toolbar ()
 	/* Search entry */
 	item = gtk_tool_item_new ();
 	search_entry = gtk_entry_new ();
+	gtk_widget_set_size_request (search_entry, 150, 20);
 	gtk_container_add (GTK_CONTAINER (item), search_entry);
 	g_signal_connect (G_OBJECT (search_entry), "activate",
 			G_CALLBACK (search_entry_cb), NULL);
