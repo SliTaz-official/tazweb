@@ -21,12 +21,9 @@ static GtkWidget *main_window, *scrolled, *loader, *toolbar;
 static GtkWidget *uri_entry, *search_entry;
 static WebKitWebView* web_view;
 static WebKitWebFrame* frame;
-static gdouble load_progress;
-static guint status_context_id;
+static gint progress;
 static gchar* main_title;
 static gchar* title;
-static gint progress;
-static gint loader_width;
 const gchar* uri;
 
 /* Create an icon */
@@ -50,18 +47,19 @@ check_requested_uri ()
 static void
 draw_loader ()
 {
-	GdkGC* gc = gdk_gc_new (loader->window);
+	GdkGC* gc;
 	GdkColor fg;
+	gint width;
 
-	uri = webkit_web_view_get_uri (web_view);
-	loader_width = progress * loader->allocation.width / 100;
+	gc = gdk_gc_new (loader->window);
+	width = progress * loader->allocation.width / 100;
 	
 	gdk_color_parse (loader_color, &fg);
 	gdk_gc_set_rgb_fg_color (gc, &fg);
 	gdk_draw_rectangle (loader->window,
 			loader->style->bg_gc [GTK_WIDGET_STATE (loader)],
 			TRUE, 0, 0, loader->allocation.width, loader->allocation.height);
-	gdk_draw_rectangle (loader->window, gc, TRUE, 0, 0, loader_width,
+	gdk_draw_rectangle (loader->window, gc, TRUE, 0, 0, width,
 			loader->allocation.height);
 	g_object_unref (gc);
 }
@@ -329,16 +327,14 @@ static GtkWidget*
 create_toolbar ()
 {
 	GtkToolItem* item;
-	PangoFontDescription *font;
-	GdkColor bg;
-	
+
 	toolbar = gtk_toolbar_new ();
-	
+	//gtk_widget_set_size_request (toolbar, 0, 24);
 	gtk_toolbar_set_orientation (GTK_TOOLBAR (toolbar),
 			GTK_ORIENTATION_HORIZONTAL);
 	gtk_toolbar_set_style (GTK_TOOLBAR (toolbar),
 			GTK_TOOLBAR_BOTH_HORIZ);
-	
+	GdkColor bg;
 	gdk_color_parse ("#f1efeb", &bg);
 	gtk_widget_modify_bg (toolbar, GTK_STATE_NORMAL, &bg);
 
@@ -402,7 +398,7 @@ create_window ()
 	GtkWidget* window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 	GtkWidget* vbox = gtk_vbox_new (FALSE, 0);
 
-	/* Default TazWeb window size ratio to 3/4 --> 720, 540*/
+	/* Default TazWeb window size ratio to 3/4 --> 720, 540 */
 	gtk_window_set_default_size (GTK_WINDOW (window), 800, 600);
 	gtk_window_set_icon (GTK_WINDOW (window),
 			create_pixbuf ("/usr/share/pixmaps/tazweb.png"));
