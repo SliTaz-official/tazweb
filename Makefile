@@ -1,4 +1,4 @@
-# Makefile for TazLauncher.
+# Makefile for TazWeb
 #
 PREFIX?=/usr
 DOCDIR?=$(PREFIX)/share/doc
