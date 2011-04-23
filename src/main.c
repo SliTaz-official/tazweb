@@ -218,7 +218,7 @@ download_requested_cb (WebKitWebView *web_view, WebKitDownload *download,
 	system (buffer);
 }
 
-/* Zoom ou and in callback function */
+/* Zoom out and in callback function */
 static void
 zoom_out_cb (GtkWidget *main_window)
 {

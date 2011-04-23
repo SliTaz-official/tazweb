@@ -3,10 +3,10 @@ TazWeb - SliTaz Web Browser
 
 
 TazWeb is a radically simple and very light web browser providing a single
-window with one small bottom toolbar using buttons, an URL and search entry
+window with one small bottom toolbar using buttons, an URL and search entry,
 and a contextual menu but no menubar or tabs. Please keep the code simple
-and clean, if you are motivated and want to add some functionnalities, please
-talk to the AUTHOR before commiting anything in the repos.
+and clean, if you are motivated and want to add some more functionality, 
+please talk to the AUTHOR before commiting anything in the repos.
 
 TazWeb uses a custom page in the user Freedesktop directory to let users add
 any content to it and get with one click from the toolbar. We may have
@@ -23,7 +23,7 @@ build all the GUI with xHTML and CSS like in TazPanel.
 For general and end-user documentation have a look at doc/tazweb.html.
 TazWeb is published, like webkit source under a free BSD license.
 
-BUG: Right clicking on "Open Link in New Window" is connect to a event
+BUG: Right clicking on "Open Link in New Window" is connecting to an event
 but doesn't work.
 
 
@@ -50,7 +50,7 @@ Coding notes
     * Get user config directory path in $HOME
       config = g_strdup_printf ("%s/.config/tazweb", g_get_home_dir ());
 
-    * This code change the browser user-agent
+    * This code changes the browser user-agent
       static gchar *useragent = "TazWeb/1.0 (X11; Linux; U; en_US) AppleWebKit/531.2+";
       
       /* User agent */
