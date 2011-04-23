@@ -19,9 +19,12 @@
 static gchar *loadfg    = "#351a0a";
 static gchar *toolbarbg = "#f1efeb";
 
+/* Needs AppleWebKit/531.2+ to handle all sites ? */
+static gchar *useragent = "TazWeb (X11; SliTaz GNU/Linux; U; en_US)";
+
 static gchar* pagetitle;
 static gchar* title;
-static GtkWidget *mainwindow, *scrolled, *loader, *toolbar;
+static GtkWidget *mainwindow, *browser, *loader, *toolbar;
 static GtkWidget *urientry, *search;
 static WebKitWebView* webview;
 static WebKitWebFrame* frame;
@@ -287,12 +290,18 @@ create_web_view_cb(WebKitWebView* webview, GtkWidget* window)
 static GtkWidget*
 create_browser()
 {
-	scrolled = gtk_scrolled_window_new(NULL, NULL);
-	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(scrolled),
+	WebKitWebSettings *settings;
+	
+	browser = gtk_scrolled_window_new(NULL, NULL);
+	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(browser),
 			GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
 
 	webview = WEBKIT_WEB_VIEW(webkit_web_view_new());
-	gtk_container_add(GTK_CONTAINER(scrolled), GTK_WIDGET(webview));
+	gtk_container_add(GTK_CONTAINER(browser), GTK_WIDGET(webview));
+
+	/* User agent */
+	settings = webkit_web_view_get_settings (webview);
+	g_object_set (G_OBJECT (settings), "user-agent", useragent, NULL);
 
 	/* Connect WebKit events */
 	g_signal_connect(webview, "notify::title",
@@ -310,7 +319,7 @@ create_browser()
 	g_object_connect(G_OBJECT(webview), "signal::populate-popup",
 		G_CALLBACK(populate_menu_cb), webview, NULL);
 
-	return scrolled;
+	return browser;
 }
 
 /* Loader area */
@@ -372,8 +381,8 @@ create_toolbar()
 	gtk_toolbar_insert(GTK_TOOLBAR(toolbar), item, -1);
 
 	/* Separator */
-	item = gtk_separator_tool_item_new();
-	gtk_toolbar_insert(GTK_TOOLBAR(toolbar), item, -1); 
+	//item = gtk_separator_tool_item_new();
+	//gtk_toolbar_insert(GTK_TOOLBAR(toolbar), item, -1); 
 	
 	/* Search entry */
 	item = gtk_tool_item_new();

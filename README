@@ -45,7 +45,7 @@ Coding notes
       
     * Check mime-type before download (needs a callback function)
       g_signal_connect (web_view, "mime-type-policy-decision-requested",
-                        G_CALLBACK (mime_type_decision_cb), web_view);
+                        G_CALLBACK (mime_type_decision_cb), webview);
 
     * Get user config directory path in $HOME
       config = g_strdup_printf ("%s/.config/tazweb", g_get_home_dir ());
@@ -55,7 +55,7 @@ Coding notes
       
       /* User agent */
       WebKitWebSettings *settings;
-      settings = webkit_web_view_get_settings (web_view);
+      settings = webkit_web_view_get_settings (webview);
       g_object_set (G_OBJECT (settings), "user-agent", useragent, NULL);
 
 
