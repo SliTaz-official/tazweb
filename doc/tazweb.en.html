@@ -32,15 +32,15 @@
 	web server is Busybox httpd.
 </p>
 <p>
-	The browser is small, very small, the binary is about 16 Kb and
+	The browser is small, very small, the binary is about 24 Kb and
 	uses the Webkit engine for page rendering and therefore supports 
 	all latest web standards as well as Javascript.
 </p>
 
-<h3>My TazWeb Page</h3>
+<h3>My Home Page</h3>
 <p>
 	TazWeb handles a personal page located in your Freedesktop standard
-	configuration directory, the path is: $HOME/.config/tazweb/page.html.
+	configuration directory, the path is: $HOME/.config/tazweb/home.html.
 	It lets you have a custom page with bookmarks and other content. The
 	CSS style is defined in $HOME/.config/tazweb/style.css.
 </p>
@@ -58,7 +58,7 @@
 	Twitter Widget</a> as seen on the SliTaz main website.
 </p>
 <p>
-	Note: You will find the default page.html in: /usr/share/tazweb and
+	Note: You will find the default home.html in: /usr/share/tazweb and
 	can get an original copy with the following commands in a terminal:
 </p>
 <pre>
@@ -67,7 +67,7 @@ $ cp /usr/share/tazweb/*.html $HOME/.config/tazweb
 $ cp /usr/share/tazweb/*.css $HOME/.config/tazweb
 </pre>
 
-<h3>Home page and url in argument</h3>
+<h3>Start page and url in argument</h3>
 
 <p>
 	The default start page has been defined in the source code and can't be
@@ -78,7 +78,7 @@ $ cp /usr/share/tazweb/*.css $HOME/.config/tazweb
 	the command line: tazweb file://$HOME/.config/tazweb/home.html.
 </p>
 <p>
-	If you want a custom home page for your Live system or all system users,
+	If you want a custom start page for your Live system or all system users,
 	you can create your own slitaz-configs package or edit the xHTML file
 	located in /usr/share/webhome/index.html. If you modify it, make sure
 	to block slitaz-configs or make a backup because it will be overwritten
