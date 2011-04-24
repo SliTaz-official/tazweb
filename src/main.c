@@ -15,22 +15,16 @@
 #define CONFIG   g_strdup_printf("%s/.config/tazweb", g_get_home_dir())
 #define START    "file:///usr/share/webhome/index.html"
 
-/* Colors(Loader: #d66018 #7b705c) */
-static gchar *loadfg    = "#351a0a";
-static gchar *toolbarbg = "#f1efeb";
-
 /* Needs AppleWebKit/531.2+ to handle all sites ? */
 static gchar *useragent = "TazWeb (X11; SliTaz GNU/Linux; U; en_US)";
 
-static gchar* pagetitle;
-static GtkWidget *mainwindow, *browser, *loader, *toolbar;
+static GtkWidget* create_window(WebKitWebView** newwebview);
+static GtkWidget *mainwindow, *vbox, *browser, *toolbar;
 static GtkWidget *urientry, *search;
 static WebKitWebView* webview;
 static WebKitWebFrame* frame;
-static gint progress;
 static gint count = 0;
 const gchar* uri;
-static GtkWidget* create_window(WebKitWebView** newwebview);
 
 /* Create an icon */
 static GdkPixbuf*
@@ -49,43 +43,20 @@ check_requested_uri()
 		: g_strdup_printf("http://%s", uri);
 }
 
-/* Loader area */
-static void
-update_loader()
-{
-	GdkGC* gc;
-	GdkColor fg;
-	gint width;
-
-	gc = gdk_gc_new(loader->window);
-	width = progress * loader->allocation.width / 100;
-	
-	gdk_color_parse(loadfg, &fg);
-	gdk_gc_set_rgb_fg_color(gc, &fg);
-	gdk_draw_rectangle(loader->window,
-			loader->style->bg_gc [GTK_WIDGET_STATE(loader)],
-			TRUE, 0, 0, loader->allocation.width, loader->allocation.height);
-	gdk_draw_rectangle(loader->window, gc, TRUE, 0, 0, width,
-			loader->allocation.height);
-	g_object_unref(gc);
-}
-
-/* Loader progress */
-static gboolean
-expose_loader_cb(GtkWidget *loader, GdkEventExpose *event, gpointer data)
-{
-	update_loader();
-	return TRUE;
-}
-
 /* Update title */
 static void
 update_title(GtkWindow* window, WebKitWebView* webview)
 {
-	GString *string = g_string_new(webkit_web_view_get_title(webview));
-	gdouble loadprogress = webkit_web_view_get_progress(webview) * 100;
-	//g_string_append(string, " - TazWeb");
-	gchar *title = g_string_free(string, FALSE);
+	GString *string;
+	gdouble progress;
+	gchar *title;
+	
+	string = g_string_new(webkit_web_view_get_title(webview));
+	progress = webkit_web_view_get_progress(webview) * 100;
+	if (progress < 100)
+		g_string_append_printf(string, " [ %f%% ] ", progress);
+	
+	title = g_string_free(string, FALSE);
 	gtk_window_set_title(window, title);
 	g_free(title);
 }
@@ -94,37 +65,26 @@ update_title(GtkWindow* window, WebKitWebView* webview)
 static void
 notify_title_cb(WebKitWebView* webview, GParamSpec* pspec, GtkWidget* window)
 {
-	pagetitle = g_strdup(webkit_web_view_get_title(webview));
 	update_title(GTK_WINDOW(window), webview);
-	update_loader();
 }
 
 /* Request progress in window title */
 static void
 notify_progress_cb(WebKitWebView* webview, GParamSpec* pspec, GtkWidget* window)
 {
-	progress = webkit_web_view_get_progress(webview) * 100;
 	update_title(GTK_WINDOW(window), webview);
-	update_loader();
 }
 
 /* Notify loader and url entry */
 static void
 notify_load_status_cb(WebKitWebView* webview, GParamSpec* pspec, gpointer data)
 {
-	switch(webkit_web_view_get_load_status(webview))
-	{
-	case WEBKIT_LOAD_COMMITTED:
-		break;
-	case WEBKIT_LOAD_FINISHED:
-		progress = 0;
-		update_loader();
-		break;
-	}
-	frame = webkit_web_view_get_main_frame(webview);
-	uri = webkit_web_frame_get_uri(frame);
+	if (webkit_web_view_get_load_status(webview) == WEBKIT_LOAD_COMMITTED) {
+		frame = webkit_web_view_get_main_frame(webview);
+		uri = webkit_web_frame_get_uri(frame);
 		if (uri)
 			gtk_entry_set_text(GTK_ENTRY(urientry), uri);
+	}
 }
 
 /* Destroy the window */
@@ -146,7 +106,7 @@ view_source_cb()
 	source = webkit_web_view_get_view_source_mode(webview);
 	
 	webkit_web_view_set_view_source_mode(webview, !source);
-	webkit_web_view_load_uri(webview, uri);
+	webkit_web_view_reload(webview);
 }
 
 /* URL entry callback function */
@@ -221,8 +181,8 @@ download_requested_cb(WebKitWebView *webview, WebKitDownload *download,
 	uri = webkit_download_get_uri(download);
 	const gchar* buffer;
 	asprintf(&buffer,
-			"xterm -T 'Download' -geom 72x10+0-24 -e 'cd $HOME/Downloads && \
-				wget -c %s; sleep 2' &", uri);
+			"xterm -T 'Download' -geom 72x10+0-24 -e \
+				'cd $HOME/Downloads && wget -c %s; sleep 2' &", uri);
 	system(buffer);
 }
 
@@ -319,7 +279,6 @@ create_browser(GtkWidget* window)
 	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(browser),
 			GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
 
-	webview = WEBKIT_WEB_VIEW(webkit_web_view_new());
 	gtk_container_add(GTK_CONTAINER(browser), GTK_WIDGET(webview));
 
 	/* User agent */
@@ -349,32 +308,16 @@ create_browser(GtkWidget* window)
 	return browser;
 }
 
-/* Loader area */
 static GtkWidget*
-create_loader()
-{
-	loader = gtk_drawing_area_new();
-	gtk_widget_set_size_request(loader, 0, 2);
-	g_signal_connect(G_OBJECT(loader), "expose_event",
-		G_CALLBACK(expose_loader_cb), NULL);
-	
-	return loader;
-}
-
-static GtkWidget*
-create_toolbar()
+create_toolbar(GtkWidget* urientry, GtkWidget* search, WebKitWebView* webview)
 {
 	GtkToolItem* item;
-	GdkColor bg;
 	
 	toolbar = gtk_toolbar_new();
-	//gtk_widget_set_size_request(toolbar, 0, 24);
 	gtk_toolbar_set_orientation(GTK_TOOLBAR(toolbar),
 			GTK_ORIENTATION_HORIZONTAL);
 	gtk_toolbar_set_style(GTK_TOOLBAR(toolbar),
 			GTK_TOOLBAR_BOTH_HORIZ);
-	gdk_color_parse(toolbarbg, &bg);
-	gtk_widget_modify_bg(toolbar, GTK_STATE_NORMAL, &bg);
 
 	/* The back button */
     item = gtk_tool_button_new_from_stock(GTK_STOCK_GO_BACK);
@@ -395,25 +338,18 @@ create_toolbar()
 	/* URL entry */
 	item = gtk_tool_item_new();
 	gtk_tool_item_set_expand(item, TRUE);
-	
-	urientry = gtk_entry_new();
-	gtk_widget_modify_base( GTK_WIDGET(urientry),
-			GTK_STATE_NORMAL, &bg);
-	gtk_entry_set_inner_border(GTK_ENTRY(urientry), NULL);
-	gtk_entry_set_has_frame(GTK_ENTRY(urientry), FALSE);
-	
+	gtk_widget_set_size_request(urientry, 0, 20);
 	gtk_container_add(GTK_CONTAINER(item), urientry);
 	g_signal_connect(G_OBJECT(urientry), "activate",
 			G_CALLBACK(uri_entry_cb), NULL);
 	gtk_toolbar_insert(GTK_TOOLBAR(toolbar), item, -1);
 
 	/* Separator */
-	//item = gtk_separator_tool_item_new();
-	//gtk_toolbar_insert(GTK_TOOLBAR(toolbar), item, -1); 
+	item = gtk_separator_tool_item_new();
+	gtk_toolbar_insert(GTK_TOOLBAR(toolbar), item, -1); 
 	
 	/* Search entry */
 	item = gtk_tool_item_new();
-	search = gtk_entry_new();
 	gtk_widget_set_size_request(search, 150, 20);
 	gtk_container_add(GTK_CONTAINER(item), search);
 	g_signal_connect(G_OBJECT(search), "activate",
@@ -433,26 +369,30 @@ create_toolbar()
 static GtkWidget*
 create_window(WebKitWebView** newwebview)
 {
+	GtkWidget* window;
 	g_atomic_int_inc(&count);
-	
-	GtkWidget* window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
-	GtkWidget* vbox = gtk_vbox_new(FALSE, 0);
 
-	/* Default TazWeb window size ratio to 3/4 --> 720, 540 */
+	/* Default TazWeb window */
+	window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
 	gtk_window_set_default_size(GTK_WINDOW(window), 800, 600);
 	gtk_window_set_icon(GTK_WINDOW(window),
 			create_pixbuf("/usr/share/pixmaps/tazweb.png"));
 	gtk_widget_set_name(window, "TazWeb");
 	g_signal_connect(window, "destroy", G_CALLBACK(destroy_cb), NULL);
 
+	/* Webview and widgets */
+	webview = WEBKIT_WEB_VIEW(webkit_web_view_new());
+	urientry = gtk_entry_new();
+	search = gtk_entry_new();
+	vbox = gtk_vbox_new(FALSE, 0);
+	
 	/* Pack box and container */
-	gtk_box_pack_start(GTK_BOX(vbox), create_browser(window), TRUE, TRUE, 0);
-	gtk_container_add(GTK_CONTAINER(vbox), create_loader());
-	gtk_box_set_child_packing(GTK_BOX(vbox), loader,
-		FALSE, FALSE, 0, GTK_PACK_START);
-	gtk_box_pack_start(GTK_BOX(vbox), create_toolbar(), FALSE, FALSE, 0);
+	gtk_box_pack_start(GTK_BOX(vbox),
+			create_browser(window), TRUE, TRUE, 0);
+	gtk_box_pack_start(GTK_BOX(vbox),
+			create_toolbar(urientry, search, webview), FALSE, FALSE, 0);
 	gtk_container_add(GTK_CONTAINER(window), vbox);
-
+	
 	if (newwebview)
 		*newwebview = webview;
 	
@@ -462,7 +402,7 @@ create_window(WebKitWebView** newwebview)
 int
 main(int argc, char* argv[])
 {
-	gtk_init(&argc, &argv);
+	gtk_init(NULL, NULL);
 	if (!g_thread_supported())
 		g_thread_init(NULL);
 
@@ -476,11 +416,10 @@ main(int argc, char* argv[])
 		check_requested_uri();
 		
 	mainwindow = create_window(&webview);
-	gtk_widget_show_all(mainwindow);
 	
+	gtk_widget_show_all(mainwindow);
 	webkit_web_view_load_uri(webview, uri);
 	gtk_widget_grab_focus(GTK_WIDGET(webview));
-	
 	gtk_main();
 	
 	return 0;

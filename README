@@ -36,27 +36,30 @@ $ ./tazweb
 
 Install with 'make install' (PREFIX and DESTDIR are supported for packaging)
 
-
 Coding notes
 ------------
 
-    * To get the filename of a WebKitDownload
+    * To get the filename of a WebKitDownload:
       file = webkit_download_get_suggested_filename (download);
       
     * Check mime-type before download (needs a callback function)
       g_signal_connect (web_view, "mime-type-policy-decision-requested",
-                        G_CALLBACK (mime_type_decision_cb), webview);
+              G_CALLBACK (mime_type_decision_cb), webview);
 
-    * Get user config directory path in $HOME
+    * Get user config directory path in $HOME:
       config = g_strdup_printf ("%s/.config/tazweb", g_get_home_dir ());
 
-    * This code changes the browser user-agent
-      static gchar *useragent = "TazWeb/1.0 (X11; Linux; U; en_US) AppleWebKit/531.2+";
-      
-      /* User agent */
-      WebKitWebSettings *settings;
-      settings = webkit_web_view_get_settings (webview);
-      g_object_set (G_OBJECT (settings), "user-agent", useragent, NULL);
+    * Change font of a widget:
+      PangoFontDescription *font;
+      font = pango_font_description_from_string("8");
+      gtk_widget_modify_font(urientry, font);
+      pango_font_description_free(font);
 
+    * Change size of a widget:
+      gtk_widget_set_size_request(toolbar, 0, 28);
+
+    * Append a string
+      g_string_append(string, " - TazWeb");
+      
 
 ================================================================================
