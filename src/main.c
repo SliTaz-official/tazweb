@@ -23,13 +23,14 @@ static gchar *toolbarbg = "#f1efeb";
 static gchar *useragent = "TazWeb (X11; SliTaz GNU/Linux; U; en_US)";
 
 static gchar* pagetitle;
-static gchar* title;
 static GtkWidget *mainwindow, *browser, *loader, *toolbar;
 static GtkWidget *urientry, *search;
 static WebKitWebView* webview;
 static WebKitWebFrame* frame;
 static gint progress;
+static gint count = 0;
 const gchar* uri;
+static GtkWidget* create_window(WebKitWebView** newwebview);
 
 /* Create an icon */
 static GdkPixbuf*
@@ -81,7 +82,7 @@ expose_loader_cb(GtkWidget *loader, GdkEventExpose *event, gpointer data)
 static void
 update()
 {
-	title = g_strdup(pagetitle);
+	gchar* title = g_strdup(pagetitle);
 	if(! pagetitle)
 		title = g_strdup_printf("Unknow - TazWeb", pagetitle);
 	draw_loader();
@@ -124,10 +125,12 @@ notify_load_status_cb(WebKitWebView* webview, GParamSpec* pspec, gpointer data)
 			gtk_entry_set_text(GTK_ENTRY(urientry), uri);
 }
 
+/* Destroy the window */
 static void
 destroy_cb(GtkWidget* widget, GtkWindow* window)
 {
-	gtk_main_quit();
+	if (g_atomic_int_dec_and_test(&count))
+		gtk_main_quit();
 }
 
 /* Show page source */
@@ -234,6 +237,31 @@ zoom_in_cb(GtkWidget *mainwindow)
 	webkit_web_view_zoom_in(webview);
 }
 
+/* New webview clallbacks */
+static WebKitWebView*
+create_web_view_cb(WebKitWebView* webview, WebKitWebFrame* web_frame,
+		GtkWidget* window)
+{
+	WebKitWebView *newview;
+	create_window(&newview);
+	return newview;
+}
+
+static gboolean
+webview_ready_cb(WebKitWebView* webview, GtkWidget* window)
+{
+	gtk_widget_grab_focus(GTK_WIDGET(webview));
+	gtk_widget_show_all(window);
+	return FALSE;
+}
+
+static gboolean
+close_webview_cb(WebKitWebView* webview, GtkWidget* window)
+{
+	gtk_widget_destroy(window);
+	return TRUE;
+}
+
 /* Add items to WebKit contextual menu */
 static void
 populate_menu_cb(WebKitWebView *webview, GtkMenu *menu, gpointer data)
@@ -279,16 +307,9 @@ populate_menu_cb(WebKitWebView *webview, GtkMenu *menu, gpointer data)
 	gtk_widget_show_all(GTK_WIDGET(menu));
 }
 
-/* Open in a new window from menu */
-static WebKitWebView*
-create_web_view_cb(WebKitWebView* webview, GtkWidget* window)
-{
-	return WEBKIT_WEB_VIEW(webview);
-}
-
 /* Scrolled window for the webview */
 static GtkWidget*
-create_browser()
+create_browser(GtkWidget* window)
 {
 	WebKitWebSettings *settings;
 	
@@ -313,7 +334,11 @@ create_browser()
 	g_signal_connect(webview, "download-requested",
 			G_CALLBACK(download_requested_cb), NULL);
 	g_signal_connect(webview, "create-web-view",
-			G_CALLBACK(create_web_view_cb), webview);
+			G_CALLBACK(create_web_view_cb), window);
+	g_signal_connect(webview, "web-view-ready",
+			G_CALLBACK(webview_ready_cb), window);
+	g_signal_connect(webview, "close-web-view",
+			G_CALLBACK(close_webview_cb), window);
 
 	/* Connect WebKit contextual menu items */
 	g_object_connect(G_OBJECT(webview), "signal::populate-popup",
@@ -404,8 +429,10 @@ create_toolbar()
 
 /* Main window */
 static GtkWidget*
-create_window()
+create_window(WebKitWebView** newwebview)
 {
+	g_atomic_int_inc(&count);
+	
 	GtkWidget* window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
 	GtkWidget* vbox = gtk_vbox_new(FALSE, 0);
 
@@ -417,13 +444,16 @@ create_window()
 	g_signal_connect(window, "destroy", G_CALLBACK(destroy_cb), NULL);
 
 	/* Pack box and container */
-	gtk_box_pack_start(GTK_BOX(vbox), create_browser(), TRUE, TRUE, 0);
+	gtk_box_pack_start(GTK_BOX(vbox), create_browser(window), TRUE, TRUE, 0);
 	gtk_container_add(GTK_CONTAINER(vbox), create_loader());
 	gtk_box_set_child_packing(GTK_BOX(vbox), loader,
 		FALSE, FALSE, 0, GTK_PACK_START);
 	gtk_box_pack_start(GTK_BOX(vbox), create_toolbar(), FALSE, FALSE, 0);
 	gtk_container_add(GTK_CONTAINER(window), vbox);
 
+	if (newwebview)
+		*newwebview = webview;
+	
 	return window;	
 }
 
@@ -443,7 +473,7 @@ main(int argc, char* argv[])
 	if (argv[1])
 		check_requested_uri();
 		
-	mainwindow = create_window();
+	mainwindow = create_window(&webview);
 	gtk_widget_show_all(mainwindow);
 	
 	webkit_web_view_load_uri(webview, uri);
