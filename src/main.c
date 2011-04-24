@@ -51,7 +51,7 @@ check_requested_uri()
 
 /* Loader area */
 static void
-draw_loader()
+update_loader()
 {
 	GdkGC* gc;
 	GdkColor fg;
@@ -74,36 +74,38 @@ draw_loader()
 static gboolean
 expose_loader_cb(GtkWidget *loader, GdkEventExpose *event, gpointer data)
 {
-	draw_loader();
+	update_loader();
 	return TRUE;
 }
 
-/* Update title and loader */
+/* Update title */
 static void
-update()
+update_title(GtkWindow* window, WebKitWebView* webview)
 {
-	gchar* title = g_strdup(pagetitle);
-	if(! pagetitle)
-		title = g_strdup_printf("Unknow - TazWeb", pagetitle);
-	draw_loader();
-	gtk_window_set_title(GTK_WINDOW(mainwindow), title);
+	GString *string = g_string_new(webkit_web_view_get_title(webview));
+	gdouble loadprogress = webkit_web_view_get_progress(webview) * 100;
+	//g_string_append(string, " - TazWeb");
+	gchar *title = g_string_free(string, FALSE);
+	gtk_window_set_title(window, title);
 	g_free(title);
 }
 
 /* Get the page title */
 static void
-notify_title_cb(WebKitWebView* webview, GParamSpec* pspec, gpointer data)
+notify_title_cb(WebKitWebView* webview, GParamSpec* pspec, GtkWidget* window)
 {
 	pagetitle = g_strdup(webkit_web_view_get_title(webview));
-	update();
+	update_title(GTK_WINDOW(window), webview);
+	update_loader();
 }
 
 /* Request progress in window title */
 static void
-notify_progress_cb(WebKitWebView* webview, GParamSpec* pspec, gpointer data)
+notify_progress_cb(WebKitWebView* webview, GParamSpec* pspec, GtkWidget* window)
 {
 	progress = webkit_web_view_get_progress(webview) * 100;
-	update();
+	update_title(GTK_WINDOW(window), webview);
+	update_loader();
 }
 
 /* Notify loader and url entry */
@@ -116,7 +118,7 @@ notify_load_status_cb(WebKitWebView* webview, GParamSpec* pspec, gpointer data)
 		break;
 	case WEBKIT_LOAD_FINISHED:
 		progress = 0;
-		update();
+		update_loader();
 		break;
 	}
 	frame = webkit_web_view_get_main_frame(webview);
@@ -326,11 +328,11 @@ create_browser(GtkWidget* window)
 
 	/* Connect WebKit events */
 	g_signal_connect(webview, "notify::title",
-			G_CALLBACK(notify_title_cb), webview);
+			G_CALLBACK(notify_title_cb), window);
 	g_signal_connect(webview, "notify::progress",
-			G_CALLBACK(notify_progress_cb), webview);
+			G_CALLBACK(notify_progress_cb), window);
 	g_signal_connect(webview, "notify::load-status",
-			G_CALLBACK(notify_load_status_cb), webview);
+			G_CALLBACK(notify_load_status_cb), window);
 	g_signal_connect(webview, "download-requested",
 			G_CALLBACK(download_requested_cb), NULL);
 	g_signal_connect(webview, "create-web-view",
