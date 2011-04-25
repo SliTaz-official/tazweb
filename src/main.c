@@ -20,7 +20,6 @@ static gchar *useragent = "TazWeb (X11; SliTaz GNU/Linux; U; en_US)";
 
 static GtkWidget* create_window(WebKitWebView** newwebview);
 static GtkWidget *mainwindow, *vbox, *browser, *toolbar;
-static GtkWidget *urientry, *search;
 static WebKitWebView* webview;
 static WebKitWebFrame* frame;
 static gint count = 0;
@@ -77,7 +76,7 @@ notify_progress_cb(WebKitWebView* webview, GParamSpec* pspec, GtkWidget* window)
 
 /* Notify loader and url entry */
 static void
-notify_load_status_cb(WebKitWebView* webview, GParamSpec* pspec, gpointer data)
+notify_load_status_cb(WebKitWebView* webview, GParamSpec* pspec, GtkWidget* urientry)
 {
 	if (webkit_web_view_get_load_status(webview) == WEBKIT_LOAD_COMMITTED) {
 		frame = webkit_web_view_get_main_frame(webview);
@@ -111,9 +110,9 @@ view_source_cb()
 
 /* URL entry callback function */
 static void
-uri_entry_cb(GtkWidget* entry, gpointer data)
+uri_entry_cb(GtkWidget* urientry, gpointer data)
 {
-	uri = gtk_entry_get_text(GTK_ENTRY(entry));
+	uri = gtk_entry_get_text(GTK_ENTRY(urientry));
 	g_assert(uri);
 	check_requested_uri();
 	webkit_web_view_load_uri(webview, uri);
@@ -121,17 +120,17 @@ uri_entry_cb(GtkWidget* entry, gpointer data)
 
 /* Search entry callback function */
 static void
-search_entry_cb(GtkWidget* entry, gpointer data)
+search_entry_cb(GtkWidget* search, gpointer data)
 {
 	uri = g_strdup_printf("http://www.google.com/search?q=%s",
-			gtk_entry_get_text(GTK_ENTRY(entry)));
+			gtk_entry_get_text(GTK_ENTRY(search)));
 	g_assert(uri);
 	webkit_web_view_load_uri(webview, uri);
 }
 
 /* Home button callback function */
 static void
-go_home_cb(GtkWidget* widget, gpointer data)
+go_home_cb(GtkWidget* widget, WebKitWebView* webview)
 {
 	uri = g_strdup_printf("file://%s/home.html", CONFIG);
 	g_assert(uri);
@@ -140,13 +139,13 @@ go_home_cb(GtkWidget* widget, gpointer data)
 
 /* Navigation button function */
 static void
-go_back_cb(GtkWidget* widget, gpointer data)
+go_back_cb(GtkWidget* widget, WebKitWebView* webview)
 {
     webkit_web_view_go_back(webview);
 }
 
 static void
-go_forward_cb(GtkWidget* widget, gpointer data)
+go_forward_cb(GtkWidget* widget, WebKitWebView* webview)
 {
     webkit_web_view_go_forward(webview);
 }
@@ -188,13 +187,13 @@ download_requested_cb(WebKitWebView *webview, WebKitDownload *download,
 
 /* Zoom out and in callback function */
 static void
-zoom_out_cb(GtkWidget *mainwindow)
+zoom_out_cb(GtkWidget *window)
 {
 	webkit_web_view_zoom_out(webview);
 }
 
 static void
-zoom_in_cb(GtkWidget *mainwindow)
+zoom_in_cb(GtkWidget *window)
 {
 	webkit_web_view_zoom_in(webview);
 }
@@ -271,7 +270,8 @@ populate_menu_cb(WebKitWebView *webview, GtkMenu *menu, gpointer data)
 
 /* Scrolled window for the webview */
 static GtkWidget*
-create_browser(GtkWidget* window)
+create_browser(GtkWidget* window, GtkWidget* urientry, GtkWidget* search,
+		WebKitWebView* webview)
 {
 	WebKitWebSettings *settings;
 	
@@ -291,7 +291,7 @@ create_browser(GtkWidget* window)
 	g_signal_connect(webview, "notify::progress",
 			G_CALLBACK(notify_progress_cb), window);
 	g_signal_connect(webview, "notify::load-status",
-			G_CALLBACK(notify_load_status_cb), window);
+			G_CALLBACK(notify_load_status_cb), urientry);
 	g_signal_connect(webview, "download-requested",
 			G_CALLBACK(download_requested_cb), NULL);
 	g_signal_connect(webview, "create-web-view",
@@ -321,18 +321,20 @@ create_toolbar(GtkWidget* urientry, GtkWidget* search, WebKitWebView* webview)
 
 	/* The back button */
     item = gtk_tool_button_new_from_stock(GTK_STOCK_GO_BACK);
-    g_signal_connect(G_OBJECT(item), "clicked", G_CALLBACK(go_back_cb), NULL);
+    g_signal_connect(G_OBJECT(item), "clicked",
+			G_CALLBACK(go_back_cb), webview);
     gtk_toolbar_insert(GTK_TOOLBAR(toolbar), item, -1);
 
     /* The forward button */
     item = gtk_tool_button_new_from_stock(GTK_STOCK_GO_FORWARD);
-    g_signal_connect(G_OBJECT(item), "clicked", G_CALLBACK(go_forward_cb), NULL);
+    g_signal_connect(G_OBJECT(item), "clicked",
+			G_CALLBACK(go_forward_cb), webview);
     gtk_toolbar_insert(GTK_TOOLBAR(toolbar), item, -1);
 
     /* Home button */
 	item = gtk_tool_button_new_from_stock(GTK_STOCK_HOME);
 	g_signal_connect(G_OBJECT(item), "clicked",
-			G_CALLBACK(go_home_cb), NULL);
+			G_CALLBACK(go_home_cb), webview);
 	gtk_toolbar_insert(GTK_TOOLBAR(toolbar), item, -1);
 
 	/* URL entry */
@@ -370,6 +372,9 @@ static GtkWidget*
 create_window(WebKitWebView** newwebview)
 {
 	GtkWidget* window;
+	GtkWidget *urientry;
+	GtkWidget *search;
+	
 	g_atomic_int_inc(&count);
 
 	/* Default TazWeb window */
@@ -388,7 +393,7 @@ create_window(WebKitWebView** newwebview)
 	
 	/* Pack box and container */
 	gtk_box_pack_start(GTK_BOX(vbox),
-			create_browser(window), TRUE, TRUE, 0);
+			create_browser(window, urientry, search, webview), TRUE, TRUE, 0);
 	gtk_box_pack_start(GTK_BOX(vbox),
 			create_toolbar(urientry, search, webview), FALSE, FALSE, 0);
 	gtk_container_add(GTK_CONTAINER(window), vbox);
@@ -402,6 +407,8 @@ create_window(WebKitWebView** newwebview)
 int
 main(int argc, char* argv[])
 {
+	WebKitWebView *webView;
+	
 	gtk_init(NULL, NULL);
 	if (!g_thread_supported())
 		g_thread_init(NULL);
