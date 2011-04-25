@@ -20,7 +20,7 @@ static gchar *useragent = "TazWeb (X11; SliTaz GNU/Linux; U; en_US)";
 
 static GtkWidget* create_window(WebKitWebView** newwebview);
 static GtkWidget *mainwindow, *vbox, *browser, *toolbar;
-static WebKitWebView* webview;
+static WebKitWebView *webview;
 static WebKitWebFrame* frame;
 static gint count = 0;
 const gchar* uri;
@@ -96,7 +96,7 @@ destroy_cb(GtkWidget* widget, GtkWindow* window)
 
 /* Show page source */
 static void
-view_source_cb()
+view_source_cb(GtkWidget* widget, WebKitWebView* webview)
 {
 	gboolean source;
 	
@@ -110,7 +110,7 @@ view_source_cb()
 
 /* URL entry callback function */
 static void
-uri_entry_cb(GtkWidget* urientry, gpointer data)
+uri_entry_cb(GtkWidget* urientry, WebKitWebView* webview)
 {
 	uri = gtk_entry_get_text(GTK_ENTRY(urientry));
 	g_assert(uri);
@@ -120,7 +120,7 @@ uri_entry_cb(GtkWidget* urientry, gpointer data)
 
 /* Search entry callback function */
 static void
-search_entry_cb(GtkWidget* search, gpointer data)
+search_entry_cb(GtkWidget* search, WebKitWebView* webview)
 {
 	uri = g_strdup_printf("http://www.google.com/search?q=%s",
 			gtk_entry_get_text(GTK_ENTRY(search)));
@@ -128,7 +128,7 @@ search_entry_cb(GtkWidget* search, gpointer data)
 	webkit_web_view_load_uri(webview, uri);
 }
 
-/* Home button callback function */
+/* Navigation button function */
 static void
 go_home_cb(GtkWidget* widget, WebKitWebView* webview)
 {
@@ -137,7 +137,6 @@ go_home_cb(GtkWidget* widget, WebKitWebView* webview)
 	webkit_web_view_load_uri(webview, uri);
 }
 
-/* Navigation button function */
 static void
 go_back_cb(GtkWidget* widget, WebKitWebView* webview)
 {
@@ -165,7 +164,7 @@ fullscreen_cb(GtkWindow* window, gpointer data)
 
 /* TazWeb doc callback function */
 static void
-tazweb_doc_cb(GtkWidget* widget, gpointer data)
+tazweb_doc_cb(GtkWidget* widget, WebKitWebView *webview)
 {
 	uri = ("file:///usr/share/doc/tazweb/tazweb.html");
 	g_assert(uri);
@@ -187,13 +186,13 @@ download_requested_cb(WebKitWebView *webview, WebKitDownload *download,
 
 /* Zoom out and in callback function */
 static void
-zoom_out_cb(GtkWidget *window)
+zoom_out_cb(GtkWidget *widget, WebKitWebView* webview)
 {
 	webkit_web_view_zoom_out(webview);
 }
 
 static void
-zoom_in_cb(GtkWidget *window)
+zoom_in_cb(GtkWidget *widget, WebKitWebView* webview)
 {
 	webkit_web_view_zoom_in(webview);
 }
@@ -238,14 +237,14 @@ populate_menu_cb(WebKitWebView *webview, GtkMenu *menu, gpointer data)
 	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(item),
 	gtk_image_new_from_stock(GTK_STOCK_ZOOM_IN, GTK_ICON_SIZE_MENU));
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
-	g_signal_connect(item, "activate", G_CALLBACK(zoom_in_cb), NULL);
+	g_signal_connect(item, "activate", G_CALLBACK(zoom_in_cb), webview);
 	
 	/* Zoom out */
 	item = gtk_image_menu_item_new_with_label("Zoom out");
 	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(item),
 	gtk_image_new_from_stock(GTK_STOCK_ZOOM_OUT, GTK_ICON_SIZE_MENU));
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
-	g_signal_connect(item, "activate", G_CALLBACK(zoom_out_cb), NULL);
+	g_signal_connect(item, "activate", G_CALLBACK(zoom_out_cb), webview);
 
 	/* Separator */
 	item = gtk_separator_menu_item_new();
@@ -256,14 +255,14 @@ populate_menu_cb(WebKitWebView *webview, GtkMenu *menu, gpointer data)
 	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(item),
 	gtk_image_new_from_stock(GTK_STOCK_INFO, GTK_ICON_SIZE_MENU));
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
-	g_signal_connect(item, "activate", G_CALLBACK(tazweb_doc_cb), NULL);
+	g_signal_connect(item, "activate", G_CALLBACK(tazweb_doc_cb), webview);
 
 	/* View source mode */
 	item = gtk_image_menu_item_new_with_label("View source mode");
 	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(item),
 	gtk_image_new_from_stock(GTK_STOCK_PROPERTIES, GTK_ICON_SIZE_MENU));
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
-	g_signal_connect(item, "activate", G_CALLBACK(view_source_cb), NULL);
+	g_signal_connect(item, "activate", G_CALLBACK(view_source_cb), webview);
 	
 	gtk_widget_show_all(GTK_WIDGET(menu));
 }
@@ -343,7 +342,7 @@ create_toolbar(GtkWidget* urientry, GtkWidget* search, WebKitWebView* webview)
 	gtk_widget_set_size_request(urientry, 0, 20);
 	gtk_container_add(GTK_CONTAINER(item), urientry);
 	g_signal_connect(G_OBJECT(urientry), "activate",
-			G_CALLBACK(uri_entry_cb), NULL);
+			G_CALLBACK(uri_entry_cb), webview);
 	gtk_toolbar_insert(GTK_TOOLBAR(toolbar), item, -1);
 
 	/* Separator */
@@ -355,7 +354,7 @@ create_toolbar(GtkWidget* urientry, GtkWidget* search, WebKitWebView* webview)
 	gtk_widget_set_size_request(search, 150, 20);
 	gtk_container_add(GTK_CONTAINER(item), search);
 	g_signal_connect(G_OBJECT(search), "activate",
-			G_CALLBACK(search_entry_cb), NULL);
+			G_CALLBACK(search_entry_cb), webview);
 	gtk_toolbar_insert(GTK_TOOLBAR(toolbar), item, -1);
 
 	/* The Fullscreen button */
@@ -407,8 +406,6 @@ create_window(WebKitWebView** newwebview)
 int
 main(int argc, char* argv[])
 {
-	WebKitWebView *webView;
-	
 	gtk_init(NULL, NULL);
 	if (!g_thread_supported())
 		g_thread_init(NULL);
