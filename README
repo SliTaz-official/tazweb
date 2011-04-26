@@ -60,6 +60,9 @@ Coding notes
 
     * Append a string
       g_string_append(string, " - TazWeb");
+
+     * Editable webview
+       webkit_web_view_set_editable (webview, TRUE);
       
 
 ================================================================================
