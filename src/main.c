@@ -4,7 +4,7 @@
  * as a contextual menu, but no menu bar or tabs. Commented line code
  * starts with // and comments are between * *
  *
- * Copyright(C) 2011 SliTaz GNU/Linux - BSD License
+ * Copyright (C) 2011 SliTaz GNU/Linux - BSD License
  * See AUTHORS and LICENSE for detailed information
  * 
  */
@@ -14,6 +14,7 @@
 
 #define CONFIG   g_strdup_printf("%s/.config/tazweb", g_get_home_dir())
 #define START    "file:///usr/share/webhome/index.html"
+#define SEARCH   "http://www.google.com/search?q=%s"
 
 /* Needs AppleWebKit/531.2+ to handle all sites ? */
 static gchar *useragent = "TazWeb (X11; SliTaz GNU/Linux; U; en_US)";
@@ -21,7 +22,7 @@ static gchar *useragent = "TazWeb (X11; SliTaz GNU/Linux; U; en_US)";
 static GtkWidget* create_window(WebKitWebView** newwebview);
 static GtkWidget *mainwindow, *vbox, *browser, *toolbar;
 static WebKitWebView *webview;
-static WebKitWebFrame* frame;
+static WebKitWebFrame *frame;
 static gint count = 0;
 const gchar* uri;
 
@@ -74,7 +75,7 @@ notify_progress_cb(WebKitWebView* webview, GParamSpec* pspec, GtkWidget* window)
 	update_title(GTK_WINDOW(window), webview);
 }
 
-/* Notify loader and url entry */
+/* Notify url entry */
 static void
 notify_load_status_cb(WebKitWebView* webview, GParamSpec* pspec, GtkWidget* urientry)
 {
@@ -122,8 +123,7 @@ uri_entry_cb(GtkWidget* urientry, WebKitWebView* webview)
 static void
 search_entry_cb(GtkWidget* search, WebKitWebView* webview)
 {
-	uri = g_strdup_printf("http://www.google.com/search?q=%s",
-			gtk_entry_get_text(GTK_ENTRY(search)));
+	uri = g_strdup_printf(SEARCH, gtk_entry_get_text(GTK_ENTRY(search)));
 	g_assert(uri);
 	webkit_web_view_load_uri(webview, uri);
 }
@@ -282,7 +282,7 @@ create_browser(GtkWidget* window, GtkWidget* urientry, GtkWidget* search,
 
 	/* User agent */
 	settings = webkit_web_view_get_settings (webview);
-	g_object_set (G_OBJECT (settings), "user-agent", useragent, NULL);
+	g_object_set(G_OBJECT(settings), "user-agent", useragent, NULL);
 
 	/* Connect WebKit events */
 	g_signal_connect(webview, "notify::title",
@@ -370,7 +370,7 @@ create_toolbar(GtkWidget* urientry, GtkWidget* search, WebKitWebView* webview)
 static GtkWidget*
 create_window(WebKitWebView** newwebview)
 {
-	GtkWidget* window;
+	GtkWidget *window;
 	GtkWidget *urientry;
 	GtkWidget *search;
 	
