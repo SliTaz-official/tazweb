@@ -352,6 +352,19 @@ create_toolbar(GtkWidget* urientry, GtkWidget* search, WebKitWebView* webview)
 	/* Search entry */
 	item = gtk_tool_item_new();
 	gtk_widget_set_size_request(search, 150, 20);
+	gtk_entry_set_icon_from_stock(GTK_ENTRY(search),
+			GTK_ENTRY_ICON_SECONDARY, GTK_STOCK_FIND);
+	/*
+	 * FIXME: The icon can be activatable but must be connected to a callback to
+	 * valid the search. With GTK_ENTRY_ICON_SECONDARY it do a segfault maybe
+	 * with GTK_ENTRY_ICON_PRIMARY it dont crash but dont works.
+	 */
+	gtk_entry_set_icon_activatable(GTK_ENTRY(search),
+			GTK_ENTRY_ICON_SECONDARY, FALSE);
+	//g_signal_connect(GTK_ENTRY(search), "icon-press",
+	//		G_CALLBACK(search_entry_cb), webview);
+	//gtk_entry_set_icon_tooltip_text (GTK_ENTRY(search),
+	//		GTK_ENTRY_ICON_SECONDARY, "Search the web");
 	gtk_container_add(GTK_CONTAINER(item), search);
 	g_signal_connect(G_OBJECT(search), "activate",
 			G_CALLBACK(search_entry_cb), webview);
