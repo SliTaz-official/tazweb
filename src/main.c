@@ -210,6 +210,14 @@ zoom_in_cb(GtkWidget *widget, WebKitWebView* webview)
 	webkit_web_view_zoom_in(webview);
 }
 
+/* Printing callback function */
+static void
+print_page_cb (GtkWidget *widget, gpointer data)
+{
+    webkit_web_frame_print (webkit_web_view_get_main_frame (
+        WEBKIT_WEB_VIEW (webview)));
+}
+
 /* New webview clallbacks */
 static WebKitWebView*
 create_web_view_cb(WebKitWebView* webview, WebKitWebFrame* web_frame,
@@ -276,6 +284,13 @@ populate_menu_cb(WebKitWebView *webview, GtkMenu *menu, gpointer data)
 	gtk_image_new_from_stock(GTK_STOCK_PROPERTIES, GTK_ICON_SIZE_MENU));
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
 	g_signal_connect(item, "activate", G_CALLBACK(view_source_cb), webview);
+
+	/* Printing */
+	item = gtk_image_menu_item_new_with_label("Print page");
+	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(item),
+	gtk_image_new_from_stock(GTK_STOCK_PRINT, GTK_ICON_SIZE_MENU));
+	gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
+	g_signal_connect(item, "activate", G_CALLBACK(print_page_cb), webview);
 	
 	gtk_widget_show_all(GTK_WIDGET(menu));
 }
