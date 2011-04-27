@@ -119,13 +119,26 @@ uri_entry_cb(GtkWidget* urientry, WebKitWebView* webview)
 	webkit_web_view_load_uri(webview, uri);
 }
 
-/* Search entry callback function */
+/* Search entry and icon callback function */
 static void
-search_entry_cb(GtkWidget* search, WebKitWebView* webview)
+search_web(GtkWidget* search, WebKitWebView* webview)
 {
 	uri = g_strdup_printf(SEARCH, gtk_entry_get_text(GTK_ENTRY(search)));
 	g_assert(uri);
 	webkit_web_view_load_uri(webview, uri);
+}
+
+static void
+search_entry_cb(GtkWidget* search, WebKitWebView* webview)
+{
+	search_web(search, webview);
+}
+
+static void
+search_icon_press_cb(GtkWidget *search, GtkEntryIconPosition pos,
+		GdkEvent *event, WebKitWebView* webview)
+{
+    search_web(search, webview);
 }
 
 /* Navigation button function */
@@ -341,10 +354,10 @@ create_toolbar(GtkWidget* urientry, GtkWidget* search, WebKitWebView* webview)
 	gtk_tool_item_set_expand(item, TRUE);
 	gtk_widget_set_size_request(urientry, 0, 20);
 	gtk_container_add(GTK_CONTAINER(item), urientry);
+	gtk_toolbar_insert(GTK_TOOLBAR(toolbar), item, -1);
 	g_signal_connect(G_OBJECT(urientry), "activate",
 			G_CALLBACK(uri_entry_cb), webview);
-	gtk_toolbar_insert(GTK_TOOLBAR(toolbar), item, -1);
-
+	
 	/* Separator */
 	item = gtk_separator_tool_item_new();
 	gtk_toolbar_insert(GTK_TOOLBAR(toolbar), item, -1); 
@@ -352,24 +365,15 @@ create_toolbar(GtkWidget* urientry, GtkWidget* search, WebKitWebView* webview)
 	/* Search entry */
 	item = gtk_tool_item_new();
 	gtk_widget_set_size_request(search, 150, 20);
+	gtk_container_add(GTK_CONTAINER(item), search);
+	gtk_toolbar_insert(GTK_TOOLBAR(toolbar), item, -1);
 	gtk_entry_set_icon_from_stock(GTK_ENTRY(search),
 			GTK_ENTRY_ICON_SECONDARY, GTK_STOCK_FIND);
-	/*
-	 * FIXME: The icon can be activatable but must be connected to a callback to
-	 * valid the search. With GTK_ENTRY_ICON_SECONDARY it do a segfault maybe
-	 * with GTK_ENTRY_ICON_PRIMARY it dont crash but dont works.
-	 */
-	gtk_entry_set_icon_activatable(GTK_ENTRY(search),
-			GTK_ENTRY_ICON_SECONDARY, FALSE);
-	//g_signal_connect(GTK_ENTRY(search), "icon-press",
-	//		G_CALLBACK(search_entry_cb), webview);
-	//gtk_entry_set_icon_tooltip_text (GTK_ENTRY(search),
-	//		GTK_ENTRY_ICON_SECONDARY, "Search the web");
-	gtk_container_add(GTK_CONTAINER(item), search);
+	g_signal_connect(GTK_ENTRY(search), "icon-press",
+			G_CALLBACK(search_icon_press_cb), webview);
 	g_signal_connect(G_OBJECT(search), "activate",
 			G_CALLBACK(search_entry_cb), webview);
-	gtk_toolbar_insert(GTK_TOOLBAR(toolbar), item, -1);
-
+	
 	/* The Fullscreen button */
 	item = gtk_tool_button_new_from_stock(GTK_STOCK_FULLSCREEN);
 	g_signal_connect(G_OBJECT(item), "clicked",
