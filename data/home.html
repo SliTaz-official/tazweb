@@ -11,22 +11,14 @@
 	<h1>My Web Home</h1>
 </div>
 
-<!-- Start content -->
+<!-- start:content -->
 <div id="content">
 
 <!--
 	Welcome to your personal and custom TazWeb page: a pure xHTML 5 file
-	with some CSS for the design, you can customize it as you want. To add
-	a section title you can use <h2></h2> elements and <div></div> to
-	organize content.
-
-	Here is an example of a bookmark entry, copy and paste it somewhere
-	between an <ul></ul> element to add an entry in the list.
-	
-	<li>
-		<a href="URL">NAME</a>
-		: DESCRIPTION
-	</li>
+	with some CSS for the design, you can customize it as you want. All
+	the page style is in the file: style.css. To add a section title you
+	can use <h2></h2> elements and <div></div> to organize content.
 -->
 
 <div id="cloud">
@@ -41,27 +33,21 @@
 	<a class="tag8" href="http://tazpanel:82/">TazPanel</a>
 </div>
 
-<!-- A nice bookmarks list (Uncomment img to have favicons) -->
-<div id="bookmarks">
-	<h2>Bookmarks</h2>
-	<ul>
-		<li>
-			<!-- <img src="http://www.slitaz.org/favicon.ico" /> -->
-			<a href="http://bugs.slitaz.org/">bugs.slitaz.org</a>
-			: SliTaz Bug tracker
-		</li>
-		<li>
-			<!-- <img src="http://www.gnu.org/favicon.ico" /> -->
-			<a href="http://www.gnu.org/">www.gnu.org</a>
-			: The GNU Website
-		</li>
-		<li>
-			<!-- <img src="http://is.gd/isgd_favicon.ico" /> -->
-			<a href="http://is.gd/">is.gd</a>
-			: URL shortener
-		</li>
-	</ul>
-</div>
+<!--
+	The bookmarks list must finish with end:bookmarks markup since it
+	is used by TazWeb to add a new item via the right click menu. Tip:
+	you can add a favicon image with a bookmark URL by adding this code
+	between <li> and <a : <img src="http://www.gnu.org/favicon.ico" />
+-->
+
+<h2>Bookmarks</h2>
+<ul>
+	<!-- start:bookmarks -->
+	<li><a href="http://bugs.slitaz.org/">SliTaz Bug tracker</a></li>
+	<li><a href="http://www.gnu.org/">The GNU Website</a></li>
+	<li><a href="http://is.gd/">is.gd URL shortener</a></li>
+	<!-- end:bookmarks -->
+</ul>
 
 <!-- End content -->
 </div>

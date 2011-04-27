@@ -189,10 +189,9 @@ static gboolean
 download_requested_cb(WebKitWebView *webview, WebKitDownload *download,
 		gpointer user_data)
 {
-	uri = webkit_download_get_uri(download);
 	const gchar* buffer;
-	asprintf(&buffer,
-			"xterm -T 'Download' -geom 72x10+0-24 -e \
+	uri = webkit_download_get_uri(download);
+	asprintf(&buffer, "xterm -T 'Download' -geom 72x10+0-24 -e \
 				'cd $HOME/Downloads && wget -c %s; sleep 2' &", uri);
 	system(buffer);
 }
@@ -243,6 +242,23 @@ close_webview_cb(WebKitWebView* webview, GtkWidget* window)
 	return TRUE;
 }
 
+/* Add a bookmark to home.html */
+void
+add_bookmark_cb(GtkWidget *widget, gpointer data)
+{
+	const gchar* title;
+	const gchar* buffer;
+	
+	title = webkit_web_view_get_title(WEBKIT_WEB_VIEW (webview));
+	uri = webkit_web_view_get_uri(WEBKIT_WEB_VIEW (webview));
+	
+	asprintf(&buffer, "sed -i \
+			-e '/<!-- end:bookmarks -->/ i <li><a href=\"%s\">%s</a></li>' \
+			-e s'/^<li>/	<li>/' $HOME/.config/tazweb/home.html &",
+			uri, title);
+	system(buffer);
+}
+
 /* Add items to WebKit contextual menu */
 static void
 populate_menu_cb(WebKitWebView *webview, GtkMenu *menu, gpointer data)
@@ -271,15 +287,26 @@ populate_menu_cb(WebKitWebView *webview, GtkMenu *menu, gpointer data)
 	item = gtk_separator_menu_item_new();
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
 
+	/* Add to bookmarks */
+	item = gtk_image_menu_item_new_with_label("Add a bookmark");
+	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(item),
+	gtk_image_new_from_stock(GTK_STOCK_ADD, GTK_ICON_SIZE_MENU));
+	gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
+	g_signal_connect(item, "activate", G_CALLBACK(add_bookmark_cb), webview);
+
+	/* Separator */
+	item = gtk_separator_menu_item_new();
+	gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
+
 	/* View source mode */
-	item = gtk_image_menu_item_new_with_label("View source");
+	item = gtk_image_menu_item_new_with_label("View source mode");
 	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(item),
 	gtk_image_new_from_stock(GTK_STOCK_PROPERTIES, GTK_ICON_SIZE_MENU));
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
 	g_signal_connect(item, "activate", G_CALLBACK(view_source_cb), webview);
 
 	/* Printing */
-	item = gtk_image_menu_item_new_with_label("Print page");
+	item = gtk_image_menu_item_new_with_label("Print this page");
 	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(item),
 	gtk_image_new_from_stock(GTK_STOCK_PRINT, GTK_ICON_SIZE_MENU));
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
@@ -292,7 +319,7 @@ populate_menu_cb(WebKitWebView *webview, GtkMenu *menu, gpointer data)
 	/* TazWeb documentation */
 	item = gtk_image_menu_item_new_with_label("TazWeb manual");
 	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(item),
-	gtk_image_new_from_stock(GTK_STOCK_INFO, GTK_ICON_SIZE_MENU));
+	gtk_image_new_from_stock(GTK_STOCK_HELP, GTK_ICON_SIZE_MENU));
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
 	g_signal_connect(item, "activate", G_CALLBACK(tazweb_doc_cb), webview);
 	
