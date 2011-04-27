@@ -271,15 +271,8 @@ populate_menu_cb(WebKitWebView *webview, GtkMenu *menu, gpointer data)
 	item = gtk_separator_menu_item_new();
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
 
-	/* TazWeb documentation */
-	item = gtk_image_menu_item_new_with_label("TazWeb manual");
-	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(item),
-	gtk_image_new_from_stock(GTK_STOCK_INFO, GTK_ICON_SIZE_MENU));
-	gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
-	g_signal_connect(item, "activate", G_CALLBACK(tazweb_doc_cb), webview);
-
 	/* View source mode */
-	item = gtk_image_menu_item_new_with_label("View source mode");
+	item = gtk_image_menu_item_new_with_label("View source");
 	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(item),
 	gtk_image_new_from_stock(GTK_STOCK_PROPERTIES, GTK_ICON_SIZE_MENU));
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
@@ -291,6 +284,17 @@ populate_menu_cb(WebKitWebView *webview, GtkMenu *menu, gpointer data)
 	gtk_image_new_from_stock(GTK_STOCK_PRINT, GTK_ICON_SIZE_MENU));
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
 	g_signal_connect(item, "activate", G_CALLBACK(print_page_cb), webview);
+
+	/* Separator */
+	item = gtk_separator_menu_item_new();
+	gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
+
+	/* TazWeb documentation */
+	item = gtk_image_menu_item_new_with_label("TazWeb manual");
+	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(item),
+	gtk_image_new_from_stock(GTK_STOCK_INFO, GTK_ICON_SIZE_MENU));
+	gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
+	g_signal_connect(item, "activate", G_CALLBACK(tazweb_doc_cb), webview);
 	
 	gtk_widget_show_all(GTK_WIDGET(menu));
 }
