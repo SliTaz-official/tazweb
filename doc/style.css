@@ -3,6 +3,7 @@
 body { font: 88% sans-serif, vernada, arial; margin: 0; }
 h1 { margin: 0; padding: 8px; color: #fff; font-size: 20px; }
 h2 { color: #444; } h3 { color: #666; font-size: 140%; }
+a:hover { text-decoration: none; }
 pre {
 	background-color: #f8f8f8;
 	border: 1px solid #ddd;
