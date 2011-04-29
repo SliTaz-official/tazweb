@@ -217,7 +217,7 @@ print_page_cb (GtkWidget *widget, gpointer data)
         WEBKIT_WEB_VIEW (webview)));
 }
 
-/* New webview clallbacks */
+/* New webview callbacks */
 static WebKitWebView*
 create_web_view_cb(WebKitWebView* webview, WebKitWebFrame* web_frame,
 		GtkWidget* window)

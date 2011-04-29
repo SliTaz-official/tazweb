@@ -20,17 +20,16 @@
 	TazWeb is a radically simple and very light web browser providing a
 	single window with a small toolbar and a contextual menu, but without
 	any menubar or tabs. Navigation is done with a right click anywhere in
-	the browser window or from the toolbar. It also handle bookmarks in a
-	personnal home page, provide a source view mode, zoom and printing
-	functions. TazWeb let you quickly search the web throught the search
+	the browser window or from the toolbar. It can also handle bookmarks in a
+	personal home page, provide a source view mode and zoom and printing
+	functions. TazWeb lets you quickly search the web through a search
 	entry and Google. This documentation file is always accessible from the
-	right-hand side. 
+	right-hand side of the toolbar. 
 </p>
 <p>
-	The browser fast, very fast and is small, very small, the binary is about
-	24 Kb and uses the Webkit engine for page rendering and therefore supports 
-	all latest web standards as well as Javascript and Flash animations or
-	videos.
+	The browser fast, very fast and small, the binary is about 24 Kb and uses 
+	the Webkit engine for page rendering and therefore supports all the latest 
+	web standards as well as Javascript and Flash animations or videos.
 </p>
 
 <h3>History</h3>
@@ -42,13 +41,13 @@
 	web server is Busybox httpd.
 </p>
 
-<h3>Security and personnal data</h3>
+<h3>Security and personal data</h3>
 <p>
-	TazWeb is a very secure browser and it dont store any personnal data,
-	no session, cookie or history file is created. So you can't have your
-	websites settings saved and will have to enter login information each
-	time you restart the browser, but by the way websites can track you
-	with cookies!
+	TazWeb is a very secure browser and doesn't store any personal data, therefore
+	no sessions, cookies or history files are created. So your websites settings 
+	will not be saved and you will have to enter login information each
+	time you restart the browser (by the way websites can track you
+	with cookies!).
 </p>
 
 <h3>My Home Page and bookmarks</h3>
@@ -73,10 +72,10 @@
 </p>
 <p>
 	Bookmarks can be handled by TazWeb and you can easily add a bookmark to
-	your home page with the right click menu item: "Add a bookmark". To work
-	TazWeb use a markup in your home.html document, this markup should not
+	your home page with the right click menu item: <i>"Add a bookmark"</i>. To function
+	TazWeb uses markup in your home.html document; this markup should not
 	be removed if you want bookmarking to work since each new item will be
-	add just before the line: &gt;!-- end:bookmarks --&lt;
+	added just before the line: <i>&gt;!-- end:bookmarks --&lt;</i>
 </p>
 <p>
 	Note: You will find the default home.html in: /usr/share/tazweb and
@@ -109,21 +108,21 @@ $ tazweb <a href="http://www.slitaz.org/">http://www.slitaz.org/</a>
 	with a slitaz-configs package update.
 </p>
 <p>
-	When you stat TazWeb from the cmdline with an URL in argument, you dont
-	have to put http:// since TazWeb will transform URL's for you.
+	When you start TazWeb from the cmdline with an URL in the argument, you dont
+	have to put http:// since TazWeb will transform URLs for you.
 </p>
 
 <h3>URL and search entry</h3>
 <p>
-	The URL entry in the toolbar let you enter a website address and shows
+	The URL entry in the toolbar lets you enter a website address and shows
 	the current website location. You can use selection, copy and paste in
-	the URL entry and dont have to put http:// before a location, Tazweb
-	will transform URL's for you. To activation a new URL you must press
+	the URL entry and don't have to put http:// before a location, Tazweb
+	will transform URLs for you. To activate a new URL you must press
 	ENTER.
 </p>
 <p>
-	The search entry let you search the web at anytime using Google. Just
-	enter you query and press ENTER or click on the entry icon to valide
+	The search entry lets you search the web at anytime using Google. Just
+	enter your query and press ENTER or click on the entry icon to validate
 	your request.
 </p>
 
@@ -145,18 +144,18 @@ Exec=tazweb http://scn.slitaz.org/
 
 <h3>Bugs and development</h3>
 <p>
-	TazWeb is an open-source project under BSD license and all resource are
+	TazWeb is an open-source project under a BSD license and all resources are
 	provided by SliTaz GNU/Linux, we use a Mercurial repository for code
-	management, discussion and support are done on the SliTaz community
-	<a href="http://forum.slitaz.org/">forum</a>. You missing a feature in
-	TazWeb or found a bug ? Please post an issue on our Roundup bugs tracket
+	management, discussion and support is done through the SliTaz community
+	<a href="http://forum.slitaz.org/">forum</a>. If you're missing any features in
+	TazWeb or find any bugs ? Please post an issue on our Roundup bug tracker
 	at: <a href="http://bugs.slitaz.org/">bugs.slitaz.org</a>
 </p>
 <p>
-	If you want to get involved or help in development, you can start by cloning
-	TazWeb repository and the submit you patch, improved documentation or artwork
-	to SliTaz mailing list or on the <a href="http://scn.slitaz.org/">SCN</a>. To
-	clone or browse TazWeb Hg repository:
+	If you want to help and get involved in development, you can start by cloning the
+	TazWeb repository and then submit your patch, improved documentation or artwork
+	to the SliTaz mailing list or on the <a href="http://scn.slitaz.org/">SCN</a>. To
+	clone or browse the TazWeb Hg repository:
 </p>
 <pre>
 $ hg clone <a href="http://hg.slitaz.org/tazweb">http://hg.slitaz.org/tazweb</a>
