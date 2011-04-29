@@ -192,7 +192,7 @@ download_requested_cb(WebKitWebView *webview, WebKitDownload *download,
 	const gchar* buffer;
 	uri = webkit_download_get_uri(download);
 	asprintf(&buffer, "xterm -T 'Download' -geom 72x10+0-24 -e \
-				'cd $HOME/Downloads && wget -c %s; sleep 2' &", uri);
+				'mkdir -p $HOME/Downloads && cd $HOME/Downloads && wget -c %s; sleep 2' &", uri);
 	system(buffer);
 }
 
