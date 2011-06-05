@@ -19,10 +19,19 @@
 <p>
 	O TazWeb é um navegador web extremamente simples e leve, consistindo
 	em uma única janela com uma pequena barra de tarefas, sem menus ou
-	abas. A navegação é feita por cliques de mouse na janela do browser
-	ou pela barra de tarefas, sendo que o modo de tela cheia e esta 
-	documentação são acessíveis pelo lado direito desta.
+	abas. Ele fornece suporte a favoritos, visualização do código fonte
+	da página, zoom e impressão. Traz também um campo que facilita a 
+	rápida pesquisa na web. A navegação é feita por cliques de mouse 
+	na janela do browser ou pela barra de tarefas, sendo que o modo de 
+	tela cheia e esta documentação são acessíveis pelo lado direito desta.
 </p>
+<p>
+	O TazWeb é pequeno, muito pequeno: seu binário possui cerca de 24 Kb.
+	Usa o Webkit como motor de renderização de páginas, suportando
+	todos os padrões web, Javascript e animações e vídeos em Flash.
+</p>
+
+<h3>História</h3>
 <p>
 	Este navegador foi criado com o intuito de ser utilizado pelo
 	TazPanel, que é a central de Administração de sistema do SliTaz,
@@ -30,11 +39,54 @@
 	e CSS3 para a interface de usuário. Ele funciona com scrips CGI
 	sobre o servidor web httpd fornecido pelo Busybox.
 </p>
+
+<h3>Segurança e dados pessoais</h3>
 <p>
-	O TazWeb é pequeno, muito pequeno: seu binário possui cerca de 12 Kb.
-	Usa o Webkit como motor de renderização de páginas, suportando
-	todos os padrões web e também Javascript.
+	O TazWeb é seguro e não armazena dados pessoais, embora arquivos
+	temporários e cookies sejam criados. Cada vez que o browser é fechado,
+	estes arquivos são apagados, por isso você deverá oferecer seus dados
+	novamente em sites que se utilizam deles para guardar informações
+	sobre usuários.
 </p>
+
+<h3>Página Inicial e favoritos</h3>
+<p>
+	O navegador suporta uma página inicial personalizada, que também pode
+	ser utilizada para organizar seus favoritos. É localizada em 
+	$HOME/.config/tazweb/home.html e seu estilo CSS encontra-se em
+	$HOME/.config/tazweb/style.css.
+</p>
+<p>
+	Na primeira vez que é executado o TazWeb cria e copia a página para 
+	o diretório de configuração do usuário.
+	O arquivo é uma página xHTML 5 válida com uma lista de links e uma
+	caixa para organizá-los. Este arquivo pode ser editado em qualquer
+	editor de texto para adicionar conteúdo ou mudar a aparência da página
+	de forma customizada. 
+</p>
+<p>
+	Para adicionar mais recursos à página pode-se adicionar código 
+	javascript personalizado ou algum widget como o 
+	<a href="http://twitter.com/about/resources/widgets">
+	Widget do Twitter</a>, que pode ser visto em ação na página principal
+	do SliTaz.
+</p>
+<p>
+	Os favoritos podem ser adicionados ao se clicar com o botão direito
+	numa página e ao selecionar a opção <i>"Add a bookmark"</i>. O TazWeb
+	utiliza linguagem de marcação para armazenar os favoritos no arquivo
+	home.html. Esta marcação não deve ser removida, visto que os links
+	serão adicionados antes da linha que contém a marcação 
+	<i>&gt;!-- end:bookmarks --&lt;</i>
+</p>
+<p>
+	Nota: a página home.html padrão está localizada em /usr/share/tazweb.
+	Pode-se copiá-la manualmente para a pasta de configuração de usuário
+	com o comando:
+</p>
+<pre>
+$ cp -r /usr/share/tazweb $HOME/.config/tazweb
+</pre>
 
 <h3>Página inicial e url em argumentos</h3>
 
@@ -56,6 +108,20 @@
 	atualização do referido pacote.
 </p>
 
+<h3>Barra de endereços e campo de busca</h3>
+<p>
+	A barra de endereço na barra de ferramentas permite a entrada de 
+	uma URL e a visualização da URL visitada. Pode-se copiar e colar
+	qualquer URL no campo, sem a necessidade de especificar o protocolo
+	http:// visto que o TazWeb transforma as URLs ao se pressionar a tecla
+	ENTER.
+</p>
+<p>
+	O campo de busca utiliza o google para pesquisas, devendo-se especificar
+	os termos da busca no campo e pressionar a tecla ENTER ou clicar 
+	com o mouse no ícode de busca.
+</p>
+
 <h3>Aplicações Web</h3>
 <p>
 	O navegador TazWeb é perfeito para iniciar aplicações web por
@@ -69,6 +135,26 @@ Type=Application
 Name=SliTaz SCN
 Icon=slitaz-menu
 Exec=tazweb http://scn.slitaz.org/
+</pre>
+
+<h3>Bugs e desenvolvimento</h3>
+<p>
+	O TazWeb é um projeto opensource sob licença BSD e todos os recursos
+	são fornecidos pelo SliTaz GNU/Linux. Um repositório mercurial é 
+	utilizado para o gerenciamento de código, discussão e suporte são
+	realizadas no <a href="http://forum.slitaz.org/">fórum do SliTaz</a>. 
+	Pedidos de inserção de funcionalidades ou reporte de bugs são feitos
+	em <a href="http://bugs.slitaz.org/">bugs.slitaz.org</a>
+</p>
+<p>
+	Para ajudar no desenvolvimento do projeto, pode-se clonar o repositório
+	e submeter patches, melhorar a documentação ou criar nova arte, 
+	enviando-os na lista de discussão ou na plataforma da comunidade de 
+	usuários <a href="http://scn.slitaz.org/">SCN</a>. Para clonar
+	o repositório (é necessário ter o mercurial instalado):
+</p>
+<pre>
+$ hg clone <a href="http://hg.slitaz.org/tazweb">http://hg.slitaz.org/tazweb</a>
 </pre>
 
 <!-- End content -->
