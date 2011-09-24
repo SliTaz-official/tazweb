@@ -430,6 +430,7 @@ create_toolbar(GtkWidget* urientry, GtkWidget* search, WebKitWebView* webview)
 	return toolbar;
 }
 
+static gboolean notoolbar;
 /* Main window */
 static GtkWidget*
 create_window(WebKitWebView** newwebview)
@@ -457,8 +458,9 @@ create_window(WebKitWebView** newwebview)
 	/* Pack box and container */
 	gtk_box_pack_start(GTK_BOX(vbox),
 			create_browser(window, urientry, search, webview), TRUE, TRUE, 0);
-	gtk_box_pack_start(GTK_BOX(vbox),
-			create_toolbar(urientry, search, webview), FALSE, FALSE, 0);
+	if (! notoolbar)
+		gtk_box_pack_start(GTK_BOX(vbox),
+				create_toolbar(urientry, search, webview), FALSE, FALSE, 0);
 	gtk_container_add(GTK_CONTAINER(window), vbox);
 	
 	if (newwebview)
@@ -470,6 +472,19 @@ create_window(WebKitWebView** newwebview)
 int
 main(int argc, char* argv[])
 {
+	while (argc > 1) {
+		if (!strcmp(argv[1],"--notoolbar")) {
+			notoolbar++;
+		}
+		else if (!strcmp(argv[1],"--useragent") && argc > 2) {
+			argc--;
+			argv++;
+			useragent = argv[1];
+		}
+		else break;
+		argc--;
+		argv++;
+	}
 	gtk_init(NULL, NULL);
 	if (!g_thread_supported())
 		g_thread_init(NULL);
