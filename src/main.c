@@ -14,7 +14,7 @@
 
 #define CONFIG   g_strdup_printf("%s/.config/tazweb", g_get_home_dir())
 #define START    "file:///usr/share/webhome/index.html"
-#define SEARCH   "http://duckduckgo.com/?q=%s"
+#define SEARCH   "http://duckduckgo.com/?q=%s&t=slitaz"
 
 /* Needs AppleWebKit/531.2+ to handle all sites ? */
 static gchar *useragent = "TazWeb (X11; SliTaz GNU/Linux; U; en_US)";
