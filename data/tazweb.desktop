@@ -1,6 +1,7 @@
 [Desktop Entry]
 Type=Application
 Name=TazWeb Browser
+Name[ru]=Браузер TazWeb
 Icon=tazweb
 Exec=tazweb %u
 Categories=Network;

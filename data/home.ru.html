@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ru">
+<head>
+	<meta charset="utf-8" />
+	<title>Моя веб-страница</title>
+	<link rel="stylesheet" type="text/css" href="style.css" />
+</head>
+<body>
+
+<div id="header">
+	<h1>Моя домашняя страница</h1>
+</div>
+
+<!-- start:content -->
+<div id="content">
+
+<!--
+	Добро пожаловать на вашу личную и настраиваемую страницу TazWeb:
+	перед вами файл формата xHTML 5 с небольшим добавлением CSS для дизайна,
+	всё это вы можете настроить, как вы хотите. Все стили страницы находятся
+	в файле style.css. Чтобы добавить название раздела, используйте теги
+	<h2>…</h2>, а для организации содержимого используйте <div>…</div>.
+-->
+
+<div id="cloud">
+	<a class="tag4" href="http://www.slitaz.org/">Сайт SliTaz</a>
+	<a class="tag6" href="http://scn.slitaz.org/">SCN</a>
+	<a class="tag8" href="http://wikipedia.org/">Википедия</a>
+	<a class="tag5" href="http://forum.slitaz.org/">Форум SliTaz</a>
+	<a class="tag4" href="http://duckduckgo.com/">DuckDuckGo</a>
+	<a class="tag4" href="http://www.google.com/">Google</a>
+	<a class="tag6" href="http://doc.slitaz.org/">Wiki SliTaz</a>
+	<a class="tag5" href="http://twitter.com">Twitter</a>
+	<a class="tag2" href="http://search.yahoo.com/">Yahoo</a>
+	<a class="tag8" href="http://tazpanel:82/">TazPanel</a>
+</div>
+
+<!--
+	Список закладок обязательно должен заканчиваться строкой с текстом
+	«end:bookmarks», поскольку эта строка используется TazWeb для добавления
+	новых элементов с помощью контекстного меню. Совет: вы можете поместить
+	значок перед адресом закладки, добавив примерно такой код между <li> и <a:
+	<img src="http://www.gnu.org/favicon.ico" />
+-->
+
+<h2>Закладки</h2>
+<ul>
+	<!-- start:bookmarks -->
+	<li><a href="http://bugs.slitaz.org/">Баг-трекер SliTaz</a></li>
+	<li><img src="http://www.gnu.org/favicon.ico" /><a href="http://www.gnu.org/">Сайт GNU</a></li>
+	<li><a href="http://is.gd/">Сокращатель ссылок is.gd</a></li>
+	<!-- end:bookmarks -->
+</ul>
+
+<!-- End content -->
+</div>
+
+</body>
+</html>

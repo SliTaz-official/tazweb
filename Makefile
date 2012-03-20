@@ -25,6 +25,10 @@ install:
 		$(DESTDIR)$(PREFIX)/share/pixmaps/tazweb.png
 	install -m 0644 data/tazweb.desktop \
 		$(DESTDIR)$(PREFIX)/share/applications
+	install -m 0644 data/home.en.html \
+		$(DESTDIR)$(PREFIX)/share/tazweb
+	install -m 0644 data/home.ru.html \
+		$(DESTDIR)$(PREFIX)/share/tazweb
 	install -m 0644 data/home.html \
 		$(DESTDIR)$(PREFIX)/share/tazweb
 	install -m 0644 data/style.css \
