@@ -5,7 +5,7 @@ DOCDIR?=$(PREFIX)/share/doc
 DESTDIR?=
 
 PACKAGE=tazweb
-VERSION=1.2
+VERSION=1.5
 
 all:
 	gcc src/main.c -o $(PACKAGE) \
@@ -21,16 +21,11 @@ install:
 		$(DESTDIR)$(PREFIX)/share/applications
 	install -m 0755 $(PACKAGE) $(DESTDIR)$(PREFIX)/bin
 	cp -d doc/* $(DESTDIR)$(DOCDIR)/$(PACKAGE)
-	install -m 0644 data/tazweb-icon.png \
-		$(DESTDIR)$(PREFIX)/share/pixmaps/tazweb.png
+	install -m 0644 data/tazweb.png \
+		$(DESTDIR)$(PREFIX)/share/pixmaps
 	install -m 0644 data/tazweb.desktop \
 		$(DESTDIR)$(PREFIX)/share/applications
-	install -m 0644 data/home.en.html \
-		$(DESTDIR)$(PREFIX)/share/tazweb
-	install -m 0644 data/home.ru.html \
-		$(DESTDIR)$(PREFIX)/share/tazweb
-	install -m 0644 data/home.html \
-		$(DESTDIR)$(PREFIX)/share/tazweb
+	cp -a data/*.html $(DESTDIR)$(PREFIX)/share/tazweb
 	install -m 0644 data/style.css \
 		$(DESTDIR)$(PREFIX)/share/tazweb
 

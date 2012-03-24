@@ -490,8 +490,11 @@ main(int argc, char* argv[])
 		g_thread_init(NULL);
 
 	/* Get a default home.html if missing */
-	if (! g_file_test(CONFIG, G_FILE_TEST_EXISTS))
-		system("cp -r /usr/share/tazweb $HOME/.config/tazweb");
+	if (! g_file_test(CONFIG, G_FILE_TEST_EXISTS)) {
+		system("mkdir -p $HOME/.config/tazweb");
+		system("cp /usr/share/tazweb/home.html $HOME/.config/tazweb");
+		system("cp /usr/share/tazweb/style.css $HOME/.config/tazweb");
+	}
 
 	/* Load the start page file or the url in argument */
 	uri =(char*)(argc > 1 ? argv[1] : START);
