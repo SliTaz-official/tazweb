@@ -4,7 +4,7 @@
  * as a contextual menu, but no menu bar or tabs. Commented line code
  * starts with // and comments are between * *
  *
- * Copyright (C) 2011-2012 SliTaz GNU/Linux - BSD License
+ * Copyright (C) 2011-2013 SliTaz GNU/Linux - BSD License
  * See AUTHORS and LICENSE for detailed information
  * 
  */
