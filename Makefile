@@ -6,7 +6,7 @@ DESTDIR?=
 
 PACKAGE=tazweb
 VERSION=1.6.4
-LINGUAS?=ru
+LINGUAS?=fr pt_BR ru
 
 all:
 	gcc src/main.c -o $(PACKAGE) \
