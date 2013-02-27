@@ -1,0 +1,42 @@
+# Russian translations for TazWeb package
+# Copyright (C) 2011-2013 SliTazWeb
+# This file is distributed under the same license as the TazWeb package.
+# Aleksej Bobylev <al.bobylev@gmail.com>, 2013.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: TazWeb 1.6.4\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-02-19 18:17+0000\n"
+"PO-Revision-Date: 2013-02-19 18:21-0000\n"
+"Last-Translator: Aleksej Bobylev <al.bobylev@gmail.com>\n"
+"Language-Team: Russian\n"
+"Language: ru\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: src/main.c:278
+msgid "Zoom in"
+msgstr "Увеличить"
+
+#: src/main.c:285
+msgid "Zoom out"
+msgstr "Уменьшить"
+
+#: src/main.c:296
+msgid "Add a bookmark"
+msgstr "Добавить закладку"
+
+#: src/main.c:307
+msgid "View source mode"
+msgstr "Исходный код"
+
+#: src/main.c:314
+msgid "Print this page"
+msgstr "Печать страницы"
+
+#: src/main.c:325
+msgid "TazWeb manual"
+msgstr "Руководство TazWeb"
+

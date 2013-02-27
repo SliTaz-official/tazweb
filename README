@@ -34,11 +34,15 @@ TazWeb depends on GTK and libwebkit. To build and test, simply:
 $ make
 $ ./tazweb
 
-Install with 'make install' (PREFIX and DESTDIR are supported for packaging)
+Generate translation files:
+
+$ make msgfmt
+
+Install with 'make install' (PREFIX and DESTDIR are supported for packaging).
+
 
 Coding notes
 ------------
-
     * To get the filename of a WebKitDownload:
       file = webkit_download_get_suggested_filename (download);
       
@@ -61,8 +65,35 @@ Coding notes
     * Append a string
       g_string_append(string, " - TazWeb");
 
-     * Editable webview
-       webkit_web_view_set_editable (webview, TRUE);
-      
+    * Editable webview
+      webkit_web_view_set_editable (webview, TRUE);
+
+
+i18n
+----
+Internationalization of TazWeb was introduced since version 1.6.4.
+It's standard GLib technique described in developer notes:
+http://developer.gnome.org/glib/2.32/glib-I18N.html
+
+Translation template (tazweb.pot) and all translations (xx.po) contained
+in the po/ folder. To start a new translation use msginit from the
+po/ directory. Example for French/France locale (fr_FR):
+
+$ msginit -l fr_FR -o fr.po -i tazpanel.pot
+
+If you run msginit directly without any parameters, locale settings of your
+system will be used.
+
+To update pot file from a newly updated sources:
+
+$ make pot
+
+To update all translations from a newly updated pot file:
+
+$ make msgmerge
+
+To clear the distro from temporary compiled and generated files:
+
+$ make clean
 
 ================================================================================

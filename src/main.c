@@ -9,6 +9,10 @@
  * 
  */
 
+#include <glib.h>
+#include <glib/gi18n.h>
+#define GETTEXT_PACKAGE "tazweb"
+
 #include <gtk/gtk.h>
 #include <webkit/webkit.h>
 
@@ -271,14 +275,14 @@ populate_menu_cb(WebKitWebView *webview, GtkMenu *menu, gpointer data)
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
 
 	/* Zoom in */
-	item = gtk_image_menu_item_new_with_label("Zoom in");
+	item = gtk_image_menu_item_new_with_label(_("Zoom in"));
 	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(item),
 	gtk_image_new_from_stock(GTK_STOCK_ZOOM_IN, GTK_ICON_SIZE_MENU));
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
 	g_signal_connect(item, "activate", G_CALLBACK(zoom_in_cb), webview);
 	
 	/* Zoom out */
-	item = gtk_image_menu_item_new_with_label("Zoom out");
+	item = gtk_image_menu_item_new_with_label(_("Zoom out"));
 	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(item),
 	gtk_image_new_from_stock(GTK_STOCK_ZOOM_OUT, GTK_ICON_SIZE_MENU));
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
@@ -289,7 +293,7 @@ populate_menu_cb(WebKitWebView *webview, GtkMenu *menu, gpointer data)
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
 
 	/* Add to bookmarks */
-	item = gtk_image_menu_item_new_with_label("Add a bookmark");
+	item = gtk_image_menu_item_new_with_label(_("Add a bookmark"));
 	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(item),
 	gtk_image_new_from_stock(GTK_STOCK_ADD, GTK_ICON_SIZE_MENU));
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
@@ -300,14 +304,14 @@ populate_menu_cb(WebKitWebView *webview, GtkMenu *menu, gpointer data)
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
 
 	/* View source mode */
-	item = gtk_image_menu_item_new_with_label("View source mode");
+	item = gtk_image_menu_item_new_with_label(_("View source mode"));
 	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(item),
 	gtk_image_new_from_stock(GTK_STOCK_PROPERTIES, GTK_ICON_SIZE_MENU));
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
 	g_signal_connect(item, "activate", G_CALLBACK(view_source_cb), webview);
 
 	/* Printing */
-	item = gtk_image_menu_item_new_with_label("Print this page");
+	item = gtk_image_menu_item_new_with_label(_("Print this page"));
 	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(item),
 	gtk_image_new_from_stock(GTK_STOCK_PRINT, GTK_ICON_SIZE_MENU));
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
@@ -318,7 +322,7 @@ populate_menu_cb(WebKitWebView *webview, GtkMenu *menu, gpointer data)
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
 
 	/* TazWeb documentation */
-	item = gtk_image_menu_item_new_with_label("TazWeb manual");
+	item = gtk_image_menu_item_new_with_label(_("TazWeb manual"));
 	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(item),
 	gtk_image_new_from_stock(GTK_STOCK_HELP, GTK_ICON_SIZE_MENU));
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
@@ -472,6 +476,8 @@ create_window(WebKitWebView** newwebview)
 int
 main(int argc, char* argv[])
 {
+	textdomain (GETTEXT_PACKAGE);
+
 	while (argc > 1) {
 		if (!strcmp(argv[1],"--notoolbar")) {
 			notoolbar++;

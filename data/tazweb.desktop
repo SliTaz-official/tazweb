@@ -2,7 +2,9 @@
 Type=Application
 Name=TazWeb Browser
 Name[ru]=Браузер TazWeb
+Comment=SliTaz simple, fast and small Web Browser
+Comment[ru]=Простой, быстрый и маленький браузер SliTaz
 Icon=tazweb
 Exec=tazweb %u
-Categories=Network;
+Categories=Network;WebBrowser;
 MimeType=text/html;text/xml;text/plain;application/xhtml+xml;application/xml;
