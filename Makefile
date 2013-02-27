@@ -51,6 +51,7 @@ install:
 	cp -a data/*.html $(DESTDIR)$(PREFIX)/share/tazweb
 	install -m 0644 data/style.css \
 		$(DESTDIR)$(PREFIX)/share/tazweb
+	mkdir -p $(DESTDIR)$(PREFIX)/share/locale
 	cp -a po/mo/* $(DESTDIR)$(PREFIX)/share/locale
 
 clean:
