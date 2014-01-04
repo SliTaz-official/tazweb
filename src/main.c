@@ -22,12 +22,13 @@
 
 /* Needs AppleWebKit/531.2+ to handle all sites ? */
 static gchar *useragent = "TazWeb (X11; SliTaz GNU/Linux; U; en_US)";
-
 static GtkWidget* create_window(WebKitWebView** newwebview);
 static GtkWidget *mainwindow, *vbox, *browser, *toolbar;
 static WebKitWebView *webview;
 static WebKitWebFrame *frame;
 static gint count = 0;
+static gboolean notoolbar;
+static gboolean kiosk;
 const gchar* uri;
 
 /* Create an icon */
@@ -167,17 +168,17 @@ go_forward_cb(GtkWidget* widget, WebKitWebView* webview)
 }
 
 /* Fullscreen and unfullscreen callback function */
-//static void
-//fullscreen_cb(GtkWindow* window, gpointer data)
-//{
-	//GdkWindowState state;
-	//state = gdk_window_get_state(gtk_widget_get_window(GTK_WIDGET(mainwindow)));
+static void
+fullscreen_cb(GtkWindow* window, gpointer data)
+{
+	GdkWindowState state;
+	state = gdk_window_get_state(gtk_widget_get_window(GTK_WIDGET(mainwindow)));
 
-	//if(state & GDK_WINDOW_STATE_FULLSCREEN)
-		//gtk_window_unfullscreen(GTK_WINDOW(mainwindow));
-	//else
-		//gtk_window_fullscreen(GTK_WINDOW(mainwindow));
-//}
+	if(state & GDK_WINDOW_STATE_FULLSCREEN)
+		gtk_window_unfullscreen(GTK_WINDOW(mainwindow));
+	else
+		gtk_window_fullscreen(GTK_WINDOW(mainwindow));
+}
 
 /* TazWeb doc callback function */
 static void
@@ -293,22 +294,13 @@ populate_menu_cb(WebKitWebView *webview, GtkMenu *menu, gpointer data)
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
 
 	/* Add to bookmarks */
-	item = gtk_image_menu_item_new_with_label(_("Add a bookmark"));
-	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(item),
-	gtk_image_new_from_stock(GTK_STOCK_ADD, GTK_ICON_SIZE_MENU));
-	gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
-	g_signal_connect(item, "activate", G_CALLBACK(add_bookmark_cb), webview);
-
-	/* Separator */
-	item = gtk_separator_menu_item_new();
-	gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
-
-	/* View source mode */
-	item = gtk_image_menu_item_new_with_label(_("View source mode"));
-	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(item),
-	gtk_image_new_from_stock(GTK_STOCK_PROPERTIES, GTK_ICON_SIZE_MENU));
-	gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
-	g_signal_connect(item, "activate", G_CALLBACK(view_source_cb), webview);
+	if (! kiosk) {
+		item = gtk_image_menu_item_new_with_label(_("Add a bookmark"));
+		gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(item),
+		gtk_image_new_from_stock(GTK_STOCK_ADD, GTK_ICON_SIZE_MENU));
+		gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
+		g_signal_connect(item, "activate", G_CALLBACK(add_bookmark_cb), webview);
+	}
 
 	/* Printing */
 	item = gtk_image_menu_item_new_with_label(_("Print this page"));
@@ -316,6 +308,13 @@ populate_menu_cb(WebKitWebView *webview, GtkMenu *menu, gpointer data)
 	gtk_image_new_from_stock(GTK_STOCK_PRINT, GTK_ICON_SIZE_MENU));
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
 	g_signal_connect(item, "activate", G_CALLBACK(print_page_cb), webview);
+
+	/* View source mode */
+	item = gtk_image_menu_item_new_with_label(_("View source mode"));
+	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(item),
+	gtk_image_new_from_stock(GTK_STOCK_PROPERTIES, GTK_ICON_SIZE_MENU));
+	gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
+	g_signal_connect(item, "activate", G_CALLBACK(view_source_cb), webview);
 
 	/* Separator */
 	item = gtk_separator_menu_item_new();
@@ -327,6 +326,17 @@ populate_menu_cb(WebKitWebView *webview, GtkMenu *menu, gpointer data)
 	gtk_image_new_from_stock(GTK_STOCK_HELP, GTK_ICON_SIZE_MENU));
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
 	g_signal_connect(item, "activate", G_CALLBACK(tazweb_doc_cb), webview);
+	
+	/* Separator */
+	item = gtk_separator_menu_item_new();
+	gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
+	
+	/* Quit TazWeb */
+	item = gtk_image_menu_item_new_with_label(_("Quit TazWeb"));
+	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(item),
+	gtk_image_new_from_stock(GTK_STOCK_CLOSE, GTK_ICON_SIZE_MENU));
+	gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
+	g_signal_connect(item, "activate", G_CALLBACK(destroy_cb), webview);
 	
 	gtk_widget_show_all(GTK_WIDGET(menu));
 }
@@ -355,14 +365,17 @@ create_browser(GtkWidget* window, GtkWidget* urientry, GtkWidget* search,
 			G_CALLBACK(notify_progress_cb), window);
 	g_signal_connect(webview, "notify::load-status",
 			G_CALLBACK(notify_load_status_cb), urientry);
-	g_signal_connect(webview, "download-requested",
-			G_CALLBACK(download_requested_cb), NULL);
-	g_signal_connect(webview, "create-web-view",
-			G_CALLBACK(create_web_view_cb), window);
 	g_signal_connect(webview, "web-view-ready",
 			G_CALLBACK(webview_ready_cb), window);
 	g_signal_connect(webview, "close-web-view",
 			G_CALLBACK(close_webview_cb), window);
+	/* Impossible to open in new window or download in kiosk mode */
+	if (! kiosk) {
+		g_signal_connect(webview, "download-requested",
+			G_CALLBACK(download_requested_cb), NULL);
+		g_signal_connect(webview, "create-web-view",
+			G_CALLBACK(create_web_view_cb), window);
+	}
 
 	/* Connect WebKit contextual menu items */
 	g_object_connect(G_OBJECT(webview), "signal::populate-popup",
@@ -426,15 +439,16 @@ create_toolbar(GtkWidget* urientry, GtkWidget* search, WebKitWebView* webview)
 			G_CALLBACK(search_entry_cb), webview);
 	
 	/* The Fullscreen button */
-	//item = gtk_tool_button_new_from_stock(GTK_STOCK_FULLSCREEN);
-	//g_signal_connect(G_OBJECT(item), "clicked",
-			//G_CALLBACK(fullscreen_cb), NULL);
-	//gtk_toolbar_insert(GTK_TOOLBAR(toolbar), item, -1);
-
+	if (! kiosk) {
+		item = gtk_tool_button_new_from_stock(GTK_STOCK_FULLSCREEN);
+		g_signal_connect(G_OBJECT(item), "clicked",
+				G_CALLBACK(fullscreen_cb), NULL);
+		gtk_toolbar_insert(GTK_TOOLBAR(toolbar), item, -1);
+	}
+	
 	return toolbar;
 }
 
-static gboolean notoolbar;
 /* Main window */
 static GtkWidget*
 create_window(WebKitWebView** newwebview)
@@ -464,7 +478,7 @@ create_window(WebKitWebView** newwebview)
 			create_browser(window, urientry, search, webview), TRUE, TRUE, 0);
 	if (! notoolbar)
 		gtk_box_pack_start(GTK_BOX(vbox),
-				create_toolbar(urientry, search, webview), FALSE, FALSE, 0);
+			create_toolbar(urientry, search, webview), FALSE, FALSE, 0);
 	gtk_container_add(GTK_CONTAINER(window), vbox);
 	
 	if (newwebview)
@@ -481,6 +495,9 @@ main(int argc, char* argv[])
 	while (argc > 1) {
 		if (!strcmp(argv[1],"--notoolbar")) {
 			notoolbar++;
+		}
+		else if (!strcmp(argv[1],"--kiosk")) {
+			kiosk++;
 		}
 		else if (!strcmp(argv[1],"--useragent") && argc > 2) {
 			argc--;
@@ -508,8 +525,12 @@ main(int argc, char* argv[])
 		check_requested_uri();
 		
 	mainwindow = create_window(&webview);
-	
 	gtk_widget_show_all(mainwindow);
+	
+	/* Fullscreen for Kiosk mode */
+	if (kiosk)
+		gtk_window_fullscreen(GTK_WINDOW(mainwindow));
+	
 	webkit_web_view_load_uri(webview, uri);
 	gtk_widget_grab_focus(GTK_WIDGET(webview));
 	gtk_main();
