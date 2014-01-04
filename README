@@ -3,9 +3,9 @@ TazWeb - SliTaz Web Browser
 
 
 TazWeb is a radically simple and very light web browser providing a single
-window with one small bottom toolbar using buttons, an URL and search entry,
+window with one small bottom toolbar using buttons, a URL and search entry,
 and a contextual menu but no menubar or tabs. Please keep the code simple
-and clean, if you are motivated and want to add some more functionality, 
+and clean. If you are motivated and want to add some more functionality, 
 please talk to the AUTHOR before commiting anything in the repos.
 
 TazWeb uses a custom page in the user Freedesktop directory to let users add
@@ -43,7 +43,7 @@ Install with 'make install' (PREFIX and DESTDIR are supported for packaging).
 
 Qt Build and install
 --------------------
-The Qt port is actually only little toy to play with!
+The Qt port is actually only a little toy to play with!
 
 $ cd src
 $ qmake
@@ -81,7 +81,7 @@ Coding notes
 i18n
 ----
 Internationalization of TazWeb was introduced since version 1.6.4.
-It's standard GLib technique described in developer notes:
+Its standard GLib technique is described in developer notes:
 http://developer.gnome.org/glib/2.32/glib-I18N.html
 
 Translation template (tazweb.pot) and all translations (xx.po) contained
