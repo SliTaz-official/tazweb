@@ -41,6 +41,15 @@ $ make msgfmt
 Install with 'make install' (PREFIX and DESTDIR are supported for packaging).
 
 
+Qt Build and install
+--------------------
+The Qt port is actually only little toy to play with!
+
+$ cd src
+$ qmake
+$ make
+
+
 Coding notes
 ------------
     * To get the filename of a WebKitDownload:

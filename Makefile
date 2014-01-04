@@ -59,6 +59,7 @@ clean:
 	rm -rf po/mo
 	rm -f po/*.mo
 	rm -f po/*.*~
+	rm -f src/Makefile src/*.o src/tazweb-qt
 
 help:
 	@echo "make [ pot | msgmerge | msgfmt | install | clean ]"
