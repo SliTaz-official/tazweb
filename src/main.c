@@ -474,11 +474,12 @@ create_window(WebKitWebView** newwebview)
 	vbox = gtk_vbox_new(FALSE, 0);
 	
 	/* Pack box and container */
-	gtk_box_pack_start(GTK_BOX(vbox),
-			create_browser(window, urientry, search, webview), TRUE, TRUE, 0);
 	if (! notoolbar)
 		gtk_box_pack_start(GTK_BOX(vbox),
 			create_toolbar(urientry, search, webview), FALSE, FALSE, 0);
+	gtk_box_pack_start(GTK_BOX(vbox),
+			create_browser(window, urientry, search, webview), TRUE, TRUE, 0);
+	
 	gtk_container_add(GTK_CONTAINER(window), vbox);
 	
 	if (newwebview)
