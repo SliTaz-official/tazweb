@@ -8,13 +8,14 @@ msgstr ""
 "Project-Id-Version: TazWeb 1.6.4\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-01-13 00:07+0100\n"
-"PO-Revision-Date: 2013-02-27 19:24+0000\n"
-"Last-Translator: Aleksej Bobylev <al.bobylev@gmail.com>\n"
-"Language-Team: Portuguese (Brasilian)\n"
+"PO-Revision-Date: 2014-01-14 21:27+0300\n"
+"Last-Translator: Claudinei Pereira <claudinei@slitaz.org>\n"
+"Language-Team: Portuguese (Brasilian)<i18n@slitaz.org>\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
 #: src/main.c:279
 msgid "Zoom in"
@@ -42,4 +43,4 @@ msgstr "Manual do TazWeb"
 
 #: src/main.c:335
 msgid "Quit TazWeb"
-msgstr ""
+msgstr "Sair do Tazweb"
