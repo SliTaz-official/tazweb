@@ -1,8 +1,12 @@
 [Desktop Entry]
 Type=Application
 Name=TazWeb Browser
+Name[pt]=Navegador TazWeb
+Name[pt_BR]=Navegador TazWeb
 Name[ru]=Браузер TazWeb
 Comment=SliTaz simple, fast and small Web Browser
+Comment[pt]=Navegador web simples e rápido do SliTaz
+Comment[pt_BR]=Navegador web simples e rápido do SliTaz
 Comment[ru]=Простой, быстрый и маленький браузер SliTaz
 Icon=tazweb
 Exec=tazweb %u
