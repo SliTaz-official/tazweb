@@ -8,10 +8,16 @@ PACKAGE=tazweb
 VERSION=1.6.4
 LINGUAS?=fr pt_BR ru
 
+CC?=gcc
+
 all:
-	gcc src/main.c -o $(PACKAGE) \
+	$(CC) src/main.c -o $(PACKAGE) \
 		`pkg-config --cflags --libs gtk+-2.0 webkit-1.0`
 	@du -sh $(PACKAGE)
+
+qt:
+	cd src && qmake && make
+	@du -sh src/$(PACKAGE)-qt
 
 # i18n
 
