@@ -40,23 +40,20 @@ msgfmt:
 		msgfmt -o po/mo/$$l/LC_MESSAGES/$(PACKAGE).mo po/$$l.po; \
 	done;
 
-
 install:
 	mkdir -p \
 		$(DESTDIR)$(DOCDIR)/$(PACKAGE) \
 		$(DESTDIR)$(PREFIX)/bin \
+		$(DESTDIR)$(PREFIX)/var/www/cgi-bin \
 		$(DESTDIR)$(PREFIX)/share/tazweb \
 		$(DESTDIR)$(PREFIX)/share/pixmaps \
 		$(DESTDIR)$(PREFIX)/share/applications
 	install -m 0755 $(PACKAGE) $(DESTDIR)$(PREFIX)/bin
 	cp -d doc/* $(DESTDIR)$(DOCDIR)/$(PACKAGE)
-	install -m 0644 data/tazweb.png \
-		$(DESTDIR)$(PREFIX)/share/pixmaps
-	install -m 0644 data/tazweb.desktop \
-		$(DESTDIR)$(PREFIX)/share/applications
-	cp -a data/*.html $(DESTDIR)$(PREFIX)/share/tazweb
-	install -m 0644 data/style.css \
-		$(DESTDIR)$(PREFIX)/share/tazweb
+	install -m 0644 data/tazweb.png $(DESTDIR)$(PREFIX)/share/pixmaps
+	install -m 0644 data/tazweb.desktop $(DESTDIR)$(PREFIX)/share/applications
+	install -m 0644 data/bookmarks.txt $(DESTDIR)$(PREFIX)/share/tazweb
+	install -m 0755 data/bookmarks.cgi $(DESTDIR)$(PREFIX)/var/www/cgi-bin
 	mkdir -p $(DESTDIR)$(PREFIX)/share/locale
 	cp -a po/mo/* $(DESTDIR)$(PREFIX)/share/locale
 

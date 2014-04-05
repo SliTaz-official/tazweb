@@ -52,6 +52,7 @@ $ make
 
 Coding notes
 ------------
+
     * To get the filename of a WebKitDownload:
       file = webkit_download_get_suggested_filename (download);
       

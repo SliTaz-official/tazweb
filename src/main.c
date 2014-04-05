@@ -16,9 +16,12 @@
 #include <gtk/gtk.h>
 #include <webkit/webkit.h>
 
-#define CONFIG   g_strdup_printf("%s/.config/tazweb", g_get_home_dir())
-#define START    "file:///usr/share/webhome/index.html"
-#define SEARCH   "http://duckduckgo.com/?q=%s&t=slitaz"
+#define HOME       g_get_home_dir()
+#define CONFIG     g_strdup_printf("%s/.config/tazweb", HOME)
+#define BMTXT      g_strdup_printf("%s/bookmarks.txt", CONFIG)
+#define BMURL      "http://localhost/cgi-bin/bookmarks.cgi"
+#define WEBHOME    "file:///usr/share/webhome/index.html"
+#define SEARCH     "http://duckduckgo.com/?q=%s&t=slitaz"
 
 /* Needs AppleWebKit/531.2+ to handle all sites ? */
 static gchar *useragent = "TazWeb (X11; SliTaz GNU/Linux; U; en_US)";
@@ -28,6 +31,7 @@ static WebKitWebView *webview;
 static WebKitWebFrame *frame;
 static gint count = 0;
 static gboolean notoolbar;
+static gboolean noquit;
 static gboolean kiosk;
 const gchar* uri;
 
@@ -146,11 +150,19 @@ search_icon_press_cb(GtkWidget *search, GtkEntryIconPosition pos,
     search_web(search, webview);
 }
 
-/* Navigation button function */
+/* Navigation button function: */
+static void
+go_bookmarks_cb(GtkWidget* widget, WebKitWebView* webview)
+{
+	uri = g_strdup_printf("%s?home=%s", BMURL, HOME);
+	g_assert(uri);
+	webkit_web_view_load_uri(webview, uri);
+}
+
 static void
 go_home_cb(GtkWidget* widget, WebKitWebView* webview)
 {
-	uri = g_strdup_printf("file://%s/home.html", CONFIG);
+	uri = WEBHOME;
 	g_assert(uri);
 	webkit_web_view_load_uri(webview, uri);
 }
@@ -168,17 +180,17 @@ go_forward_cb(GtkWidget* widget, WebKitWebView* webview)
 }
 
 /* Fullscreen and unfullscreen callback function */
-static void
-fullscreen_cb(GtkWindow* window, gpointer data)
-{
-	GdkWindowState state;
-	state = gdk_window_get_state(gtk_widget_get_window(GTK_WIDGET(mainwindow)));
+//static void
+//fullscreen_cb(GtkWindow* window, gpointer data)
+//{
+	//GdkWindowState state;
+	//state = gdk_window_get_state(gtk_widget_get_window(GTK_WIDGET(mainwindow)));
 
-	if(state & GDK_WINDOW_STATE_FULLSCREEN)
-		gtk_window_unfullscreen(GTK_WINDOW(mainwindow));
-	else
-		gtk_window_fullscreen(GTK_WINDOW(mainwindow));
-}
+	//if(state & GDK_WINDOW_STATE_FULLSCREEN)
+		//gtk_window_unfullscreen(GTK_WINDOW(mainwindow));
+	//else
+		//gtk_window_fullscreen(GTK_WINDOW(mainwindow));
+//}
 
 /* TazWeb doc callback function */
 static void
@@ -249,8 +261,7 @@ close_webview_cb(WebKitWebView* webview, GtkWidget* window)
 }
 
 /* Add a bookmark to home.html */
-void
-add_bookmark_cb(GtkWidget *widget, gpointer data)
+void add_bookmark_cb(GtkWidget *widget, gpointer data)
 {
 	const gchar* title;
 	const gchar* buffer;
@@ -258,10 +269,7 @@ add_bookmark_cb(GtkWidget *widget, gpointer data)
 	title = webkit_web_view_get_title(WEBKIT_WEB_VIEW (webview));
 	uri = webkit_web_view_get_uri(WEBKIT_WEB_VIEW (webview));
 	
-	asprintf(&buffer, "sed -i \
-			-e '/<!-- end:bookmarks -->/ i <li><a href=\"%s\">%s</a></li>' \
-			-e s'/^<li>/	<li>/' $HOME/.config/tazweb/home.html &",
-			uri, title);
+	asprintf(&buffer, "echo '%s|%s' >> %s", title, uri, BMTXT);
 	system(buffer);
 }
 
@@ -293,8 +301,8 @@ populate_menu_cb(WebKitWebView *webview, GtkMenu *menu, gpointer data)
 	item = gtk_separator_menu_item_new();
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
 
-	/* Add to bookmarks */
 	if (! kiosk) {
+		/* Add a bookmark */
 		item = gtk_image_menu_item_new_with_label(_("Add a bookmark"));
 		gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(item),
 		gtk_image_new_from_stock(GTK_STOCK_ADD, GTK_ICON_SIZE_MENU));
@@ -326,10 +334,6 @@ populate_menu_cb(WebKitWebView *webview, GtkMenu *menu, gpointer data)
 	gtk_image_new_from_stock(GTK_STOCK_HELP, GTK_ICON_SIZE_MENU));
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
 	g_signal_connect(item, "activate", G_CALLBACK(tazweb_doc_cb), webview);
-	
-	/* Separator */
-	item = gtk_separator_menu_item_new();
-	gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
 	
 	/* Quit TazWeb */
 	item = gtk_image_menu_item_new_with_label(_("Quit TazWeb"));
@@ -369,6 +373,7 @@ create_browser(GtkWidget* window, GtkWidget* urientry, GtkWidget* search,
 			G_CALLBACK(webview_ready_cb), window);
 	g_signal_connect(webview, "close-web-view",
 			G_CALLBACK(close_webview_cb), window);
+	
 	/* Impossible to open in new window or download in kiosk mode */
 	if (! kiosk) {
 		g_signal_connect(webview, "download-requested",
@@ -428,7 +433,7 @@ create_toolbar(GtkWidget* urientry, GtkWidget* search, WebKitWebView* webview)
 	
 	/* Search entry */
 	item = gtk_tool_item_new();
-	gtk_widget_set_size_request(search, 150, 20);
+	gtk_widget_set_size_request(search, 160, 20);
 	gtk_container_add(GTK_CONTAINER(item), search);
 	gtk_toolbar_insert(GTK_TOOLBAR(toolbar), item, -1);
 	gtk_entry_set_icon_from_stock(GTK_ENTRY(search),
@@ -438,14 +443,12 @@ create_toolbar(GtkWidget* urientry, GtkWidget* search, WebKitWebView* webview)
 	g_signal_connect(G_OBJECT(search), "activate",
 			G_CALLBACK(search_entry_cb), webview);
 	
-	/* The Fullscreen button */
-	if (! kiosk) {
-		item = gtk_tool_button_new_from_stock(GTK_STOCK_FULLSCREEN);
-		g_signal_connect(G_OBJECT(item), "clicked",
-				G_CALLBACK(fullscreen_cb), NULL);
-		gtk_toolbar_insert(GTK_TOOLBAR(toolbar), item, -1);
-	}
-	
+	/* Bookmark button */
+	item = gtk_tool_button_new_from_stock(GTK_STOCK_SAVE);
+	g_signal_connect(G_OBJECT(item), "clicked",
+			G_CALLBACK(go_bookmarks_cb), webview);
+	gtk_toolbar_insert(GTK_TOOLBAR(toolbar), item, -1);
+
 	return toolbar;
 }
 
@@ -492,7 +495,7 @@ int
 main(int argc, char* argv[])
 {
 	textdomain (GETTEXT_PACKAGE);
-
+	
 	while (argc > 1) {
 		if (!strcmp(argv[1],"--notoolbar")) {
 			notoolbar++;
@@ -505,23 +508,29 @@ main(int argc, char* argv[])
 			argv++;
 			useragent = argv[1];
 		}
+		else if (!strcmp(argv[1],"--help")) {
+			printf ("Usage: tazweb [--notoolbar|--kiosk|--useragent] [ua]\n");
+			printf ("Bookmarks: %s\n", BMTXT);
+			return 0;
+		}
 		else break;
 		argc--;
 		argv++;
 	}
+	
 	gtk_init(NULL, NULL);
 	if (!g_thread_supported())
 		g_thread_init(NULL);
-
+	
 	/* Get a default home.html if missing */
 	if (! g_file_test(CONFIG, G_FILE_TEST_EXISTS)) {
-		system("mkdir -p $HOME/.config/tazweb");
-		system("cp /usr/share/tazweb/home.html $HOME/.config/tazweb");
-		system("cp /usr/share/tazweb/style.css $HOME/.config/tazweb");
-	}
+		system("install -m 0777 $HOME/.config/tazweb");
+		system("install -m 0666 /usr/share/tazweb/bookmarks.txt \
+			$HOME/.config/tazweb");
+	} 
 
 	/* Load the start page file or the url in argument */
-	uri =(char*)(argc > 1 ? argv[1] : START);
+	uri =(char*)(argc > 1 ? argv[1] : WEBHOME);
 	if (argv[1])
 		check_requested_uri();
 		

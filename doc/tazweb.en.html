@@ -60,39 +60,29 @@
 $ tazweb --kiosk
 </pre>
 
-<h3>My Home Page and bookmarks</h3>
+<h3>Home Page and bookmarks</h3>
 <p>
-	TazWeb handles a personal page located in your Freedesktop standard
-	configuration directory, the path is: $HOME/.config/tazweb/home.html.
-	It lets you have a custom page with bookmarks and other content. The
-	CSS style is defined in $HOME/.config/tazweb/style.css.
+	TazWeb handles a home page located in your a system wide standard
+	configuration directory, the path is: /usr/share/webhome
 </p>
 <p>
-	The file is a simple xHTML 5 document with, by default, a list of
-	links and a box. You can edit this file with you favorite editor
-	and add content such as bookmarks entries or change the look and
-	feel as you want. At first start TazWeb will create and copy your
-	personal page and style to your config directory.
-</p>
-<p>
-	To add some life to your pages you can use your own Javascript
-	widgets or some from a third party website such as the famous
-	<a href="http://twitter.com/about/resources/widgets">
-	Twitter Widget</a> as seen on the SliTaz main website.
+	The bookmark.txt file is a simple text document with, by default, a
+	list of links. You can edit this file with you favorite editor
+	and add bookmarks entries or use Tazweb right click menu. At first
+	start TazWeb will create and copy your personal bookmarks file to 
+	your config directory.
 </p>
 <p>
 	Bookmarks can be handled by TazWeb and you can easily add a bookmark to
-	your home page with the right click menu item: <i>"Add a bookmark"</i>. To function
-	TazWeb uses markup in your home.html document; this markup should not
-	be removed if you want bookmarking to work since each new item will be
-	added just before the line: <i>&lt;!-- end:bookmarks --&gt;</i>
+	your home page with the right click menu item: <i>"Add a bookmark"</i>.
+	Tazweb let you also manage your bookmarks via a nifty CGI web interface.
 </p>
 <p>
-	Note: You will find the default home.html in: /usr/share/tazweb and
+	Note: You will find the default bookmarks.txt in: /usr/share/tazweb and
 	can get an original copy with the following command in a terminal:
 </p>
 <pre>
-$ cp -r /usr/share/tazweb $HOME/.config/tazweb
+$ cp -f /usr/share/tazweb/bookmarks.html $HOME/.config/tazweb
 </pre>
 
 <h3>Start page and url in argument</h3>
