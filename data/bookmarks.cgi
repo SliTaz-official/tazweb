@@ -68,7 +68,7 @@ case " $(GET) " in
 		echo "</pre>"
 		html_footer && exit 0 ;;
 	*\ rm\ *)
-		# Remove a bookmark item and contine
+		# Remove a bookmark item and continue
 		url=$(GET rm)
 		[ "$url" ] || continue
 		sed -i s"#.*${url}.*##" ${bookmarks}
