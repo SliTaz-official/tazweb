@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: TazWeb 1.6.4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-01-13 00:07+0100\n"
+"POT-Creation-Date: 2014-04-05 18:53+0200\n"
 "PO-Revision-Date: 2014-01-14 21:27+0300\n"
 "Last-Translator: Claudinei Pereira <claudinei@slitaz.org>\n"
 "Language-Team: Portuguese (Brasilian)<i18n@slitaz.org>\n"
@@ -17,30 +17,30 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: src/main.c:279
+#: src/main.c:287
 msgid "Zoom in"
 msgstr "Aumentar"
 
-#: src/main.c:286
+#: src/main.c:294
 msgid "Zoom out"
 msgstr "Diminuir"
 
-#: src/main.c:298
+#: src/main.c:306
 msgid "Add a bookmark"
 msgstr "Adicionar aos favoritos"
 
-#: src/main.c:306
+#: src/main.c:314
 msgid "Print this page"
 msgstr "Imprimir esta página"
 
-#: src/main.c:313
+#: src/main.c:321
 msgid "View source mode"
 msgstr "Código-fonte"
 
-#: src/main.c:324
+#: src/main.c:332
 msgid "TazWeb manual"
 msgstr "Manual do TazWeb"
 
-#: src/main.c:335
+#: src/main.c:339
 msgid "Quit TazWeb"
 msgstr "Sair do Tazweb"

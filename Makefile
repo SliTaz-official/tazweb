@@ -5,7 +5,7 @@ DOCDIR?=$(PREFIX)/share/doc
 DESTDIR?=
 
 PACKAGE=tazweb
-VERSION=1.6.4
+VERSION=1.8
 LINGUAS?=fr pt_BR ru
 
 CC?=gcc

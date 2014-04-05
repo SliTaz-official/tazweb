@@ -6,9 +6,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: TazWeb 1.6.4\n"
+"Project-Id-Version: TazWeb 1.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-01-19 13:36+0100\n"
+"POT-Creation-Date: 2014-04-05 18:53+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,30 +17,30 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: src/main.c:279
+#: src/main.c:287
 msgid "Zoom in"
 msgstr ""
 
-#: src/main.c:286
+#: src/main.c:294
 msgid "Zoom out"
 msgstr ""
 
-#: src/main.c:298
+#: src/main.c:306
 msgid "Add a bookmark"
 msgstr ""
 
-#: src/main.c:306
+#: src/main.c:314
 msgid "Print this page"
 msgstr ""
 
-#: src/main.c:313
+#: src/main.c:321
 msgid "View source mode"
 msgstr ""
 
-#: src/main.c:324
+#: src/main.c:332
 msgid "TazWeb manual"
 msgstr ""
 
-#: src/main.c:335
+#: src/main.c:339
 msgid "Quit TazWeb"
 msgstr ""
