@@ -44,7 +44,7 @@ install:
 	mkdir -p \
 		$(DESTDIR)$(DOCDIR)/$(PACKAGE) \
 		$(DESTDIR)$(PREFIX)/bin \
-		$(DESTDIR)$(PREFIX)/var/www/cgi-bin \
+		$(DESTDIR)/var/www/cgi-bin \
 		$(DESTDIR)$(PREFIX)/share/tazweb \
 		$(DESTDIR)$(PREFIX)/share/pixmaps \
 		$(DESTDIR)$(PREFIX)/share/applications
