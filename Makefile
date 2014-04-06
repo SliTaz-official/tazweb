@@ -53,7 +53,7 @@ install:
 	install -m 0644 data/tazweb.png $(DESTDIR)$(PREFIX)/share/pixmaps
 	install -m 0644 data/tazweb.desktop $(DESTDIR)$(PREFIX)/share/applications
 	install -m 0644 data/bookmarks.txt $(DESTDIR)$(PREFIX)/share/tazweb
-	install -m 0755 data/bookmarks.cgi $(DESTDIR)$(PREFIX)/var/www/cgi-bin
+	install -m 0755 data/bookmarks.cgi $(DESTDIR)/var/www/cgi-bin
 	mkdir -p $(DESTDIR)$(PREFIX)/share/locale
 	cp -a po/mo/* $(DESTDIR)$(PREFIX)/share/locale
 
