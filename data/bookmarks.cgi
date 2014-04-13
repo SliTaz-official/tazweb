@@ -31,6 +31,7 @@ html_header() {
 		a { text-decoration: none; } a:hover { text-decoration: underline; }
 		li { list-style-type: none; color: #666; line-height: 1.4em; padding: 0; }
 		footer { font-size: 80%; border-top: 2px solid #666; padding: 5px 0; }
+		textarea { width: 100%; height: 240px; font-size: 98%; }
 	</style>
 </head>
 <body>
@@ -46,8 +47,9 @@ html_footer() {
 </section>
 
 <footer>
-	<a href="$script?home=$home">Bookmarks</a> -
-	<a href="$script?raw&amp;home=$home">bookmarks.txt</a>
+	<a href="$script?home=$home">Bookmarks</a>
+	- <a href="$script?raw&amp;home=$home">Raw</a>
+	- <a href="$script?edit&amp;home=$home">Edit</a>
 </footer>
 
 </body>
@@ -58,21 +60,49 @@ EOT
 # Handle GET actions: continue or exit
 
 case " $(GET) " in
+	
+	*\ edit\ *)
+		header
+		html_header
+		cat << EOT
+<h1>Bookmarks Edit</h1>
+<form method="get" action="$script" name="edit">
+	<input type="hidden" name="save" />
+	<input type="hidden" name="home" value="$home" />
+	<textarea name="content">$(cat "$bookmarks")</textarea>
+	<p><input type="submit" value="$(gettext "Save bookmarks")" /></p>
+</form>
+EOT
+		html_footer && exit 0 ;;
+	
+	*\ save\ *)
+		sed "s/$(echo -en '\r') /\n/g" > ${bookmarks} << EOT
+$(GET content)
+EOT
+		;;
+	
 	*\ raw\ *)
 		# View bookmarks file
 		header
 		html_header
-		echo "<h1>TazWeb: bookmarks.txt</h1>"
-		echo "<pre>" 
-		cat ${bookmarks}
+		echo '<h1>Raw Bookmarks</h1>'
+		echo "<pre>"
+		IFS="|"
+		cat ${bookmarks} | cat ${bookmarks} | while read title url null
+		do
+			echo "$title | <a href='$url'>$url</a>"
+		done
+		unset IFS
 		echo "</pre>"
 		html_footer && exit 0 ;;
+	
 	*\ rm\ *)
 		# Remove a bookmark item and continue
 		url=$(GET rm)
 		[ "$url" ] || continue
 		sed -i s"#.*${url}.*##" ${bookmarks}
 		sed -i "/^$/"d ${bookmarks} ;;
+	
 esac
 
 # Show all bookmarks

@@ -522,11 +522,11 @@ main(int argc, char* argv[])
 	if (!g_thread_supported())
 		g_thread_init(NULL);
 	
-	/* Get a default home.html if missing */
-	if (! g_file_test(CONFIG, G_FILE_TEST_EXISTS)) {
-		system("install -m 0777 $HOME/.config/tazweb");
+	/* Get a default bookmarks.txt if missing */
+	if (! g_file_test(BMTXT, G_FILE_TEST_EXISTS)) {
+		system("install -m 0777 -d $HOME/.config/tazweb");
 		system("install -m 0666 /usr/share/tazweb/bookmarks.txt \
-			$HOME/.config/tazweb");
+			$HOME/.config/tazweb/bookmarks.txt");
 	} 
 
 	/* Load the start page file or the url in argument */
