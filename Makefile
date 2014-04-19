@@ -11,7 +11,7 @@ LINGUAS?=fr pt_BR ru
 CC?=gcc
 
 all:
-	$(CC) src/main.c -o $(PACKAGE) \
+	$(CC) src/main.c -o $(PACKAGE) $(CFLAGS) \
 		`pkg-config --cflags --libs gtk+-2.0 webkit-1.0`
 	@du -sh $(PACKAGE)
 
