@@ -518,9 +518,8 @@ main(int argc, char* argv[])
 		argv++;
 	}
 	
+	/* Initialize GTK */
 	gtk_init(NULL, NULL);
-	if (!g_thread_supported())
-		g_thread_init(NULL);
 	
 	/* Get a default bookmarks.txt if missing */
 	if (! g_file_test(BMTXT, G_FILE_TEST_EXISTS)) {
