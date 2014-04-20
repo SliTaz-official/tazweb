@@ -260,7 +260,7 @@ close_webview_cb(WebKitWebView* webview, GtkWidget* window)
 	return TRUE;
 }
 
-/* Add a bookmark to home.html */
+/* Add a bookmark */
 void add_bookmark_cb(GtkWidget *widget, gpointer data)
 {
 	const gchar* title;
@@ -468,6 +468,7 @@ create_window(WebKitWebView** newwebview)
 	gtk_window_set_icon(GTK_WINDOW(window),
 			create_pixbuf("/usr/share/pixmaps/tazweb.png"));
 	gtk_widget_set_name(window, "TazWeb");
+	gtk_window_set_wmclass(GTK_WINDOW(window), "tazweb", "TazWeb");
 	g_signal_connect(window, "destroy", G_CALLBACK(destroy_cb), NULL);
 
 	/* Webview and widgets */
