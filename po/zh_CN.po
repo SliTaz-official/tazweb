@@ -1,0 +1,47 @@
+# Simplified Chinese translations for SliTaz Tazweb package.
+# Copyright (C) 2014 Slitaz Association
+# This file is distributed under the same license as the Slitaz tazweb package.
+# 张文宇 <jame987165702@gmail.com>, 2014.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: TazWeb 1.8\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2014-06-05 15:05+0800\n"
+"PO-Revision-Date: 2014-06-26 15:07+0800\n"
+"Last-Translator: 张文宇 <jame987165702@gmail.com>\n"
+"Language-Team: \n"
+"Language: zh_Hans_CN\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Poedit 1.6.5\n"
+
+#: src/main.c:287
+msgid "Zoom in"
+msgstr "放大"
+
+#: src/main.c:294
+msgid "Zoom out"
+msgstr "缩小"
+
+#: src/main.c:306
+msgid "Add a bookmark"
+msgstr "加入书签"
+
+#: src/main.c:314
+msgid "Print this page"
+msgstr "列印本页"
+
+#: src/main.c:321
+msgid "View source mode"
+msgstr "源代码检视模式"
+
+#: src/main.c:332
+msgid "TazWeb manual"
+msgstr "TazWeb 手册"
+
+#: src/main.c:339
+msgid "Quit TazWeb"
+msgstr "离开 TazWeb"
