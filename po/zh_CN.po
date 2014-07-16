@@ -8,10 +8,10 @@ msgstr ""
 "Project-Id-Version: TazWeb 1.8\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-06-05 15:05+0800\n"
-"PO-Revision-Date: 2014-06-26 15:07+0800\n"
-"Last-Translator: 张文宇 <jame987165702@gmail.com>\n"
+"PO-Revision-Date: 2014-07-02 13:12+0800\n"
+"Last-Translator: rhsky <rhsky@qq.com>\n"
 "Language-Team: \n"
-"Language: zh_Hans_CN\n"
+"Language: zh_CN\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -28,20 +28,20 @@ msgstr "缩小"
 
 #: src/main.c:306
 msgid "Add a bookmark"
-msgstr "加入书签"
+msgstr "添加书签"
 
 #: src/main.c:314
 msgid "Print this page"
-msgstr "列印本页"
+msgstr "打印本页"
 
 #: src/main.c:321
 msgid "View source mode"
-msgstr "源代码检视模式"
+msgstr "源代码查看"
 
 #: src/main.c:332
 msgid "TazWeb manual"
-msgstr "TazWeb 手册"
+msgstr "TazWeb 使用手册"
 
 #: src/main.c:339
 msgid "Quit TazWeb"
-msgstr "离开 TazWeb"
+msgstr "退出 TazWeb"
