@@ -12,9 +12,10 @@ config="/home/$user/.config/tazweb"
 bookmarks="$config/bookmarks.txt"
 
 # Security check
-if [ "$REMOTE_ADDR" != "127.0.0.1" ]; then
-	echo "Security exit" && exit 1
-fi
+case $REMOTE_ADDR in
+	127.0.0.1|\[::ffff:127.0.0.1\]) ;;
+	*) header; echo "Security exit! Your IP: $REMOTE_ADDR"; exit 1
+esac
 
 # HTML 5 header with built-in minimal CSS
 html_header() {

@@ -444,7 +444,7 @@ create_toolbar(GtkWidget* urientry, GtkWidget* search, WebKitWebView* webview)
 			G_CALLBACK(search_entry_cb), webview);
 	
 	/* Bookmark button */
-	item = gtk_tool_button_new_from_stock(GTK_STOCK_SAVE);
+	item = gtk_tool_button_new_from_stock(GTK_STOCK_PROPERTIES);
 	g_signal_connect(G_OBJECT(item), "clicked",
 			G_CALLBACK(go_bookmarks_cb), webview);
 	gtk_toolbar_insert(GTK_TOOLBAR(toolbar), item, -1);
@@ -465,8 +465,7 @@ create_window(WebKitWebView** newwebview)
 	/* Default TazWeb window */
 	window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
 	gtk_window_set_default_size(GTK_WINDOW(window), 800, 600);
-	gtk_window_set_icon(GTK_WINDOW(window),
-			create_pixbuf("/usr/share/pixmaps/tazweb.png"));
+	gtk_window_set_icon_name(GTK_WINDOW(window), "tazweb");
 	gtk_widget_set_name(window, "TazWeb");
 	gtk_window_set_wmclass(GTK_WINDOW(window), "tazweb", "TazWeb");
 	g_signal_connect(window, "destroy", G_CALLBACK(destroy_cb), NULL);

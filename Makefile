@@ -5,7 +5,7 @@ DOCDIR?=$(PREFIX)/share/doc
 DESTDIR?=
 
 PACKAGE=tazweb
-VERSION=1.8
+VERSION=1.10
 LINGUAS?=fr pt_BR ru zh_CN zh_TW
 
 CC?=gcc
@@ -46,11 +46,11 @@ install:
 		$(DESTDIR)$(PREFIX)/bin \
 		$(DESTDIR)/var/www/cgi-bin \
 		$(DESTDIR)$(PREFIX)/share/tazweb \
-		$(DESTDIR)$(PREFIX)/share/pixmaps \
+		$(DESTDIR)$(PREFIX)/share/icons/hicolor/32x32/apps \
 		$(DESTDIR)$(PREFIX)/share/applications
 	install -m 0755 $(PACKAGE) $(DESTDIR)$(PREFIX)/bin
 	cp -d doc/* $(DESTDIR)$(DOCDIR)/$(PACKAGE)
-	install -m 0644 data/tazweb.png $(DESTDIR)$(PREFIX)/share/pixmaps
+	install -m 0644 data/tazweb.png $(DESTDIR)$(PREFIX)/share/icons/hicolor/32x32/apps
 	install -m 0644 data/tazweb.desktop $(DESTDIR)$(PREFIX)/share/applications
 	install -m 0644 data/bookmarks.txt $(DESTDIR)$(PREFIX)/share/tazweb
 	install -m 0755 data/bookmarks.cgi $(DESTDIR)/var/www/cgi-bin
