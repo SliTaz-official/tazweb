@@ -20,7 +20,7 @@ int main(int argc, char** argv)
 	if (argc > 1) { url = QUrl::fromUserInput(argv[1]); }
 	else {
 		if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-			msg = "Using subox pass... Load succesfuly" + msg2;
+			msg = "Using subox pass... Load successfully" + msg2;
 			QTextStream in(&file);
 			while (!in.atEnd()) { line = in.readLine(); }
 			file.close(); }
