@@ -1,6 +1,6 @@
 # Traditional Chinese translations for SliTaz Tazweb package.
-# Copyright (C) 2014 Slitaz Association
-# This file is distributed under the same license as the Slitaz tazweb package.
+# Copyright (C) 2014 SliTaz Association
+# This file is distributed under the same license as the SliTaz tazweb package.
 # lunglungyu <lunglungyu2004@gmail.com>, 2014.
 #
 msgid ""
