@@ -6,7 +6,7 @@ DESTDIR?=
 
 PACKAGE=tazweb
 VERSION=1.10
-LINGUAS?=fr pt_BR ru zh_CN zh_TW
+LINGUAS?=de fr pt_BR ru vi_VN zh_CN zh_TW
 
 CC?=gcc
 
