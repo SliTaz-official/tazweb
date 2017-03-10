@@ -19,7 +19,7 @@
 #define HOME       g_get_home_dir()
 #define CONFIG     g_strdup_printf("%s/.config/tazweb", HOME)
 #define BMTXT      g_strdup_printf("%s/bookmarks.txt", CONFIG)
-#define BMURL      "http://localhost/cgi-bin/bookmarks.cgi"
+#define BMURL      g_strdup_printf("%s/bookmarks.html", CONFIG)
 #define WEBHOME    "file:///usr/share/webhome/index.html"
 #define SEARCH     "http://duckduckgo.com/?q=%s&t=slitaz"
 
@@ -154,7 +154,8 @@ search_icon_press_cb(GtkWidget *search, GtkEntryIconPosition pos,
 static void
 go_bookmarks_cb(GtkWidget* widget, WebKitWebView* webview)
 {
-	uri = g_strdup_printf("%s?home=%s", BMURL, HOME);
+	system("tazweb-helper html_bookmarks");
+	uri = g_strdup_printf("file://%s", BMURL);
 	g_assert(uri);
 	webkit_web_view_load_uri(webview, uri);
 }
@@ -523,8 +524,8 @@ main(int argc, char* argv[])
 	
 	/* Get a default bookmarks.txt if missing */
 	if (! g_file_test(BMTXT, G_FILE_TEST_EXISTS)) {
-		system("install -m 0777 -d $HOME/.config/tazweb");
-		system("install -m 0666 /usr/share/tazweb/bookmarks.txt \
+		system("install -m 0700 -d $HOME/.config/tazweb");
+		system("install -m 0600 /usr/share/tazweb/bookmarks.txt \
 			$HOME/.config/tazweb/bookmarks.txt");
 	} 
 

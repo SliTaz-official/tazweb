@@ -49,11 +49,11 @@ install:
 		$(DESTDIR)$(PREFIX)/share/icons/hicolor/32x32/apps \
 		$(DESTDIR)$(PREFIX)/share/applications
 	install -m 0755 $(PACKAGE) $(DESTDIR)$(PREFIX)/bin
+	install -m 0755 $(PACKAGE)-helper $(DESTDIR)$(PREFIX)/bin
 	cp -d doc/* $(DESTDIR)$(DOCDIR)/$(PACKAGE)
 	install -m 0644 data/tazweb.png $(DESTDIR)$(PREFIX)/share/icons/hicolor/32x32/apps
 	install -m 0644 data/tazweb.desktop $(DESTDIR)$(PREFIX)/share/applications
 	install -m 0644 data/bookmarks.txt $(DESTDIR)$(PREFIX)/share/tazweb
-	install -m 0755 data/bookmarks.cgi $(DESTDIR)/var/www/cgi-bin
 	mkdir -p $(DESTDIR)$(PREFIX)/share/locale
 	cp -a po/mo/* $(DESTDIR)$(PREFIX)/share/locale
 
