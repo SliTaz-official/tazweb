@@ -15,15 +15,15 @@
 
 #include <gtk/gtk.h>
 #include <webkit/webkit.h>
+//#include <libsoup/soup.h> // for cookies ?
 
-#define HOME       g_get_home_dir()
-#define CONFIG     g_strdup_printf("%s/.config/tazweb", HOME)
-#define BMTXT      g_strdup_printf("%s/bookmarks.txt", CONFIG)
-#define BMURL      g_strdup_printf("%s/bookmarks.html", CONFIG)
-#define WEBHOME    "file:///usr/share/webhome/index.html"
-#define SEARCH     "http://duckduckgo.com/?q=%s&t=slitaz"
+#define HOME		g_get_home_dir()
+#define CONFIG		g_strdup_printf("%s/.config/tazweb", HOME)
+#define BMTXT		g_strdup_printf("%s/bookmarks.txt", CONFIG)
+#define BMURL		g_strdup_printf("%s/bookmarks.html", CONFIG)
+#define WEBHOME		"file:///usr/share/webhome/index.html"
+#define SEARCH		"http://duckduckgo.com/?q=%s&t=slitaz"
 
-/* Needs AppleWebKit/531.2+ to handle all sites ? */
 static gchar *useragent = "TazWeb (X11; SliTaz GNU/Linux; U; en_US)";
 static GtkWidget* create_window(WebKitWebView** newwebview);
 static GtkWidget *mainwindow, *vbox, *browser, *toolbar;

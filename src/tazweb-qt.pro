@@ -1,4 +1,4 @@
 
 TARGET = tazweb-qt
 QT += webkit
-SOURCES = main.cpp
+SOURCES = tazweb-qt.cpp

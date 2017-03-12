@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-# TazWeb Helper - Handle bookmarks (no libtaz, usable on any Linux distro)
+# TazWeb Helper - Handle bookmarks (No libtaz.sh: usable on any Linux distro)
 #
 
 tazweb="$(pwd)/tazweb"
@@ -14,7 +14,8 @@ help() {
 $(gettext "Usage:") $(basename $0) [bookmarks] --option
 
 $(gettext "Options:")
-  --raw       Show raw bookmarks.txt
+  --raw       Show raw bookmarks.txt in textmode
+  --html      Show html bookmarks in TazWeb
 
 EOT
 }
@@ -33,7 +34,6 @@ html_header() {
 		ul a { text-decoration: none; } ul a:hover { text-decoration: underline; }
 		li { list-style-type: none; color: #666; line-height: 1.4em; padding: 0; }
 		footer { font-size: 80%; border-top: 1px solid #888; padding: 5px 0; }
-		textarea { width: 100%; height: 240px; font-size: 98%; }
 	</style>
 </head>
 <body>
@@ -69,7 +69,7 @@ EOT
 	unset IFS
 	html_footer  >> ${bm_html}
 	# Security fix from old cgi-bin bookmarks.cgi
-	chmod 0600 ${USER}.${USER} ${bm_txt}
+	chown ${USER}.${USER} ${bm_txt}; chmod 0600 ${bm_txt}
 }
 
 #
@@ -79,8 +79,9 @@ case "$1" in
 	
 	-b|bookmarks)
 		if [ "$raw" ]; then
-			${tazweb} file:///${config}/bookmarks.txt &
-		else
+			cat ${config}/bookmarks.txt
+		fi
+		if [ "$html" ]; then
 			html_bookmarks
 			${tazweb} file:///${config}/bookmarks.html &
 		fi ;;

@@ -11,10 +11,16 @@ LINGUAS?=de fr ja pt_BR ru vi_VN zh_CN zh_TW
 CC?=gcc
 
 all:
-	$(CC) src/main.c -o $(PACKAGE) $(CFLAGS) \
+	$(CC) src/tazweb.c -o $(PACKAGE) $(CFLAGS) \
 		`pkg-config --cflags --libs gtk+-2.0 webkit-1.0`
 	@du -sh $(PACKAGE)
 
+# Next generation
+ng:
+	$(CC) src/tazweb-ng.c -o $(PACKAGE)-ng $(CFLAGS) \
+		`pkg-config --cflags --libs gtk+-2.0 webkit-1.0`
+	@du -sh $(PACKAGE)-ng
+	
 qt:
 	cd src && qmake && make
 	@du -sh src/$(PACKAGE)-qt
@@ -65,4 +71,4 @@ clean:
 	rm -f src/Makefile src/*.o src/tazweb-qt
 
 help:
-	@echo "make [ pot | msgmerge | msgfmt | install | clean ]"
+	@echo "make [ ng | qt | pot | msgmerge | msgfmt | install | clean ]"
