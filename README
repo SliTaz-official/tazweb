@@ -3,26 +3,25 @@ TazWeb - SliTaz Web Browser
 
 
 TazWeb is a modern, radically simple and very light web browser providing all
-needed functions for daily browsing on the internet. TazWeb is take of users
+needed functions for daily browsing on the internet. TazWeb is aware of users
 privacy, it handle cookies but will NOT store any passwords or other user info. 
 
-a single
-window with one small toolbar using buttons, a URL and search entry,
-and a  but no menubar. Please keep the code simple
-and clean. If you are motivated and want to add some more functionality, 
-please talk to the AUTHOR before committing anything in the repos.
+It consists of a single window with one small toolbar using buttons, a URL and 
+search entry, but no menubar. Please keep the code simple and clean. If you are 
+motivated and want to add some more functionality, please talk to the AUTHOR 
+before committing anything in the repos.
 
 This application have been created for Tazpanel and future SliTaz integrated
-Web applications and it become a daily usable browser. The idea with TazWeb 
-is to have a minimal interface, the approach is to build all the GUI with 
-xHTML and CSS like in TazPanel or welkow web applications.
+Web applications and it's become a daily usable browser. The idea with TazWeb 
+is to have a minimal interface, the approach is to build all of the GUI with 
+xHTML and CSS like in TazPanel or well-known web applications.
 
 For general and end-user documentation have a look at doc/tazweb.html.
 TazWeb is published, like webkit source under a free BSD license.
 
 Major features:
 
-    * Tabbed browsing (under developement: 2.0 next generation)
+    * Tabbed browsing (under development: 2.0 next generation)
     * Cookie support
     * Download manager
     * Text based config file
@@ -56,9 +55,9 @@ The Qt port is actually only a little toy to play with!
 
 TazWeb helper script
 --------------------------------------------------------------------------------
-TazWeb use a set of SHell functions from /usr/lib/tazweb/helper.sh. These
+TazWeb uses a set of SHell functions from /usr/lib/tazweb/helper.sh. These
 functions are used to handle bookmarks and cookies. The GTK gui parts use
-yad and some functions will generated html files to be used by tazweb menu
+yad and some functions will generate html files to be used by tazweb menu
 or buttons.
 
 
