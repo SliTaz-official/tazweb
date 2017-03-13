@@ -4,9 +4,9 @@
  * as a contextual menu, but no menu bar or tabs. Commented line code
  * starts with // and comments are between * *
  *
- * Copyright (C) 2011-2014 SliTaz GNU/Linux - BSD License
+ * Copyright (C) 2011-2017 SliTaz GNU/Linux - BSD License
  * See AUTHORS and LICENSE for detailed information
- * 
+ *
  */
 
 #include <glib.h>
@@ -15,12 +15,13 @@
 
 #include <gtk/gtk.h>
 #include <webkit/webkit.h>
-//#include <libsoup/soup.h> // for cookies ?
+#include <libsoup/soup.h> // for cookies
 
 #define HOME		g_get_home_dir()
 #define CONFIG		g_strdup_printf("%s/.config/tazweb", HOME)
 #define BMTXT		g_strdup_printf("%s/bookmarks.txt", CONFIG)
 #define BMURL		g_strdup_printf("%s/bookmarks.html", CONFIG)
+#define COOKIES		g_strdup_printf("%s/cookies.txt", CONFIG)
 #define WEBHOME		"file:///usr/share/webhome/index.html"
 #define SEARCH		"http://duckduckgo.com/?q=%s&t=slitaz"
 
@@ -31,9 +32,14 @@ static WebKitWebView *webview;
 static WebKitWebFrame *frame;
 static gint count = 0;
 static gboolean notoolbar;
-static gboolean noquit;
+static gboolean nocookies;
 static gboolean kiosk;
+
+
 const gchar* uri;
+
+SoupSession		*session;
+SoupCookieJar	*cookiejar;
 
 /* Create an icon */
 static GdkPixbuf*
@@ -59,12 +65,12 @@ update_title(GtkWindow* window, WebKitWebView* webview)
 	GString *string;
 	gdouble progress;
 	gchar *title;
-	
+
 	string = g_string_new(webkit_web_view_get_title(webview));
 	progress = webkit_web_view_get_progress(webview) * 100;
 	if (progress < 100)
 		g_string_append_printf(string, " [ %f%% ] ", progress);
-	
+
 	title = g_string_free(string, FALSE);
 	gtk_window_set_title(window, title);
 	g_free(title);
@@ -109,11 +115,11 @@ static void
 view_source_cb(GtkWidget* widget, WebKitWebView* webview)
 {
 	gboolean source;
-	
+
 	frame = webkit_web_view_get_main_frame(webview);
 	uri = webkit_web_frame_get_uri(frame);
 	source = webkit_web_view_get_view_source_mode(webview);
-	
+
 	webkit_web_view_set_view_source_mode(webview, !source);
 	webkit_web_view_reload(webview);
 }
@@ -147,14 +153,25 @@ static void
 search_icon_press_cb(GtkWidget *search, GtkEntryIconPosition pos,
 		GdkEvent *event, WebKitWebView* webview)
 {
-    search_web(search, webview);
+	search_web(search, webview);
 }
 
-/* Navigation button function: */
+/* 
+ * 
+ * Navigation functions
+ * 
+ */
+
+static void
+bookmarks_edit_cb(GtkWidget* widget, WebKitWebView* webview)
+{
+	system("/usr/lib/tazweb/helper.sh edit_bookmarks");
+}
+
 static void
 go_bookmarks_cb(GtkWidget* widget, WebKitWebView* webview)
 {
-	system("tazweb-helper html_bookmarks");
+	system("/usr/lib/tazweb/helper.sh html_bookmarks");
 	uri = g_strdup_printf("file://%s", BMURL);
 	g_assert(uri);
 	webkit_web_view_load_uri(webview, uri);
@@ -171,27 +188,14 @@ go_home_cb(GtkWidget* widget, WebKitWebView* webview)
 static void
 go_back_cb(GtkWidget* widget, WebKitWebView* webview)
 {
-    webkit_web_view_go_back(webview);
+	webkit_web_view_go_back(webview);
 }
 
 static void
 go_forward_cb(GtkWidget* widget, WebKitWebView* webview)
 {
-    webkit_web_view_go_forward(webview);
+	webkit_web_view_go_forward(webview);
 }
-
-/* Fullscreen and unfullscreen callback function */
-//static void
-//fullscreen_cb(GtkWindow* window, gpointer data)
-//{
-	//GdkWindowState state;
-	//state = gdk_window_get_state(gtk_widget_get_window(GTK_WIDGET(mainwindow)));
-
-	//if(state & GDK_WINDOW_STATE_FULLSCREEN)
-		//gtk_window_unfullscreen(GTK_WINDOW(mainwindow));
-	//else
-		//gtk_window_fullscreen(GTK_WINDOW(mainwindow));
-//}
 
 /* TazWeb doc callback function */
 static void
@@ -202,7 +206,7 @@ tazweb_doc_cb(GtkWidget* widget, WebKitWebView *webview)
 	webkit_web_view_load_uri(webview, uri);
 }
 
-/* Download function */
+/* Download functions */
 static gboolean
 download_requested_cb(WebKitWebView *webview, WebKitDownload *download,
 		gpointer user_data)
@@ -232,9 +236,23 @@ zoom_in_cb(GtkWidget *widget, WebKitWebView* webview)
 static void
 print_page_cb (GtkWidget *widget, gpointer data)
 {
-    webkit_web_frame_print (webkit_web_view_get_main_frame (
-        WEBKIT_WEB_VIEW (webview)));
+	webkit_web_frame_print (webkit_web_view_get_main_frame (
+		WEBKIT_WEB_VIEW (webview)));
 }
+
+
+/* Fullscreen and unfullscreen callback function */
+//static void
+//fullscreen_cb(GtkWindow* window, gpointer data)
+//{
+	//GdkWindowState state;
+	//state = gdk_window_get_state(gtk_widget_get_window(GTK_WIDGET(mainwindow)));
+
+	//if(state & GDK_WINDOW_STATE_FULLSCREEN)
+		//gtk_window_unfullscreen(GTK_WINDOW(mainwindow));
+	//else
+		//gtk_window_fullscreen(GTK_WINDOW(mainwindow));
+//}
 
 /* New webview callbacks */
 static WebKitWebView*
@@ -262,16 +280,47 @@ close_webview_cb(WebKitWebView* webview, GtkWidget* window)
 }
 
 /* Add a bookmark */
-void add_bookmark_cb(GtkWidget *widget, gpointer data)
+void
+add_bookmark_cb(GtkWidget *widget, gpointer data)
 {
 	const gchar* title;
 	const gchar* buffer;
-	
+
 	title = webkit_web_view_get_title(WEBKIT_WEB_VIEW (webview));
 	uri = webkit_web_view_get_uri(WEBKIT_WEB_VIEW (webview));
-	
+
 	asprintf(&buffer, "echo '%s|%s' >> %s", title, uri, BMTXT);
 	system(buffer);
+}
+
+/* Setup session cookies */
+void
+cookies_setup(void)
+{
+	if (cookiejar) {
+		soup_session_remove_feature(session,
+			(SoupSessionFeature*)cookiejar);
+		g_object_unref(cookiejar);
+		cookiejar = NULL;
+	}
+
+	cookiejar = soup_cookie_jar_text_new(COOKIES, 0);
+	soup_session_add_feature(session, (SoupSessionFeature*)cookiejar);
+}
+
+static void
+cookies_view_cb(GtkWidget* widget, WebKitWebView* webview)
+{
+	system("/usr/lib/tazweb/helper.sh html_cookies");
+	uri = g_strdup_printf("file://%s/cookies.html", CONFIG);
+	g_assert(uri);
+	webkit_web_view_load_uri(webview, uri);
+}
+
+static void
+cookies_clean_cb(GtkWidget* widget, WebKitWebView* webview)
+{
+	system("/usr/lib/tazweb/helper.sh clean_cookies");
 }
 
 /* Add items to WebKit contextual menu */
@@ -279,29 +328,18 @@ static void
 populate_menu_cb(WebKitWebView *webview, GtkMenu *menu, gpointer data)
 {
 	GtkWidget* item;
-	
-	/* Separator */
-	item = gtk_separator_menu_item_new();
-	gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
-
-	/* Zoom in */
-	item = gtk_image_menu_item_new_with_label(_("Zoom in"));
-	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(item),
-	gtk_image_new_from_stock(GTK_STOCK_ZOOM_IN, GTK_ICON_SIZE_MENU));
-	gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
-	g_signal_connect(item, "activate", G_CALLBACK(zoom_in_cb), webview);
-	
-	/* Zoom out */
-	item = gtk_image_menu_item_new_with_label(_("Zoom out"));
-	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(item),
-	gtk_image_new_from_stock(GTK_STOCK_ZOOM_OUT, GTK_ICON_SIZE_MENU));
-	gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
-	g_signal_connect(item, "activate", G_CALLBACK(zoom_out_cb), webview);
 
 	/* Separator */
 	item = gtk_separator_menu_item_new();
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
-
+	
+	/* Bookmark */
+	item = gtk_image_menu_item_new_with_label(_("Bookmarks"));
+	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(item),
+	gtk_image_new_from_stock(GTK_STOCK_PROPERTIES, GTK_ICON_SIZE_MENU));
+	gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
+	g_signal_connect(item, "activate", G_CALLBACK(go_bookmarks_cb), webview);
+	
 	if (! kiosk) {
 		/* Add a bookmark */
 		item = gtk_image_menu_item_new_with_label(_("Add a bookmark"));
@@ -309,8 +347,19 @@ populate_menu_cb(WebKitWebView *webview, GtkMenu *menu, gpointer data)
 		gtk_image_new_from_stock(GTK_STOCK_ADD, GTK_ICON_SIZE_MENU));
 		gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
 		g_signal_connect(item, "activate", G_CALLBACK(add_bookmark_cb), webview);
+		
+		/* Edit bookmarks */
+		item = gtk_image_menu_item_new_with_label(_("Edit bookmarks"));
+		gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(item),
+		gtk_image_new_from_stock(GTK_STOCK_EDIT, GTK_ICON_SIZE_MENU));
+		gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
+		g_signal_connect(item, "activate", G_CALLBACK(bookmarks_edit_cb), webview);
+		
+		/* Separator */
+		item = gtk_separator_menu_item_new();
+		gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
 	}
-
+	
 	/* Printing */
 	item = gtk_image_menu_item_new_with_label(_("Print this page"));
 	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(item),
@@ -324,10 +373,47 @@ populate_menu_cb(WebKitWebView *webview, GtkMenu *menu, gpointer data)
 	gtk_image_new_from_stock(GTK_STOCK_PROPERTIES, GTK_ICON_SIZE_MENU));
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
 	g_signal_connect(item, "activate", G_CALLBACK(view_source_cb), webview);
+	
+	/* Separator */
+	item = gtk_separator_menu_item_new();
+	gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
+	
+	/* Zoom in */
+	item = gtk_image_menu_item_new_with_label(_("Zoom in"));
+	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(item),
+	gtk_image_new_from_stock(GTK_STOCK_ZOOM_IN, GTK_ICON_SIZE_MENU));
+	gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
+	g_signal_connect(item, "activate", G_CALLBACK(zoom_in_cb), webview);
+
+	/* Zoom out */
+	item = gtk_image_menu_item_new_with_label(_("Zoom out"));
+	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(item),
+	gtk_image_new_from_stock(GTK_STOCK_ZOOM_OUT, GTK_ICON_SIZE_MENU));
+	gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
+	g_signal_connect(item, "activate", G_CALLBACK(zoom_out_cb), webview);
 
 	/* Separator */
 	item = gtk_separator_menu_item_new();
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
+
+	/* Cookies */
+	if (! nocookies) {
+		item = gtk_image_menu_item_new_with_label(_("View cookies"));
+		gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(item),
+		gtk_image_new_from_stock(GTK_STOCK_HELP, GTK_ICON_SIZE_MENU));
+		gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
+		g_signal_connect(item, "activate", G_CALLBACK(cookies_view_cb), webview);
+		
+		item = gtk_image_menu_item_new_with_label(_("Clean all cookies"));
+		gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(item),
+		gtk_image_new_from_stock(GTK_STOCK_REMOVE, GTK_ICON_SIZE_MENU));
+		gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
+		g_signal_connect(item, "activate", G_CALLBACK(cookies_clean_cb), webview);
+		
+		/* Separator */
+		item = gtk_separator_menu_item_new();
+		gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
+	}
 
 	/* TazWeb documentation */
 	item = gtk_image_menu_item_new_with_label(_("TazWeb manual"));
@@ -335,14 +421,14 @@ populate_menu_cb(WebKitWebView *webview, GtkMenu *menu, gpointer data)
 	gtk_image_new_from_stock(GTK_STOCK_HELP, GTK_ICON_SIZE_MENU));
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
 	g_signal_connect(item, "activate", G_CALLBACK(tazweb_doc_cb), webview);
-	
+
 	/* Quit TazWeb */
 	item = gtk_image_menu_item_new_with_label(_("Quit TazWeb"));
 	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(item),
 	gtk_image_new_from_stock(GTK_STOCK_CLOSE, GTK_ICON_SIZE_MENU));
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
 	g_signal_connect(item, "activate", G_CALLBACK(destroy_cb), webview);
-	
+
 	gtk_widget_show_all(GTK_WIDGET(menu));
 }
 
@@ -352,7 +438,7 @@ create_browser(GtkWidget* window, GtkWidget* urientry, GtkWidget* search,
 		WebKitWebView* webview)
 {
 	WebKitWebSettings *settings;
-	
+
 	browser = gtk_scrolled_window_new(NULL, NULL);
 	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(browser),
 			GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
@@ -374,7 +460,7 @@ create_browser(GtkWidget* window, GtkWidget* urientry, GtkWidget* search,
 			G_CALLBACK(webview_ready_cb), window);
 	g_signal_connect(webview, "close-web-view",
 			G_CALLBACK(close_webview_cb), window);
-	
+
 	/* Impossible to open in new window or download in kiosk mode */
 	if (! kiosk) {
 		g_signal_connect(webview, "download-requested",
@@ -394,7 +480,7 @@ static GtkWidget*
 create_toolbar(GtkWidget* urientry, GtkWidget* search, WebKitWebView* webview)
 {
 	GtkToolItem* item;
-	
+
 	toolbar = gtk_toolbar_new();
 	gtk_toolbar_set_orientation(GTK_TOOLBAR(toolbar),
 			GTK_ORIENTATION_HORIZONTAL);
@@ -402,18 +488,18 @@ create_toolbar(GtkWidget* urientry, GtkWidget* search, WebKitWebView* webview)
 			GTK_TOOLBAR_BOTH_HORIZ);
 
 	/* The back button */
-    item = gtk_tool_button_new_from_stock(GTK_STOCK_GO_BACK);
-    g_signal_connect(G_OBJECT(item), "clicked",
+	item = gtk_tool_button_new_from_stock(GTK_STOCK_GO_BACK);
+	g_signal_connect(G_OBJECT(item), "clicked",
 			G_CALLBACK(go_back_cb), webview);
-    gtk_toolbar_insert(GTK_TOOLBAR(toolbar), item, -1);
+	gtk_toolbar_insert(GTK_TOOLBAR(toolbar), item, -1);
 
-    /* The forward button */
-    item = gtk_tool_button_new_from_stock(GTK_STOCK_GO_FORWARD);
-    g_signal_connect(G_OBJECT(item), "clicked",
+	/* The forward button */
+	item = gtk_tool_button_new_from_stock(GTK_STOCK_GO_FORWARD);
+	g_signal_connect(G_OBJECT(item), "clicked",
 			G_CALLBACK(go_forward_cb), webview);
-    gtk_toolbar_insert(GTK_TOOLBAR(toolbar), item, -1);
+	gtk_toolbar_insert(GTK_TOOLBAR(toolbar), item, -1);
 
-    /* Home button */
+	/* Home button */
 	item = gtk_tool_button_new_from_stock(GTK_STOCK_HOME);
 	g_signal_connect(G_OBJECT(item), "clicked",
 			G_CALLBACK(go_home_cb), webview);
@@ -422,19 +508,20 @@ create_toolbar(GtkWidget* urientry, GtkWidget* search, WebKitWebView* webview)
 	/* URL entry */
 	item = gtk_tool_item_new();
 	gtk_tool_item_set_expand(item, TRUE);
-	gtk_widget_set_size_request(urientry, 0, 20);
+	//gtk_widget_set_size_request(urientry, 0, 20);
 	gtk_container_add(GTK_CONTAINER(item), urientry);
 	gtk_toolbar_insert(GTK_TOOLBAR(toolbar), item, -1);
 	g_signal_connect(G_OBJECT(urientry), "activate",
 			G_CALLBACK(uri_entry_cb), webview);
-	
+
 	/* Separator */
 	item = gtk_separator_tool_item_new();
-	gtk_toolbar_insert(GTK_TOOLBAR(toolbar), item, -1); 
-	
+	gtk_toolbar_insert(GTK_TOOLBAR(toolbar), item, -1);
+
 	/* Search entry */
 	item = gtk_tool_item_new();
-	gtk_widget_set_size_request(search, 160, 20);
+	gtk_tool_item_set_expand(item, FALSE);
+	gtk_widget_set_size_request(GTK_WIDGET(item), 200, 0);
 	gtk_container_add(GTK_CONTAINER(item), search);
 	gtk_toolbar_insert(GTK_TOOLBAR(toolbar), item, -1);
 	gtk_entry_set_icon_from_stock(GTK_ENTRY(search),
@@ -443,7 +530,7 @@ create_toolbar(GtkWidget* urientry, GtkWidget* search, WebKitWebView* webview)
 			G_CALLBACK(search_icon_press_cb), webview);
 	g_signal_connect(G_OBJECT(search), "activate",
 			G_CALLBACK(search_entry_cb), webview);
-	
+
 	/* Bookmark button */
 	item = gtk_tool_button_new_from_stock(GTK_STOCK_PROPERTIES);
 	g_signal_connect(G_OBJECT(item), "clicked",
@@ -460,7 +547,7 @@ create_window(WebKitWebView** newwebview)
 	GtkWidget *window;
 	GtkWidget *urientry;
 	GtkWidget *search;
-	
+
 	g_atomic_int_inc(&count);
 
 	/* Default TazWeb window */
@@ -476,30 +563,33 @@ create_window(WebKitWebView** newwebview)
 	urientry = gtk_entry_new();
 	search = gtk_entry_new();
 	vbox = gtk_vbox_new(FALSE, 0);
-	
+
 	/* Pack box and container */
 	if (! notoolbar)
 		gtk_box_pack_start(GTK_BOX(vbox),
 			create_toolbar(urientry, search, webview), FALSE, FALSE, 0);
 	gtk_box_pack_start(GTK_BOX(vbox),
 			create_browser(window, urientry, search, webview), TRUE, TRUE, 0);
-	
+
 	gtk_container_add(GTK_CONTAINER(window), vbox);
-	
+
 	if (newwebview)
 		*newwebview = webview;
-	
-	return window;	
+
+	return window;
 }
 
 int
 main(int argc, char* argv[])
 {
 	textdomain (GETTEXT_PACKAGE);
-	
+
 	while (argc > 1) {
 		if (!strcmp(argv[1],"--notoolbar")) {
 			notoolbar++;
+		}
+		if (!strcmp(argv[1],"--nocookies")) {
+			nocookies++;
 		}
 		else if (!strcmp(argv[1],"--kiosk")) {
 			kiosk++;
@@ -510,7 +600,7 @@ main(int argc, char* argv[])
 			useragent = argv[1];
 		}
 		else if (!strcmp(argv[1],"--help")) {
-			printf ("Usage: tazweb [--notoolbar|--kiosk|--useragent] [ua]\n");
+			printf ("Usage: tazweb [--notoolbar|--nocookies|--kiosk|--useragent] [ua]\n");
 			printf ("Bookmarks: %s\n", BMTXT);
 			return 0;
 		}
@@ -518,32 +608,39 @@ main(int argc, char* argv[])
 		argc--;
 		argv++;
 	}
-	
+
 	/* Initialize GTK */
 	gtk_init(NULL, NULL);
-	
+
 	/* Get a default bookmarks.txt if missing */
 	if (! g_file_test(BMTXT, G_FILE_TEST_EXISTS)) {
 		system("install -m 0700 -d $HOME/.config/tazweb");
 		system("install -m 0600 /usr/share/tazweb/bookmarks.txt \
 			$HOME/.config/tazweb/bookmarks.txt");
-	} 
+	}
 
 	/* Load the start page file or the url in argument */
 	uri =(char*)(argc > 1 ? argv[1] : WEBHOME);
 	if (argv[1])
 		check_requested_uri();
-		
+
 	mainwindow = create_window(&webview);
 	gtk_widget_show_all(mainwindow);
+	
+	/* Handle cookies */
+	if (! nocookies) {
+		session = webkit_get_default_session();
+		snprintf(COOKIES, sizeof COOKIES, "%s", COOKIES);
+		cookies_setup();
+	}
 	
 	/* Fullscreen for Kiosk mode */
 	if (kiosk)
 		gtk_window_fullscreen(GTK_WINDOW(mainwindow));
-	
+
 	webkit_web_view_load_uri(webview, uri);
 	gtk_widget_grab_focus(GTK_WIDGET(webview));
 	gtk_main();
-	
+
 	return 0;
 }

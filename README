@@ -3,28 +3,18 @@ TazWeb - SliTaz Web Browser
 
 
 TazWeb is a radically simple and very light web browser providing a single
-window with one small bottom toolbar using buttons, a URL and search entry,
-and a contextual menu but no menubar or tabs. Please keep the code simple
+window with one small toolbar using buttons, a URL and search entry,
+and a contextual menu but no menubar. Please keep the code simple
 and clean. If you are motivated and want to add some more functionality, 
 please talk to the AUTHOR before committing anything in the repos.
 
-TazWeb uses a custom page in the user Freedesktop directory to let users add
-any content to it and get with one click from the toolbar. We may have
-an external apps/script to handle that file for users who can't manage to
-edit pure xHTML.
-
 This application have been created for Tazpanel and future SliTaz integrated
-Web applications. The goal is by far to have a fully-featured web browser. But
-if you find a way to provide a simple plugins mechanism, that would be great.
-
-The idea with TazWeb is to have a minimal interface, the approach is to
-build all the GUI with xHTML and CSS like in TazPanel.
+Web applications and it become a daily usable browser. The idea with TazWeb 
+is to have a minimal interface, the approach is to build all the GUI with 
+xHTML and CSS like in TazPanel or welkow web applications.
 
 For general and end-user documentation have a look at doc/tazweb.html.
 TazWeb is published, like webkit source under a free BSD license.
-
-BUG: Right clicking on "Open Link in New Window" is connecting to an event
-but doesn't work.
 
 
 Build and install
@@ -45,13 +35,20 @@ Qt Build and install
 --------------------
 The Qt port is actually only a little toy to play with!
 
-$ cd src
-$ qmake
-$ make
+$ make qt
+$ ./tazweb-qt
+
+
+TazWeb helper script
+--------------------
+TazWeb use a set of SHell functions from /usr/lib/tazweb/helper.sh. These
+functions are used to handle bookmarks and cookies. The GTK gui parts use
+yad and some functions will generated html files to be used by tazweb menu
+or buttons.
 
 
 Coding notes
-------------
+--------------------------------------------------------------------------------
 
     * To get the filename of a WebKitDownload:
       file = webkit_download_get_suggested_filename (download);
@@ -79,8 +76,8 @@ Coding notes
       webkit_web_view_set_editable (webview, TRUE);
 
 
-i18n
-----
+Translation (i18n)
+--------------------------------------------------------------------------------
 Internationalization of TazWeb was introduced since version 1.6.4.
 Its standard GLib technique is described in developer notes:
 http://developer.gnome.org/glib/2.32/glib-I18N.html

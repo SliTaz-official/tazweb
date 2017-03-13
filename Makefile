@@ -50,12 +50,12 @@ install:
 	mkdir -p \
 		$(DESTDIR)$(DOCDIR)/$(PACKAGE) \
 		$(DESTDIR)$(PREFIX)/bin \
-		$(DESTDIR)/var/www/cgi-bin \
+		$(DESTDIR)$(PREFIX)/lib/tazweb \
 		$(DESTDIR)$(PREFIX)/share/tazweb \
 		$(DESTDIR)$(PREFIX)/share/icons/hicolor/32x32/apps \
 		$(DESTDIR)$(PREFIX)/share/applications
 	install -m 0755 $(PACKAGE) $(DESTDIR)$(PREFIX)/bin
-	install -m 0755 $(PACKAGE)-helper $(DESTDIR)$(PREFIX)/bin
+	install -m 0755 lib/helper.sh $(DESTDIR)$(PREFIX)/lib/tazweb
 	cp -d doc/* $(DESTDIR)$(DOCDIR)/$(PACKAGE)
 	install -m 0644 data/tazweb.png $(DESTDIR)$(PREFIX)/share/icons/hicolor/32x32/apps
 	install -m 0644 data/tazweb.desktop $(DESTDIR)$(PREFIX)/share/applications
