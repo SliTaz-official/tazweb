@@ -1,5 +1,6 @@
 SliTaz Website|http://www.slitaz.org/
-SliTaz ARM|http://arm.slitaz.org/
+SliTaz Community|http://scn.slitaz.org/
 Wikipedia|https://www.wikipedia.org/
 Twitter|https://twitter.com/
+Facebook|https://facebook.com/
 Google search|https://www.google.com/

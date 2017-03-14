@@ -26,9 +26,10 @@ Major features:
     * Download manager
     * Text based config file
     * Search engine entry box
-    * Favorites support
+    * Bookmarks support
     * Print, including to pdf
     * Rich contextual menu
+    * Private browsing
 
 
 Build and install

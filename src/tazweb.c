@@ -30,7 +30,6 @@
 int		width			= 800;
 int		height			= 600;
 int		private			= 0;
-int		debug			= 1;
 
 static gchar *useragent = "TazWeb (X11; SliTaz GNU/Linux; U; en_US)";
 static gboolean		notoolbar;
@@ -392,6 +391,12 @@ populate_menu_cb(WebKitWebView *webview, GtkMenu *menu, gpointer data)
 	gtk_widget_show_all(GTK_WIDGET(menu));
 }
 
+void
+webkit_settings_set_user_agent_with_application_details
+                               (WebKitWebSettings *settings,
+                                const gchar *application_name,
+                                const gchar *application_version);
+
 /* Scrolled window for the webview */
 static GtkWidget*
 create_browser(GtkWidget* window, GtkWidget* urientry, GtkWidget* search,
@@ -405,11 +410,14 @@ create_browser(GtkWidget* window, GtkWidget* urientry, GtkWidget* search,
 
 	gtk_container_add(GTK_CONTAINER(browser), GTK_WIDGET(webview));
 
-	/* User agent */
+	/* Webkit settings */
 	settings = webkit_web_view_get_settings (webview);
 	g_object_set(G_OBJECT(settings), "user-agent", useragent, NULL);
-
-	/* Connect WebKit events */
+	
+	if (private)
+		g_object_set(G_OBJECT(settings), "enable-private-browsing", TRUE);
+	
+	/* Connect Webkit events */
 	g_signal_connect(webview, "notify::title",
 			G_CALLBACK(notify_title_cb), window);
 	g_signal_connect(webview, "notify::progress",
@@ -548,7 +556,7 @@ Usage: tazweb [--options] [value] url\n\
 \n\
 Options:\n\
   -h  --help            Print TazWeb command line help\n\
-  -p  --private         Private browsing without cookies support\n\
+  -p  --private         Disable on-disk cache, cookies, history\n\
   -u  --useragent [ua]  Configure the user agent string\n\
   -k  --kiosk           Fullscreen, no bookmarks and download support\n\
   -r  --raw             Raw webkit window without toolbar and menu\n\
@@ -592,12 +600,6 @@ main(int argc, char *argv[])
 		switch (c) {
 			case 0:
 				/* Options with flag */
-				if (debug) {
-					printf ("Option: %s", long_options[index].name);
-					if (optarg)
-						printf (" with arg: %s", optarg);
-					printf ("\n");
-				}
 				break;
 
 			case 'h':
@@ -609,8 +611,6 @@ main(int argc, char *argv[])
 				break;
 
 			case 'u':
-				if (debug)
-					printf ("User agent option: %s\n", optarg);
 				useragent = optarg;
 				break;
 
@@ -628,7 +628,7 @@ main(int argc, char *argv[])
 				height = 480;
 				break;
 
-			case '?':
+			default:
 				help();
 				return 0;
 		}

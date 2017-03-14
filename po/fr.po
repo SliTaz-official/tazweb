@@ -8,27 +8,26 @@ msgstr ""
 "Project-Id-Version: TazWeb 1.6.4\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-03-14 13:07+0200\n"
-"PO-Revision-Date: 2014-01-19 13:37+0100\n"
+"PO-Revision-Date: 2017-03-14 19:44+0100\n"
 "Last-Translator: Christophe Lincoln <pankso@slitaz.org>\n"
 "Language-Team: French\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.8.6\n"
 
 #: src/tazweb.c:319 lib/helper.sh:68 lib/helper.sh:78
-#, fuzzy
 msgid "Bookmarks"
-msgstr "Marquer cette page"
+msgstr "Marque pages"
 
 #: src/tazweb.c:327
 msgid "Add a bookmark"
 msgstr "Marquer cette page"
 
 #: src/tazweb.c:334
-#, fuzzy
 msgid "Edit bookmarks"
-msgstr "Marquer cette page"
+msgstr "Éditer les marques pages"
 
 #: src/tazweb.c:346
 msgid "Print this page"
@@ -40,11 +39,11 @@ msgstr "Code source de la page"
 
 #: src/tazweb.c:365
 msgid "View cookies"
-msgstr ""
+msgstr "Voir les cookies"
 
 #: src/tazweb.c:371
 msgid "Clean all cookies"
-msgstr ""
+msgstr "Nettoyer les cookies"
 
 #: src/tazweb.c:383
 msgid "TazWeb manual"
@@ -56,7 +55,7 @@ msgstr "Quitter TazWeb"
 
 #: lib/helper.sh:93 lib/helper.sh:103
 msgid "Cookies"
-msgstr ""
+msgstr "Cookies"
 
 #: data/tazweb.desktop.in:4
 msgid "TazWeb Browser"
@@ -68,7 +67,7 @@ msgstr "Navigateur web simple et rapide de SliTaz"
 
 #: data/tazweb.desktop.in:6
 msgid "tazweb"
-msgstr ""
+msgstr "tazweb"
 
 #~ msgid "Zoom in"
 #~ msgstr "Zoom avant"
