@@ -391,12 +391,6 @@ populate_menu_cb(WebKitWebView *webview, GtkMenu *menu, gpointer data)
 	gtk_widget_show_all(GTK_WIDGET(menu));
 }
 
-void
-webkit_settings_set_user_agent_with_application_details
-                               (WebKitWebSettings *settings,
-                                const gchar *application_name,
-                                const gchar *application_version);
-
 /* Scrolled window for the webview */
 static GtkWidget*
 create_browser(GtkWidget* window, GtkWidget* urientry, GtkWidget* search,
