@@ -36,7 +36,6 @@ static gchar *useragent = "TazWeb (X11; SliTaz GNU/Linux; U; en_US)";
 static gboolean		notoolbar;
 static gboolean		nomenu;
 static gboolean		kiosk;
-static gboolean		raw;
 
 static GtkWidget*		create_window(WebKitWebView** newwebview);
 static GtkWidget		*tazweb_window, *vbox, *browser, *toolbar;
@@ -548,15 +547,15 @@ help(void)
 Usage: tazweb [--options] [value] url\n\
 \n\
 Options:\n\
-  -h  --help\n\
-  -p  --private\n\
-  -u  --useragent [ua]\n\
-  -k  --kiosk\n\
-  -r  --raw\n\
-  -s  --small\n\
-	  --notoolbar\n\
-	  --nomenu\n\n");
-	printf ("Bookmarks: %s\n\n", BOOKMARKS);
+  -h  --help            Print TazWeb command line help\n\
+  -p  --private         Private browsing without cookies support\n\
+  -u  --useragent [ua]  Configure the user agent string\n\
+  -k  --kiosk           Fullscreen, no bookmarks and download support\n\
+  -r  --raw             Raw webkit window without toolbar and menu\n\
+  -s  --small           Small Tazweb window for tiny web applications\n\
+      --notoolbar       Disable the top toolbar\n\
+      --nomenu          Disable TazWeb contextual menu\n\n");
+    
 	return;
 }
 
