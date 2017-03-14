@@ -1,7 +1,7 @@
 /*
- * TazWeb code snippets: small region of re-usable source code
+ * TazWeb code snippets: small regions of re-usable source code
  * 
- * This file is used for ideas, proposal and to keep removed code under
+ * This file is used for ideas, proposals and to keep removed code under
  * the hand.
  *
  * Copyright (C) 2011-2017 SliTaz GNU/Linux - BSD License
@@ -42,7 +42,7 @@ while ((c = getopt(argc, argv, "psk:u")) != -1) {
 
 /* Zoom out and in callback function
  * 
- * Not sure zooming is usefull in menu, but with GDK keybinding or
+ * Not sure zooming is useful in menu, but with GDK keybinding or
  * mouse Ctrl+scroll it would be nice!
  * 
  */
