@@ -9,37 +9,46 @@
  *
  */
 
+#include <getopt.h>
 #include <glib.h>
 #include <glib/gi18n.h>
-#define GETTEXT_PACKAGE "tazweb"
 
 #include <gtk/gtk.h>
 #include <webkit/webkit.h>
-#include <libsoup/soup.h> // for cookies
+#include <libsoup/soup.h>
 
-#define HOME		g_get_home_dir()
-#define CONFIG		g_strdup_printf("%s/.config/tazweb", HOME)
-#define BMTXT		g_strdup_printf("%s/bookmarks.txt", CONFIG)
-#define BMURL		g_strdup_printf("%s/bookmarks.html", CONFIG)
-#define COOKIES		g_strdup_printf("%s/cookies.txt", CONFIG)
-#define WEBHOME		"file:///usr/share/webhome/index.html"
-#define SEARCH		"http://duckduckgo.com/?q=%s&t=slitaz"
+#define HOME			g_get_home_dir()
+#define CONFIG			g_strdup_printf("%s/.config/tazweb", HOME)
+#define BMTXT			g_strdup_printf("%s/bookmarks.txt", CONFIG)
+#define BOOKMARKS		g_strdup_printf("%s/bookmarks.txt", CONFIG)
+#define COOKIES			g_strdup_printf("%s/cookies.txt", CONFIG)
+#define DOWNLOADS		g_strdup_printf("%s/Downloads", HOME)
+#define WEBHOME			"file:///usr/share/webhome/index.html"
+#define SEARCH			"http://duckduckgo.com/?q=%s&t=slitaz"
+#define GETTEXT_PACKAGE	"tazweb"
+
+int		width			= 800;
+int		height			= 600;
+int		private			= 0;
+int		debug			= 1;
 
 static gchar *useragent = "TazWeb (X11; SliTaz GNU/Linux; U; en_US)";
-static GtkWidget* create_window(WebKitWebView** newwebview);
-static GtkWidget *mainwindow, *vbox, *browser, *toolbar;
-static WebKitWebView *webview;
-static WebKitWebFrame *frame;
-static gint count = 0;
-static gboolean notoolbar;
-static gboolean nocookies;
-static gboolean kiosk;
+static gboolean		notoolbar;
+static gboolean		nomenu;
+static gboolean		kiosk;
+static gboolean		raw;
 
+static GtkWidget*		create_window(WebKitWebView** newwebview);
+static GtkWidget		*tazweb_window, *vbox, *browser, *toolbar;
+static WebKitWebView	*webview;
+static WebKitWebFrame	*frame;
+static SoupSession		*session;
+static SoupCookieJar	*cookiejar;
+static gint count		= 0;
+const gchar*			uri;
 
-const gchar* uri;
+/* Turn on/off debug mode */
 
-SoupSession		*session;
-SoupCookieJar	*cookiejar;
 
 /* Create an icon */
 static GdkPixbuf*
@@ -172,7 +181,7 @@ static void
 go_bookmarks_cb(GtkWidget* widget, WebKitWebView* webview)
 {
 	system("/usr/lib/tazweb/helper.sh html_bookmarks");
-	uri = g_strdup_printf("file://%s", BMURL);
+	uri = g_strdup_printf("file://%s/bookmarks.html", CONFIG);
 	g_assert(uri);
 	webkit_web_view_load_uri(webview, uri);
 }
@@ -197,7 +206,7 @@ go_forward_cb(GtkWidget* widget, WebKitWebView* webview)
 	webkit_web_view_go_forward(webview);
 }
 
-/* TazWeb doc callback function */
+/* Documentation callback */
 static void
 tazweb_doc_cb(GtkWidget* widget, WebKitWebView *webview)
 {
@@ -206,30 +215,17 @@ tazweb_doc_cb(GtkWidget* widget, WebKitWebView *webview)
 	webkit_web_view_load_uri(webview, uri);
 }
 
-/* Download functions */
+/* Download callback */
 static gboolean
 download_requested_cb(WebKitWebView *webview, WebKitDownload *download,
 		gpointer user_data)
 {
 	const gchar* buffer;
 	uri = webkit_download_get_uri(download);
-	asprintf(&buffer, "xterm -T 'Download' -geom 72x10+0-24 -e \
-				'mkdir -p $HOME/Downloads && cd $HOME/Downloads && \
-				wget -c %s; sleep 2' &", uri);
+	asprintf(&buffer, "xterm -T 'TazWeb Download' -geom 72x12+0-24 -e \
+				'mkdir -p %s && wget -P %s -c %s; sleep 2' &", 
+				DOWNLOADS, DOWNLOADS, uri);
 	system(buffer);
-}
-
-/* Zoom out and in callback function */
-static void
-zoom_out_cb(GtkWidget *widget, WebKitWebView* webview)
-{
-	webkit_web_view_zoom_out(webview);
-}
-
-static void
-zoom_in_cb(GtkWidget *widget, WebKitWebView* webview)
-{
-	webkit_web_view_zoom_in(webview);
 }
 
 /* Printing callback function */
@@ -239,20 +235,6 @@ print_page_cb (GtkWidget *widget, gpointer data)
 	webkit_web_frame_print (webkit_web_view_get_main_frame (
 		WEBKIT_WEB_VIEW (webview)));
 }
-
-
-/* Fullscreen and unfullscreen callback function */
-//static void
-//fullscreen_cb(GtkWindow* window, gpointer data)
-//{
-	//GdkWindowState state;
-	//state = gdk_window_get_state(gtk_widget_get_window(GTK_WIDGET(mainwindow)));
-
-	//if(state & GDK_WINDOW_STATE_FULLSCREEN)
-		//gtk_window_unfullscreen(GTK_WINDOW(mainwindow));
-	//else
-		//gtk_window_fullscreen(GTK_WINDOW(mainwindow));
-//}
 
 /* New webview callbacks */
 static WebKitWebView*
@@ -289,7 +271,7 @@ add_bookmark_cb(GtkWidget *widget, gpointer data)
 	title = webkit_web_view_get_title(WEBKIT_WEB_VIEW (webview));
 	uri = webkit_web_view_get_uri(WEBKIT_WEB_VIEW (webview));
 
-	asprintf(&buffer, "echo '%s|%s' >> %s", title, uri, BMTXT);
+	asprintf(&buffer, "echo '%s|%s' >> %s", title, uri, BOOKMARKS);
 	system(buffer);
 }
 
@@ -377,27 +359,9 @@ populate_menu_cb(WebKitWebView *webview, GtkMenu *menu, gpointer data)
 	/* Separator */
 	item = gtk_separator_menu_item_new();
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
-	
-	/* Zoom in */
-	item = gtk_image_menu_item_new_with_label(_("Zoom in"));
-	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(item),
-	gtk_image_new_from_stock(GTK_STOCK_ZOOM_IN, GTK_ICON_SIZE_MENU));
-	gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
-	g_signal_connect(item, "activate", G_CALLBACK(zoom_in_cb), webview);
-
-	/* Zoom out */
-	item = gtk_image_menu_item_new_with_label(_("Zoom out"));
-	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(item),
-	gtk_image_new_from_stock(GTK_STOCK_ZOOM_OUT, GTK_ICON_SIZE_MENU));
-	gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
-	g_signal_connect(item, "activate", G_CALLBACK(zoom_out_cb), webview);
-
-	/* Separator */
-	item = gtk_separator_menu_item_new();
-	gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
 
 	/* Cookies */
-	if (! nocookies) {
+	if (! private) {
 		item = gtk_image_menu_item_new_with_label(_("View cookies"));
 		gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(item),
 		gtk_image_new_from_stock(GTK_STOCK_HELP, GTK_ICON_SIZE_MENU));
@@ -469,10 +433,11 @@ create_browser(GtkWidget* window, GtkWidget* urientry, GtkWidget* search,
 			G_CALLBACK(create_web_view_cb), window);
 	}
 
-	/* Connect WebKit contextual menu items */
-	g_object_connect(G_OBJECT(webview), "signal::populate-popup",
-		G_CALLBACK(populate_menu_cb), webview, NULL);
-
+	if (! nomenu) {
+		/* Connect WebKit contextual menu items */
+		g_object_connect(G_OBJECT(webview), "signal::populate-popup",
+			G_CALLBACK(populate_menu_cb), webview, NULL);
+	}
 	return browser;
 }
 
@@ -499,16 +464,9 @@ create_toolbar(GtkWidget* urientry, GtkWidget* search, WebKitWebView* webview)
 			G_CALLBACK(go_forward_cb), webview);
 	gtk_toolbar_insert(GTK_TOOLBAR(toolbar), item, -1);
 
-	/* Home button */
-	item = gtk_tool_button_new_from_stock(GTK_STOCK_HOME);
-	g_signal_connect(G_OBJECT(item), "clicked",
-			G_CALLBACK(go_home_cb), webview);
-	gtk_toolbar_insert(GTK_TOOLBAR(toolbar), item, -1);
-
 	/* URL entry */
 	item = gtk_tool_item_new();
 	gtk_tool_item_set_expand(item, TRUE);
-	//gtk_widget_set_size_request(urientry, 0, 20);
 	gtk_container_add(GTK_CONTAINER(item), urientry);
 	gtk_toolbar_insert(GTK_TOOLBAR(toolbar), item, -1);
 	g_signal_connect(G_OBJECT(urientry), "activate",
@@ -530,6 +488,12 @@ create_toolbar(GtkWidget* urientry, GtkWidget* search, WebKitWebView* webview)
 			G_CALLBACK(search_icon_press_cb), webview);
 	g_signal_connect(G_OBJECT(search), "activate",
 			G_CALLBACK(search_entry_cb), webview);
+	
+	/* Home button */
+	item = gtk_tool_button_new_from_stock(GTK_STOCK_HOME);
+	g_signal_connect(G_OBJECT(item), "clicked",
+			G_CALLBACK(go_home_cb), webview);
+	gtk_toolbar_insert(GTK_TOOLBAR(toolbar), item, -1);
 
 	/* Bookmark button */
 	item = gtk_tool_button_new_from_stock(GTK_STOCK_PROPERTIES);
@@ -552,7 +516,7 @@ create_window(WebKitWebView** newwebview)
 
 	/* Default TazWeb window */
 	window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
-	gtk_window_set_default_size(GTK_WINDOW(window), 800, 600);
+	gtk_window_set_default_size(GTK_WINDOW(window), width, height);
 	gtk_window_set_icon_name(GTK_WINDOW(window), "tazweb");
 	gtk_widget_set_name(window, "TazWeb");
 	gtk_window_set_wmclass(GTK_WINDOW(window), "tazweb", "TazWeb");
@@ -579,35 +543,100 @@ create_window(WebKitWebView** newwebview)
 	return window;
 }
 
+void
+help(void)
+{
+	printf("\nTazWeb - Light and fast web browser using Webkit engine\n\n\
+Usage: tazweb [--options] [value] url\n\
+\n\
+Options:\n\
+  -h  --help\n\
+  -p  --private\n\
+  -u  --useragent [ua]\n\
+  -k  --kiosk\n\
+  -r  --raw\n\
+      --notoolbar\n\
+      --nomenu\n\n");
+	printf ("Bookmarks: %s\n\n", BOOKMARKS);
+	return;
+}
+
 int
 main(int argc, char* argv[])
 {
 	textdomain (GETTEXT_PACKAGE);
+	int c;
+	
+	/* Cmdline parsing with getopt_long to handle --option or -o */
+	while (1) {
+		static struct option long_options[] =
+		{
+			/* Set flag */
+			{ "notoolbar",  no_argument,       &notoolbar, 1 },
+			{ "nomenu",     no_argument,       &nomenu,    1 },
+			/* No flag */
+			{ "help",       no_argument,       0, 'h' },
+			{ "private",    no_argument,       0, 'p' },
+			{ "useragent",  required_argument, 0, 'u' },
+			{ "kiosk",      no_argument,       0, 'k' },
+			{ "raw",        no_argument,       0, 'r' },
+			{ "width",      required_argument, 0, 'w' },
+			{ 0, 0, 0, 0}
+		};
+		
+		int index = 0;
+		c = getopt_long (argc, argv, "hpu:kr", long_options, &index);
+		
+		/* Detect the end of the options */
+		if (c == -1)
+			break;
 
-	while (argc > 1) {
-		if (!strcmp(argv[1],"--notoolbar")) {
-			notoolbar++;
+		switch (c) {
+			case 0:
+				/* Options with flag */
+				if (debug) {
+					printf ("Option: %s", long_options[index].name);
+					if (optarg)
+						printf (" with arg: %s", optarg);
+					printf ("\n");
+				}
+				break;
+				
+			case 'h':
+				help();
+				return 0;
+				
+			case 'p':
+				private++;
+				break;
+				
+			case 'u':
+				if (debug)
+					printf ("User agent option: %s\n", optarg);
+				useragent = optarg;
+				break;
+				
+			case 'k':
+				kiosk++;
+				break;
+			
+			case 'r':
+				notoolbar++;
+				nomenu++;
+				break;
+			
+			case 'w':
+				width = optarg;
+				break;
+				
+			case '?':
+				help();
+				return 0;
 		}
-		if (!strcmp(argv[1],"--nocookies")) {
-			nocookies++;
-		}
-		else if (!strcmp(argv[1],"--kiosk")) {
-			kiosk++;
-		}
-		else if (!strcmp(argv[1],"--useragent") && argc > 2) {
-			argc--;
-			argv++;
-			useragent = argv[1];
-		}
-		else if (!strcmp(argv[1],"--help")) {
-			printf ("Usage: tazweb [--notoolbar|--nocookies|--kiosk|--useragent] [ua]\n");
-			printf ("Bookmarks: %s\n", BMTXT);
-			return 0;
-		}
-		else break;
-		argc--;
-		argv++;
 	}
+		
+	argc -= optind;
+	argv += optind;
 
 	/* Initialize GTK */
 	gtk_init(NULL, NULL);
@@ -624,11 +653,11 @@ main(int argc, char* argv[])
 	if (argv[1])
 		check_requested_uri();
 
-	mainwindow = create_window(&webview);
-	gtk_widget_show_all(mainwindow);
+	tazweb_window = create_window(&webview);
+	gtk_widget_show_all(tazweb_window);
 	
 	/* Handle cookies */
-	if (! nocookies) {
+	if (! private) {
 		session = webkit_get_default_session();
 		snprintf(COOKIES, sizeof COOKIES, "%s", COOKIES);
 		cookies_setup();
@@ -636,7 +665,7 @@ main(int argc, char* argv[])
 	
 	/* Fullscreen for Kiosk mode */
 	if (kiosk)
-		gtk_window_fullscreen(GTK_WINDOW(mainwindow));
+		gtk_window_fullscreen(GTK_WINDOW(tazweb_window));
 
 	webkit_web_view_load_uri(webview, uri);
 	gtk_widget_grab_focus(GTK_WIDGET(webview));
