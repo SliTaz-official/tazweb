@@ -47,9 +47,6 @@ static SoupCookieJar	*cookiejar;
 static gint count		= 0;
 const gchar*			uri;
 
-/* Turn on/off debug mode */
-
-
 /* Create an icon */
 static GdkPixbuf*
 create_pixbuf(const gchar* image)
@@ -165,10 +162,10 @@ search_icon_press_cb(GtkWidget *search, GtkEntryIconPosition pos,
 	search_web(search, webview);
 }
 
-/* 
- * 
+/*
+ *
  * Navigation functions
- * 
+ *
  */
 
 static void
@@ -223,7 +220,7 @@ download_requested_cb(WebKitWebView *webview, WebKitDownload *download,
 	const gchar* buffer;
 	uri = webkit_download_get_uri(download);
 	asprintf(&buffer, "xterm -T 'TazWeb Download' -geom 72x12+0-24 -e \
-				'mkdir -p %s && wget -P %s -c %s; sleep 2' &", 
+				'mkdir -p %s && wget -P %s -c %s; sleep 2' &",
 				DOWNLOADS, DOWNLOADS, uri);
 	system(buffer);
 }
@@ -314,14 +311,14 @@ populate_menu_cb(WebKitWebView *webview, GtkMenu *menu, gpointer data)
 	/* Separator */
 	item = gtk_separator_menu_item_new();
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
-	
+
 	/* Bookmark */
 	item = gtk_image_menu_item_new_with_label(_("Bookmarks"));
 	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(item),
 	gtk_image_new_from_stock(GTK_STOCK_PROPERTIES, GTK_ICON_SIZE_MENU));
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
 	g_signal_connect(item, "activate", G_CALLBACK(go_bookmarks_cb), webview);
-	
+
 	if (! kiosk) {
 		/* Add a bookmark */
 		item = gtk_image_menu_item_new_with_label(_("Add a bookmark"));
@@ -329,19 +326,19 @@ populate_menu_cb(WebKitWebView *webview, GtkMenu *menu, gpointer data)
 		gtk_image_new_from_stock(GTK_STOCK_ADD, GTK_ICON_SIZE_MENU));
 		gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
 		g_signal_connect(item, "activate", G_CALLBACK(add_bookmark_cb), webview);
-		
+
 		/* Edit bookmarks */
 		item = gtk_image_menu_item_new_with_label(_("Edit bookmarks"));
 		gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(item),
 		gtk_image_new_from_stock(GTK_STOCK_EDIT, GTK_ICON_SIZE_MENU));
 		gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
 		g_signal_connect(item, "activate", G_CALLBACK(bookmarks_edit_cb), webview);
-		
+
 		/* Separator */
 		item = gtk_separator_menu_item_new();
 		gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
 	}
-	
+
 	/* Printing */
 	item = gtk_image_menu_item_new_with_label(_("Print this page"));
 	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(item),
@@ -355,7 +352,7 @@ populate_menu_cb(WebKitWebView *webview, GtkMenu *menu, gpointer data)
 	gtk_image_new_from_stock(GTK_STOCK_PROPERTIES, GTK_ICON_SIZE_MENU));
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
 	g_signal_connect(item, "activate", G_CALLBACK(view_source_cb), webview);
-	
+
 	/* Separator */
 	item = gtk_separator_menu_item_new();
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
@@ -367,13 +364,13 @@ populate_menu_cb(WebKitWebView *webview, GtkMenu *menu, gpointer data)
 		gtk_image_new_from_stock(GTK_STOCK_HELP, GTK_ICON_SIZE_MENU));
 		gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
 		g_signal_connect(item, "activate", G_CALLBACK(cookies_view_cb), webview);
-		
+
 		item = gtk_image_menu_item_new_with_label(_("Clean all cookies"));
 		gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(item),
 		gtk_image_new_from_stock(GTK_STOCK_REMOVE, GTK_ICON_SIZE_MENU));
 		gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
 		g_signal_connect(item, "activate", G_CALLBACK(cookies_clean_cb), webview);
-		
+
 		/* Separator */
 		item = gtk_separator_menu_item_new();
 		gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
@@ -488,7 +485,7 @@ create_toolbar(GtkWidget* urientry, GtkWidget* search, WebKitWebView* webview)
 			G_CALLBACK(search_icon_press_cb), webview);
 	g_signal_connect(G_OBJECT(search), "activate",
 			G_CALLBACK(search_entry_cb), webview);
-	
+
 	/* Home button */
 	item = gtk_tool_button_new_from_stock(GTK_STOCK_HOME);
 	g_signal_connect(G_OBJECT(item), "clicked",
@@ -543,6 +540,7 @@ create_window(WebKitWebView** newwebview)
 	return window;
 }
 
+/* Cmdline Help & usage */
 void
 help(void)
 {
@@ -555,8 +553,9 @@ Options:\n\
   -u  --useragent [ua]\n\
   -k  --kiosk\n\
   -r  --raw\n\
-      --notoolbar\n\
-      --nomenu\n\n");
+  -s  --small\n\
+	  --notoolbar\n\
+	  --nomenu\n\n");
 	printf ("Bookmarks: %s\n\n", BOOKMARKS);
 	return;
 }
@@ -566,27 +565,27 @@ main(int argc, char *argv[])
 {
 	textdomain (GETTEXT_PACKAGE);
 	int c;
-	
+
 	/* Cmdline parsing with getopt_long to handle --option or -o */
 	while (1) {
 		static struct option long_options[] =
 		{
 			/* Set flag */
-			{ "notoolbar",  no_argument,       &notoolbar, 1 },
-			{ "nomenu",     no_argument,       &nomenu,    1 },
-			//{ "width",      required_argument, &width,     'width' },
+			{ "notoolbar",  no_argument,		&notoolbar, 1 },
+			{ "nomenu",     no_argument,		&nomenu,    1 },
 			/* No flag */
-			{ "help",       no_argument,       0, 'h' },
-			{ "private",    no_argument,       0, 'p' },
-			{ "useragent",  required_argument, 0, 'u' },
-			{ "kiosk",      no_argument,       0, 'k' },
-			{ "raw",        no_argument,       0, 'r' },
+			{ "help",       no_argument,		0, 'h' },
+			{ "private",    no_argument,		0, 'p' },
+			{ "useragent",  required_argument,	0, 'u' },
+			{ "kiosk",      no_argument,		0, 'k' },
+			{ "raw",        no_argument,		0, 'r' },
+			{ "small",		no_argument,		0, 's' },
 			{ 0, 0, 0, 0}
 		};
-		
+
 		int index = 0;
-		c = getopt_long (argc, argv, "hpu:kr", long_options, &index);
-		
+		c = getopt_long (argc, argv, "hpu:krs", long_options, &index);
+
 		/* Detect the end of the options */
 		if (c == -1)
 			break;
@@ -601,43 +600,44 @@ main(int argc, char *argv[])
 					printf ("\n");
 				}
 				break;
-				
+
 			case 'h':
 				help();
 				return 0;
-				
+
 			case 'p':
 				private++;
 				break;
-				
+
 			case 'u':
 				if (debug)
 					printf ("User agent option: %s\n", optarg);
 				useragent = optarg;
 				break;
-				
+
 			case 'k':
 				kiosk++;
 				break;
-			
+
 			case 'r':
 				notoolbar++;
 				nomenu++;
 				break;
-			
-			case 'w':
-				//width = optarg;
+
+			case 's':
+				width = 640;
+				height = 480;
 				break;
-				
+
 			case '?':
 				help();
 				return 0;
 		}
 	}
-		
+
 	argc -= optind;
 	argv += optind;
-	
+
 
 	/* Initialize GTK */
 	gtk_init(NULL, NULL);
@@ -656,14 +656,14 @@ main(int argc, char *argv[])
 
 	tazweb_window = create_window(&webview);
 	gtk_widget_show_all(tazweb_window);
-	
+
 	/* Handle cookies */
 	if (! private) {
 		session = webkit_get_default_session();
 		snprintf(COOKIES, sizeof COOKIES, "%s", COOKIES);
 		cookies_setup();
 	}
-	
+
 	/* Fullscreen for Kiosk mode */
 	if (kiosk)
 		gtk_window_fullscreen(GTK_WINDOW(tazweb_window));
