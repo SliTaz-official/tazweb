@@ -562,7 +562,7 @@ Options:\n\
 }
 
 int
-main(int argc, char* argv[])
+main(int argc, char *argv[])
 {
 	textdomain (GETTEXT_PACKAGE);
 	int c;
@@ -574,13 +574,13 @@ main(int argc, char* argv[])
 			/* Set flag */
 			{ "notoolbar",  no_argument,       &notoolbar, 1 },
 			{ "nomenu",     no_argument,       &nomenu,    1 },
+			//{ "width",      required_argument, &width,     'width' },
 			/* No flag */
 			{ "help",       no_argument,       0, 'h' },
 			{ "private",    no_argument,       0, 'p' },
 			{ "useragent",  required_argument, 0, 'u' },
 			{ "kiosk",      no_argument,       0, 'k' },
 			{ "raw",        no_argument,       0, 'r' },
-			{ "width",      required_argument, 0, 'w' },
 			{ 0, 0, 0, 0}
 		};
 		
@@ -626,7 +626,7 @@ main(int argc, char* argv[])
 				break;
 			
 			case 'w':
-				width = optarg;
+				//width = optarg;
 				break;
 				
 			case '?':
@@ -637,6 +637,7 @@ main(int argc, char* argv[])
 		
 	argc -= optind;
 	argv += optind;
+	
 
 	/* Initialize GTK */
 	gtk_init(NULL, NULL);
@@ -648,9 +649,9 @@ main(int argc, char* argv[])
 			$HOME/.config/tazweb/bookmarks.txt");
 	}
 
-	/* Load the start page file or the url in argument */
-	uri =(char*)(argc > 1 ? argv[1] : WEBHOME);
-	if (argv[1])
+	/* Load the start page or the url in argument */
+	uri =(char*)(argc == 1 ? argv[0] : WEBHOME);
+	if (argv[0])
 		check_requested_uri();
 
 	tazweb_window = create_window(&webview);
