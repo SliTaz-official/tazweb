@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=TazWeb Browser
+Comment=SliTaz simple, fast and small Web Browser
+Icon=tazweb
+Exec=tazweb %u
+Categories=Network;WebBrowser;
+MimeType=text/html;text/xml;text/plain;application/xhtml+xml;application/xml;image/svg+xml;application/x-shockwave-flash;image/jpeg;image/png;x-scheme-handler/http;x-scheme-handler/https;

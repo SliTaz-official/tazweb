@@ -6,7 +6,7 @@ DESTDIR?=
 
 PACKAGE=tazweb
 VERSION=1.10
-LINGUAS?=de fr ja pt_BR ru vi_VN zh_CN zh_TW
+LINGUAS?=$(shell grep -v "^\#" po/LINGUAS)
 
 CC?=gcc
 
@@ -28,10 +28,10 @@ qt:
 # i18n
 
 pot:
-	xgettext -o po/$(PACKAGE).pot -L C -k_ \
+	xgettext -o po/$(PACKAGE).pot -k_ \
 		--package-name="TazWeb" \
 		--package-version="$(VERSION)" \
-		./src/main.c
+		./src/tazweb.c ./lib/helper.sh ./data/tazweb.desktop.in
 
 msgmerge:
 	@for l in $(LINGUAS); do \
@@ -46,7 +46,11 @@ msgfmt:
 		msgfmt -o po/mo/$$l/LC_MESSAGES/$(PACKAGE).mo po/$$l.po; \
 	done;
 
-install:
+desktop:
+	msgfmt --desktop --template=data/tazweb.desktop.in -d po \
+		-o data/tazweb.desktop;
+
+install: msgfmt desktop
 	mkdir -p \
 		$(DESTDIR)$(DOCDIR)/$(PACKAGE) \
 		$(DESTDIR)$(PREFIX)/bin \
@@ -69,6 +73,7 @@ clean:
 	rm -f po/*.mo
 	rm -f po/*.*~
 	rm -f src/Makefile src/*.o src/tazweb-qt
+	rm -f data/*.desktop
 
 help:
 	@echo "make [ ng | qt | pot | msgmerge | msgfmt | install | clean ]"

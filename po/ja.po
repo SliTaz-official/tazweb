@@ -7,41 +7,74 @@ msgid ""
 msgstr ""
 "Project-Id-Version: TazWeb 1.10\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-01-02 19:09+0900\n"
+"POT-Creation-Date: 2017-03-14 13:07+0200\n"
 "PO-Revision-Date: 2017-01-05 22:46+0900\n"
+"Last-Translator: BALLOON a.k.a. Fu-sen. (Keiichi SHIGA) <balloonakafusen　AT "
+"gmail DOT com>\n"
 "Language-Team: \n"
+"Language: ja_JP\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 1.8.7.1\n"
-"Last-Translator: BALLOON a.k.a. Fu-sen. (Keiichi SHIGA) <balloonakafusen　AT gmail DOT com>\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"Language: ja_JP\n"
 
-#: src/main.c:287
-msgid "Zoom in"
-msgstr "拡大"
+#: src/tazweb.c:319 lib/helper.sh:68 lib/helper.sh:78
+#, fuzzy
+msgid "Bookmarks"
+msgstr "ブックマークへ追加"
 
-#: src/main.c:294
-msgid "Zoom out"
-msgstr "縮小"
-
-#: src/main.c:306
+#: src/tazweb.c:327
 msgid "Add a bookmark"
 msgstr "ブックマークへ追加"
 
-#: src/main.c:314
+#: src/tazweb.c:334
+#, fuzzy
+msgid "Edit bookmarks"
+msgstr "ブックマークへ追加"
+
+#: src/tazweb.c:346
 msgid "Print this page"
 msgstr "このページを印刷"
 
-#: src/main.c:321
+#: src/tazweb.c:353
 msgid "View source mode"
 msgstr "ソースモードで表示"
 
-#: src/main.c:332
+#: src/tazweb.c:365
+msgid "View cookies"
+msgstr ""
+
+#: src/tazweb.c:371
+msgid "Clean all cookies"
+msgstr ""
+
+#: src/tazweb.c:383
 msgid "TazWeb manual"
 msgstr "TazWeb マニュアル"
 
-#: src/main.c:339
+#: src/tazweb.c:390
 msgid "Quit TazWeb"
 msgstr "TazWeb を終了"
+
+#: lib/helper.sh:93 lib/helper.sh:103
+msgid "Cookies"
+msgstr ""
+
+#: data/tazweb.desktop.in:4
+msgid "TazWeb Browser"
+msgstr ""
+
+#: data/tazweb.desktop.in:5
+msgid "SliTaz simple, fast and small Web Browser"
+msgstr ""
+
+#: data/tazweb.desktop.in:6
+msgid "tazweb"
+msgstr ""
+
+#~ msgid "Zoom in"
+#~ msgstr "拡大"
+
+#~ msgid "Zoom out"
+#~ msgstr "縮小"

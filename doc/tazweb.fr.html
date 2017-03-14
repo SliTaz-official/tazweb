@@ -1,66 +1,64 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html lang="fr">
 <head>
+	<meta charset="UTF-8">
 	<title>Documentation TazWeb</title>
-	<meta charset="utf-8" />
-	<link rel="stylesheet" type="text/css" href="style.css" />
+	<link rel="stylesheet" href="style.css">
 </head>
 <body>
-	
-<div id="header">
-	<h1>Documentation TazWeb</h1>
-</div>
 
-<!-- Start content -->
-<div id="content">
+<header>
+	<h1>Documentation TazWeb</h1>
+</header>
+
+<main>
 
 <h2>Le navigateur Web de SliTaz</h2>
 
-<p>
-	Tazweb est un navigateur radicalement simple et léger avec une seule fenêtre sans menus ni onglets,  mais une barre d'outils très simple.
-	La navigation se fait avec le clic droit de la souris, à n'importe quel endroit de la fanêtre ou de la barre d'outils.
-	Le mode plein écran et cette documentation sont également accessible sur le côté droit de la barre d'outils.
-</p>
-<p>
-	
-	Le Navigateur Web SliTaz a été crée pour les besoins de TazPanel qui est
-	 l'outil d'aministration et de gestion de paquets pour SliTaz.
-	L'interface utilisateur utilise les dernières technologies comme XHTML 5 et CSS 3.
-	Le contenu est alimenté par des scripts CGI et utilise le serveur 
-	HTTP de Busybox.
-</p>
-<p>
-	Le navigateur est léger, très léger, le binaire pèse à peu près 17Ko.
-	Il utilise Webkit comme moteur de rendu HTML, qui supporte les derniers standards du Web tels que le Javascript.
-</p>
+<p>Tazweb est un navigateur radicalement simple et léger avec une seule fenêtre sans menus ni
+onglets, mais une barre d'outils très simple.
+La navigation se fait avec le clic droit de la souris, à n'importe quel endroit de la fanêtre ou
+de la barre d'outils.
+Le mode plein écran et cette documentation sont également accessible sur le côté droit de la barre
+d'outils.</p>
+
+<p>Le Navigateur Web SliTaz a été crée pour les besoins de TazPanel qui est l'outil d'aministration
+et de gestion de paquets pour SliTaz.
+L'interface utilisateur utilise les dernières technologies comme HTML 5 et CSS 3.
+Le contenu est alimenté par des scripts CGI et utilise le serveur HTTP de Busybox.</p>
+
+<p>Le navigateur est léger, très léger, le binaire pèse à peu près 17Ko.
+Il utilise Webkit comme moteur de rendu HTML, qui supporte les derniers standards du Web tels que
+le Javascript.</p>
+
 
 <h3>Page d'acceuil et URL</h3>
 
-<p>
+<p>La page d'acceuil est définie dans le code source et ne peut être modifiée.
+Il s'agit de la page d'acceuil « SliTaz WebHome ».<br>
+Mais Tazweb accepte aussi les URLs comme arguments.
+Par exemple http://www.slitaz.org.<br>
+De cette façon vous pouvez créer votre propre page d'acceuil en HTML et démarrer Tazweb avec un
+fichier .desktop ou depuis la ligne de commande.<br>
+Comme ceci :</p>
 
-	La page d'acceuil est définie dans le code source et ne peut être modifiée.
-	Il s'agit de la page d'acceuil "SliTaz WebHome".<br> Mais Tazweb accepte aussi les URLs 
-	comme arguments. Par exemple http://www.slitaz.org.<br>
-	De cette façon vous pouvez créer votre propre page d'acceuil en XHTML et démarrer Tazweb avec un fichier .desktop ou depuis la ligne de commande.<br>
-	Comme ceci :<br>
-	<pre>tazweb file://$HOME/fichier.html</pre>
-</p>
-<p>
-	Si vous souhaitez personnaliser la page d'acceuil de votre Live CD ou des autres utilisateurs,
-	vous pouvez créer votre propre paquet slitaz-configs ou éditer le fichier /usr/share/webhome/index.html.
-	<br>
-	Si vous modifiez ce fichier, assurez-vous d'en faire une copie ou bloquez la mise à jour du paquet
-	slitaz-configs car vos modifications seront écrassées si vous faites une mise à jour des paquets.
-</p>
+<pre>tazweb file://$HOME/fichier.html</pre>
+
+<p>Si vous souhaitez personnaliser la page d'acceuil de votre Live CD ou des autres utilisateurs,
+vous pouvez créer votre propre paquet slitaz-configs ou éditer le fichier
+/usr/share/webhome/index.html.<br>
+Si vous modifiez ce fichier, assurez-vous d'en faire une copie ou bloquez la mise à jour du paquet
+slitaz-configs car vos modifications seront écrassées si vous faites une mise à jour des
+paquets.</p>
+
 
 <h3>Applications Web</h3>
-<p>
 
-	Le navigateur TazWeb est parfait pour lancer des applications via un fichier .desktop.
-	Une fois crée avec un simple éditeur de textes, le fichier .desktop peut être posé sur le bureau ou dans le menu avec une jolie icône.
-	Voici un exemple de lanceur pour une application Web :
-	
-</p>
+<p>Le navigateur TazWeb est parfait pour lancer des applications via un fichier .desktop.
+Une fois crée avec un simple éditeur de textes, le fichier .desktop peut être posé sur le bureau ou
+dans le menu avec une jolie icône.
+Voici un exemple de lanceur pour une application Web :</p>
+
 <pre>
 [Desktop Entry]
 Type=Application
@@ -69,13 +67,11 @@ Icon=slitaz-menu
 Exec=tazweb http://scn.slitaz.org/
 </pre>
 
-<!-- End content -->
-</div>
+</main>
 
-<div id="footer">
+<footer>
 	Copyright &copy; <span class="year"></span> TazWeb contributors
-</div>
+</footer>
 
 </body>
 </html>
-

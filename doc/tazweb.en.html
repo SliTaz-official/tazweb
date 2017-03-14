@@ -1,139 +1,125 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html lang="en">
 <head>
+	<meta charset="UTF-8">
 	<title>TazWeb Documentation</title>
-	<meta charset="utf-8" />
-	<link rel="stylesheet" type="text/css" href="style.css" />
+	<link rel="stylesheet" href="style.css">
 </head>
 <body>
-	
-<div id="header">
-	<h1>TazWeb Documentation</h1>
-</div>
 
-<!-- Start content -->
-<div id="content">
+<header>
+	<h1>TazWeb Documentation</h1>
+</header>
+
+<main>
 
 <h2>SliTaz Web Browser</h2>
 
-<p>
-	TazWeb is a radically simple and very light web browser providing a
-	single window with a small toolbar and a contextual menu, but without
-	any menubar or tabs. Navigation is done with a right click anywhere in
-	the browser window or from the toolbar. It can also handle bookmarks in a
-	personal home page, provide a source view mode and zoom and printing
-	functions. TazWeb lets you quickly search the web through a search
-	entry and Google. This documentation file is always accessible from the
-	right-hand side of the toolbar. 
-</p>
-<p>
-	The browser's fast, very fast and small, the binary is about 24 Kb and uses 
-	the Webkit engine for page rendering and therefore supports all the latest 
-	web standards as well as Javascript and Flash animations or videos.
-</p>
+<p>TazWeb is a radically simple and very light web browser providing a single window with a small
+toolbar and a contextual menu, but without any menubar or tabs.
+Navigation is done with a right click anywhere in the browser window or from the toolbar.
+It can also handle bookmarks in a personal home page, provide a source view mode and zoom and
+printing functions.
+TazWeb lets you quickly search the web through a search entry and Google.
+This documentation file is always accessible from the right-hand side of the toolbar.</p>
+
+<p>The browser's fast, very fast and small, the binary is about 24 Kb and uses the Webkit engine
+for page rendering and therefore supports all the latest web standards as well as Javascript and
+Flash animations or videos.</p>
+
 
 <h3>History</h3>
-<p>
-	The SliTaz Web Browser was created for the needs of TazPanel which is
-	the SliTaz administration and packages manager panel and made with 
-	the latest technologies such as xHTML 5 and CSS 3 for the graphical
-	user interface. The content is powered by CGI scripts and the preferred
-	web server is Busybox httpd.
-</p>
+
+<p>The SliTaz Web Browser was created for the needs of TazPanel which is the SliTaz administration
+and packages manager panel and made with the latest technologies such as HTML 5 and CSS 3 for the
+graphical user interface.
+The content is powered by CGI scripts and the preferred web server is Busybox httpd.</p>
+
 
 <h3>Security and personal data</h3>
-<p>
-	TazWeb is a very secure browser and doesn't store any personal data, therefore
-	no sessions, cookies or history files are created. So your websites settings 
-	will not be saved and you will have to enter login information each
-	time you restart the browser (by the way websites can track you
-	with cookies!).
-</p>
+
+<p>TazWeb is a very secure browser and doesn't store any personal data, therefore no sessions,
+cookies or history files are created.
+So your websites settings will not be saved and you will have to enter login information each time
+you restart the browser (by the way websites can track you with cookies!).</p>
+
 
 <h3>Kiosk mode</h3>
-<p>
-	TazWeb provides a Kiosk mode useful for computers in public areas. The
-	Kiosk mode will start TazWeb in fullscreen. It will not allow users to
-	bookmark a page, download anything or open a URL in a new window.
-</p>
+
+<p>TazWeb provides a Kiosk mode useful for computers in public areas.
+The Kiosk mode will start TazWeb in fullscreen.
+It will not allow users to bookmark a page, download anything or open a URL in a new window.</p>
+
 <pre>
 $ tazweb --kiosk
 </pre>
 
+
 <h3>Home Page and bookmarks</h3>
-<p>
-	TazWeb handles a home page located in your system wide standard
-	configuration directory, the path is: /usr/share/webhome.
-</p>
-<p>
-	The bookmark.txt file is a simple text document with, by default, a
-	list of links. You can edit this file with you favorite editor
-	and add bookmark entries or use the Tazweb right click menu. At first
-	start TazWeb will create and copy your personal bookmarks file to 
-	your config directory.
-</p>
-<p>
-	Bookmarks can be handled by TazWeb and you can easily add a bookmark to
-	your home page with the right click menu item: <i>"Add a bookmark"</i>.
-	Tazweb also lets you manage your bookmarks via a nifty CGI web interface.
-</p>
-<p>
-	Note: You will find the default bookmarks.txt in: /usr/share/tazweb or
-	you can get an original copy with the following command in a terminal:
-</p>
+
+<p>TazWeb handles a home page located in your system wide standard configuration directory, the
+path is: /usr/share/webhome.</p>
+
+<p>The bookmark.txt file is a simple text document with, by default, a list of links.
+You can edit this file with you favorite editor and add bookmark entries or use the Tazweb right
+click menu.
+At first start TazWeb will create and copy your personal bookmarks file to your config
+directory.</p>
+
+<p>Bookmarks can be handled by TazWeb and you can easily add a bookmark to your home page with the
+right click menu item: <i>“Add a bookmark”</i>.
+Tazweb also lets you manage your bookmarks via a nifty CGI web interface.</p>
+
+<p>Note: You will find the default bookmarks.txt in: /usr/share/tazweb or you can get an original
+copy with the following command in a terminal:</p>
+
 <pre>
 $ cp -f /usr/share/tazweb/bookmarks.html $HOME/.config/tazweb
 </pre>
 
-<h3>Start page and url in argument</h3>
 
-<p>
-	The default start page has been defined in the source code and can't be
-	changed and is the default SliTaz WebHome but TazWeb accepts a URL as
-	a first argument, you can for example execute:
-</p>
+<h3>Start page and URL in argument</h3>
+
+<p>The default start page has been defined in the source code and can't be changed and is the
+default SliTaz WebHome but TazWeb accepts a URL as a first argument, you can for example
+execute:</p>
+
 <pre>
 $ tazweb <a href="http://www.slitaz.org/">http://www.slitaz.org/</a>
 </pre>
-<p>
-	In this way you can for example create your own and custom home page in
-	a pretty xHTML document and start tazweb with a standard desktop file or
-	from the command line: tazweb file://$HOME/.config/tazweb/home.html.
-</p>
-<p>
-	If you want a custom start page for your Live system or all system users,
-	you can create your own slitaz-configs package or edit the xHTML file
-	located in /usr/share/webhome/index.html. If you modify it, make sure
-	to block slitaz-configs or make a backup because it will be overwritten
-	with a slitaz-configs package update.
-</p>
-<p>
-	When you start TazWeb from the cmdline with a URL in the argument you don’t
-	have to put http:// since TazWeb will transform URLs for you.
-</p>
+
+<p>In this way you can for example create your own and custom home page in a pretty HTML document
+and start tazweb with a standard desktop file or from the command line:
+tazweb file://$HOME/.config/tazweb/home.html.</p>
+
+<p>If you want a custom start page for your Live system or all system users, you can create your
+own slitaz-configs package or edit the HTML file located in /usr/share/webhome/index.html.
+If you modify it, make sure to block slitaz-configs or make a backup because it will be overwritten
+with a slitaz-configs package update.</p>
+
+<p>When you start TazWeb from the cmdline with a URL in the argument you don’t have to put http://
+since TazWeb will transform URLs for you.</p>
+
 
 <h3>URL and search entry</h3>
-<p>
-	The URL entry in the toolbar lets you enter a website address and shows
-	the current website location. You can use selection, copy and paste in
-	the URL entry and don't have to put http:// before a location, Tazweb
-	will transform URLs for you. To activate a new URL you must press
-	ENTER.
-</p>
-<p>
-	The search entry lets you search the web at anytime using Google. Just
-	enter your query and press ENTER or click on the entry icon to validate
-	your request.
-</p>
+
+<p>The URL entry in the toolbar lets you enter a website address and shows the current website
+location.
+You can use selection, copy and paste in the URL entry and don't have to put http:// before
+a location, Tazweb will transform URLs for you.
+To activate a new URL you must press ENTER.</p>
+
+<p>The search entry lets you search the web at anytime using Google.
+Just enter your query and press ENTER or click on the entry icon to validate your request.</p>
+
 
 <h3>Web applications</h3>
-<p>
-	TazWeb browser is perfect to launch web applications via a simple
-	desktop file. Once created with a simple text editor, the desktop
-	file can stand on the desktop with a nice icon or in the standard
-	SliTaz menu. Example of a web application launcher that you could
-	name scn.desktop:
-</p>
+
+<p>TazWeb browser is perfect to launch web applications via a simple desktop file.
+Once created with a simple text editor, the desktop file can stand on the desktop with a nice icon
+or in the standard SliTaz menu.
+Example of a web application launcher that you could name scn.desktop:</p>
+
 <pre>
 [Desktop Entry]
 Type=Application
@@ -142,32 +128,29 @@ Icon=slitaz-menu
 Exec=tazweb http://scn.slitaz.org/
 </pre>
 
+
 <h3>Bugs and development</h3>
-<p>
-	TazWeb is an open-source project under a BSD license and all resources are
-	provided by SliTaz GNU/Linux, we use a Mercurial repository for code
-	management, discussion and support is done through the SliTaz community
-	<a href="http://forum.slitaz.org/">forum</a>. If you're missing any features in
-	TazWeb or find any bugs ? Please post an issue on our Roundup bug tracker
-	at: <a href="http://bugs.slitaz.org/">bugs.slitaz.org</a>
-</p>
-<p>
-	If you want to help and get involved in development, you can start by cloning the
-	TazWeb repository and then submit your patch, improved documentation or artwork
-	to the SliTaz mailing list or on the <a href="http://scn.slitaz.org/">SCN</a>. To
-	clone or browse the TazWeb Hg repository:
-</p>
+
+<p>TazWeb is an open-source project under a BSD license and all resources are provided by SliTaz
+GNU/Linux, we use a Mercurial repository for code management, discussion and support is done
+through the SliTaz community <a href="http://forum.slitaz.org/">forum</a>.
+If you're missing any features in TazWeb or find any bugs, please post an issue on our bug tracker
+at <a href="http://bugs.slitaz.org/">bugs.slitaz.org</a>.</p>
+
+<p>If you want to help and get involved in development, you can start by cloning the TazWeb
+repository and then submit your patch, improved documentation or artwork to the SliTaz mailing list
+or on the <a href="http://scn.slitaz.org/">SCN</a>.
+To clone or browse the TazWeb Hg repository:</p>
+
 <pre>
 $ hg clone <a href="http://hg.slitaz.org/tazweb">http://hg.slitaz.org/tazweb</a>
 </pre>
 
-<!-- End content -->
-</div>
+</main>
 
-<div id="footer">
+<footer>
 	Copyright &copy; <span class="year"></span> TazWeb contributors
-</div>
+</footer>
 
 </body>
 </html>
-

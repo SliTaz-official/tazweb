@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: TazWeb 1.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-06-05 15:05+0800\n"
+"POT-Creation-Date: 2017-03-14 13:07+0200\n"
 "PO-Revision-Date: 2014-07-02 13:12+0800\n"
 "Last-Translator: rhsky <rhsky@qq.com>\n"
 "Language-Team: \n"
@@ -18,30 +18,62 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Poedit 1.6.5\n"
 
-#: src/main.c:287
-msgid "Zoom in"
-msgstr "放大"
+#: src/tazweb.c:319 lib/helper.sh:68 lib/helper.sh:78
+#, fuzzy
+msgid "Bookmarks"
+msgstr "添加书签"
 
-#: src/main.c:294
-msgid "Zoom out"
-msgstr "缩小"
-
-#: src/main.c:306
+#: src/tazweb.c:327
 msgid "Add a bookmark"
 msgstr "添加书签"
 
-#: src/main.c:314
+#: src/tazweb.c:334
+#, fuzzy
+msgid "Edit bookmarks"
+msgstr "添加书签"
+
+#: src/tazweb.c:346
 msgid "Print this page"
 msgstr "打印本页"
 
-#: src/main.c:321
+#: src/tazweb.c:353
 msgid "View source mode"
 msgstr "源代码查看"
 
-#: src/main.c:332
+#: src/tazweb.c:365
+msgid "View cookies"
+msgstr ""
+
+#: src/tazweb.c:371
+msgid "Clean all cookies"
+msgstr ""
+
+#: src/tazweb.c:383
 msgid "TazWeb manual"
 msgstr "TazWeb 使用手册"
 
-#: src/main.c:339
+#: src/tazweb.c:390
 msgid "Quit TazWeb"
 msgstr "退出 TazWeb"
+
+#: lib/helper.sh:93 lib/helper.sh:103
+msgid "Cookies"
+msgstr ""
+
+#: data/tazweb.desktop.in:4
+msgid "TazWeb Browser"
+msgstr ""
+
+#: data/tazweb.desktop.in:5
+msgid "SliTaz simple, fast and small Web Browser"
+msgstr ""
+
+#: data/tazweb.desktop.in:6
+msgid "tazweb"
+msgstr ""
+
+#~ msgid "Zoom in"
+#~ msgstr "放大"
+
+#~ msgid "Zoom out"
+#~ msgstr "缩小"

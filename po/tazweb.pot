@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: TazWeb 1.10\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-11-20 00:21+0200\n"
+"POT-Creation-Date: 2017-03-14 19:07+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,30 +17,54 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: src/main.c:287
-msgid "Zoom in"
+#: src/tazweb.c:319 lib/helper.sh:68 lib/helper.sh:78
+msgid "Bookmarks"
 msgstr ""
 
-#: src/main.c:294
-msgid "Zoom out"
-msgstr ""
-
-#: src/main.c:306
+#: src/tazweb.c:327
 msgid "Add a bookmark"
 msgstr ""
 
-#: src/main.c:314
+#: src/tazweb.c:334
+msgid "Edit bookmarks"
+msgstr ""
+
+#: src/tazweb.c:346
 msgid "Print this page"
 msgstr ""
 
-#: src/main.c:321
+#: src/tazweb.c:353
 msgid "View source mode"
 msgstr ""
 
-#: src/main.c:332
+#: src/tazweb.c:365
+msgid "View cookies"
+msgstr ""
+
+#: src/tazweb.c:371
+msgid "Clean all cookies"
+msgstr ""
+
+#: src/tazweb.c:383
 msgid "TazWeb manual"
 msgstr ""
 
-#: src/main.c:339
+#: src/tazweb.c:390
 msgid "Quit TazWeb"
+msgstr ""
+
+#: lib/helper.sh:93 lib/helper.sh:103
+msgid "Cookies"
+msgstr ""
+
+#: data/tazweb.desktop.in:4
+msgid "TazWeb Browser"
+msgstr ""
+
+#: data/tazweb.desktop.in:5
+msgid "SliTaz simple, fast and small Web Browser"
+msgstr ""
+
+#: data/tazweb.desktop.in:6
+msgid "tazweb"
 msgstr ""

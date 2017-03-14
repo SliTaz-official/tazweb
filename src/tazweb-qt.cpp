@@ -2,7 +2,7 @@
  * TazWeb-Qt is a radically simple web browser providing a single window.
  * Commented line code starts with // and comments are between * *
  *
- * Copyright (C) 2011-2014 SliTaz GNU/Linux - BSD License
+ * Copyright (C) 2011-2017 SliTaz GNU/Linux - BSD License
  * See AUTHORS and LICENSE for detailed information
  * 
  */

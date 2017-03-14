@@ -1,180 +1,174 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
+	<meta charset="UTF-8">
 	<title>TazWeb-Handbuch</title>
-	<meta charset="utf-8" />
-	<link rel="stylesheet" type="text/css" href="style.css" />
+	<link rel="stylesheet" href="style.css">
 </head>
 <body>
-	
-<div id="header">
-	<h1>TazWeb-Handbuch</h1>
-</div>
 
-<!-- Start content -->
-<div id="content">
+<header>
+	<h1>TazWeb-Handbuch</h1>
+</header>
+
+<main>
 
 <h2>SliTaz-Webbrowser</h2>
 
-<p>
-	TazWeb ist ein ganz einfacher und sehr ressourcenschonender Webbrowser mit einem
-	einzigen Fenster, einer kleinen Werkzeugleiste und einem Kontextmenü, aber ohne
-	eine Menüleiste und Reiter. Funktionen wählt man mit einem Rechtsklick irgendwo in
-	dem Browser-Fenster oder über die Werkzeugleiste. TazWeb kann auch Lesezeichen in einer
-	persönlichen Startseite verwalten. Es hat einen Modus zum Betrachten des Seiten-Quelltextes sowie
-	Vergrößerungs- und Druckfunktionen.
-	TazWeb ermöglicht über ein Suchfeld und (standardmäßig) Google schnell im Internet zu suchen.
-	Diese Dokumentationsdatei ist stets über die rechte Seite der Werkzeugleiste zugreifbar.
-</p>
-<p>
-	Der Browser ist sehr schnell und klein (das Objektprogramm ist etwa 24 KB groß) und verwendet 
-	die "Webkit engine" zum Seitenaufbau. Daher werden alle neuesten 
-	Web-Standards unterstützt wie auch Javascript und Flash-Animationen sowie Videos.
-</p>
+<p>TazWeb ist ein ganz einfacher und sehr ressourcenschonender Webbrowser mit einem einzigen
+Fenster, einer kleinen Werkzeugleiste und einem Kontextmenü, aber ohne eine Menüleiste und Reiter.
+Funktionen wählt man mit einem Rechtsklick irgendwo in dem Browser-Fenster oder über
+die Werkzeugleiste.
+TazWeb kann auch Lesezeichen in einer persönlichen Startseite verwalten.
+Es hat einen Modus zum Betrachten des Seiten-Quelltextes sowie Vergrößerungs- und Druckfunktionen.
+TazWeb ermöglicht über ein Suchfeld und (standardmäßig) Google schnell im Internet zu suchen.
+Diese Dokumentationsdatei ist stets über die rechte Seite der Werkzeugleiste zugreifbar.</p>
+
+<p>Der Browser ist sehr schnell und klein (das Objektprogramm ist etwa 24 KB groß) und verwendet
+die „Webkit engine“ zum Seitenaufbau.
+Daher werden alle neuesten Web-Standards unterstützt wie auch Javascript und Flash-Animationen
+sowie Videos.</p>
 
 <h3>Geschichte</h3>
-<p>
-	Der SliTaz Webbrowser wurde für die Anforderungen von TazPanel entwickelt, das die
-	SliTaz-Verwaltung mitsamt einer Paketverwaltung ermöglicht. Es wurden
-	die neuesten Technologien wie xHTML 5 und CSS 3 für die graphische
-	Benutzeroberfläche verwendet. Die Inhalte werden mit CGI erstellt. Der bevorzugte
-	Webserver ist "Busybox httpd".
-</p>
+
+<p>Der SliTaz Webbrowser wurde für die Anforderungen von TazPanel entwickelt, das die
+SliTaz-Verwaltung mitsamt einer Paketverwaltung ermöglicht.
+Es wurden die neuesten Technologien wie HTML 5 und CSS 3 für die graphische Benutzeroberfläche
+verwendet.
+Die Inhalte werden mit CGI erstellt.
+Der bevorzugte Webserver ist „Busybox httpd.“</p>
+
 
 <h3>Sicherheit und persönliche Daten</h3>
-<p>
-	TazWeb ist ein sehr sicheres Programm und speichert keinerlei persönliche Daten: Es
-	werden keine "cookies" gespeichert oder Sitzungs- und Verlaufsdateien erstellt.
-	Daher werden auch "website"-bezogene
-	Einstellungen nicht gespeichert, so dass z.B. Anmeldedaten nach jedem Starten
-	des Programms erneut eingegeben werden müssen (nebenbei bemerkt: "websites" können mithilfe
-	von "cookies" Ihr Verhalten beobachten!).
-</p>
+
+<p>TazWeb ist ein sehr sicheres Programm und speichert keinerlei persönliche Daten:
+Es werden keine „cookies“ gespeichert oder Sitzungs- und Verlaufsdateien erstellt.
+Daher werden auch „website“-bezogene Einstellungen nicht gespeichert, so dass z.B. Anmeldedaten
+nach jedem Starten des Programms erneut eingegeben werden müssen (nebenbei bemerkt: „websites“
+können mithilfe von „cookies“ Ihr Verhalten beobachten!).</p>
+
 
 <h3>Kiosk-Modus</h3>
-<p>
-	TazWeb bietet einen Kiosk-Modus, der für Rechner in öffentlichen Bereichen nützlich ist. Der
-	Kiosk-Modus startet TazWeb im Vollbildschirmmodus. Im Kiosk-Modus ist es nicht möglich,
-	Lesezeichen zu setzen, irgendetwas zu speichern ("download") oder einen URL in einem neuen
-	Fenster zu öffnen.
-</p>
+
+<p>TazWeb bietet einen Kiosk-Modus, der für Rechner in öffentlichen Bereichen nützlich ist.
+Der Kiosk-Modus startet TazWeb im Vollbildschirmmodus.
+Im Kiosk-Modus ist es nicht möglich, Lesezeichen zu setzen, irgendetwas zu speichern („download“)
+oder einen URL in einem neuen Fenster zu öffnen.</p>
+
 <pre>
 $ tazweb --kiosk
 </pre>
 
+
 <h3>Startseite und Lesezeichen</h3>
-<p>
-	TazWeb kann eine Startseite in dem globalen Standard-Konfigurations-Verzeichnis verwenden.
-	Der Pfadname ist: <code>/usr/share/webhome</code>.
-</p>
-<p>
-	Die Datei <code>bookmark.txt</code> ist eine einfache Textdatei, die standardmäßig eine
-	Liste von Verweisen ("links") enthält. Diese Datei kann mit einem beliebigen Text-Editor
-	bearbeitet werden, z.B. zum Einfügen von Lesezeichen. Es kann aber auch das TazWeb-Kontextmenü
-	(durch Rechtsklick) verwendet werden. Beim ersten Starten
-	erzeugt TazWeb eine persönliche Lesezeichen-Datei in dem Verzeichnis <code>.config/tazweb</code>.
-</p>
-<p>
-	TazWeb kann mit Lesezeichen umgehen und ein Lesezeichen auf Ihre Startseite kann leicht
-	über den Kontextmenüeintrag: <i>"Lesezeichen hinzufügen"</i> hinzugefügt werden.
-	TazWeb kann Ihre Lesezeichen auch über eine elegante CGI-Web-Oberfläche verwalten.
-</p>
-<p>
-	Anmerkung: Die Standard-Lesezeichendatei <code>bookmarks.txt</code> befindet sich in dem Verzeichnis
-	<code>/usr/share/tazweb</code>.
-	Diese kann als persönliche Lesezeichendatei verwendet werden, indem in einem Terminal das
-	folgende Kommando eingegeben wird:
-</p>
-<pre>
-<code>$ cp -f /usr/share/tazweb/bookmarks.txt $HOME/.config/tazweb</code>
-</pre>
+
+<p>TazWeb kann eine Startseite in dem globalen Standard-Konfigurations-Verzeichnis verwenden.
+Der Pfadname ist: <code>/usr/share/webhome</code>.</p>
+
+<p>Die Datei <code>bookmark.txt</code> ist eine einfache Textdatei, die standardmäßig eine Liste
+von Verweisen („links“) enthält.
+Diese Datei kann mit einem beliebigen Text-Editor bearbeitet werden, z.B. zum Einfügen von
+Lesezeichen.
+Es kann aber auch das TazWeb-Kontextmenü (durch Rechtsklick) verwendet werden.
+Beim ersten Starten erzeugt TazWeb eine persönliche Lesezeichen-Datei in dem Verzeichnis
+<code>.config/tazweb</code>.</p>
+
+<p>TazWeb kann mit Lesezeichen umgehen und ein Lesezeichen auf Ihre Startseite kann leicht über den
+Kontextmenüeintrag: <i>„Lesezeichen hinzufügen“</i> hinzugefügt werden.
+TazWeb kann Ihre Lesezeichen auch über eine elegante CGI-Web-Oberfläche verwalten.</p>
+
+<p>Anmerkung: Die Standard-Lesezeichendatei <code>bookmarks.txt</code> befindet sich in dem
+Verzeichnis <code>/usr/share/tazweb</code>.
+Diese kann als persönliche Lesezeichendatei verwendet werden, indem in einem Terminal das folgende
+Kommando eingegeben wird:</p>
+
+<pre><code>
+$ cp -f /usr/share/tazweb/bookmarks.txt $HOME/.config/tazweb
+</code></pre>
+
 
 <h3>Startseite und URL als Aufrufparameter</h3>
 
-<p>
-	Die Standard-Startseite ("SliTaz WebHome") ist im Quellprogramm festgelegt und kann nicht geändert werden.
-	TazWeb kann aber mit einem URL als erstem Argument gestartet werden, z.B.:
-</p>
-<pre>
-<code>$ tazweb <a href="http://www.slitaz.org/">http://www.slitaz.org/</a></code>
-</pre>
-<p>
-	Auf diese Art können Sie beispielsweise Ihre eigene Startseite als
-	hübsches xHTML-Dokument gestalten und TazWeb über ein Schreibtischsymbol oder
-	mit dem Kommando <code>tazweb file://$HOME/.config/tazweb/home.html</code> starten.
-</p>
-<p>
-	Wenn Sie eine eigene Startseite für Ihr Direktstart-System oder alle Benutzer gemeinsam haben möchten,
-	können Sie ein eigenes Paket slitaz-configs erzeugen oder Sie bearbeiten die xHTML-Datei
-	<code>/usr/share/webhome/index.html</code>. Wenn Sie diese Datei ändern, sollten Sie
-	das Paket <code>slitaz-configs</code> blockieren oder eine Sicherungskopie der geänderten Datei erstellen,
-	da diese bei Aktualisierung des Pakets <code>slitaz-configs</code> überschrieben wird.
-</p>
-<p>
-	Wenn TazWeb mit einem URL als Argument gestartet wird, braucht <code>http://</code> darin nicht
-	angegeben zu werden, da TazWeb URLs selbstständig umformt.
-</p>
+<p>Die Standard-Startseite („SliTaz WebHome“) ist im Quellprogramm festgelegt und kann nicht
+geändert werden.
+TazWeb kann aber mit einem URL als erstem Argument gestartet werden, z.B.:</p>
+
+<pre><code>
+$ tazweb <a href="http://www.slitaz.org/">http://www.slitaz.org/</a>
+</code></pre>
+
+<p>Auf diese Art können Sie beispielsweise Ihre eigene Startseite als hübsches HTML-Dokument
+gestalten und TazWeb über ein Schreibtischsymbol oder mit dem Kommando
+<code>tazweb file://$HOME/.config/tazweb/home.html</code> starten.</p>
+
+<p>Wenn Sie eine eigene Startseite für Ihr Direktstart-System oder alle Benutzer gemeinsam haben
+möchten, können Sie ein eigenes Paket slitaz-configs erzeugen oder Sie bearbeiten die HTML-Datei
+<code>/usr/share/webhome/index.html</code>.
+Wenn Sie diese Datei ändern, sollten Sie das Paket <code>slitaz-configs</code> blockieren oder eine
+Sicherungskopie der geänderten Datei erstellen, da diese bei Aktualisierung des Pakets
+<code>slitaz-configs</code> überschrieben wird.</p>
+
+<p>Wenn TazWeb mit einem URL als Argument gestartet wird, braucht <code>http://</code> darin nicht
+angegeben zu werden, da TazWeb URLs selbstständig umformt.</p>
+
 
 <h3>URL und Suchanfragen</h3>
-<p>
-	Über das URL-Feld in der Werkzeugleiste kann die Adresse einer "website" eingegeben werden. Dort
-	wird auch die Adresse der aktuellen "website" angezeigt.
-	In dem URL-Feld kann Auswählen, Kopieren und Ablegen benutzt werden. <code>http://</code> braucht
-	darin nicht angegeben zu werden, da TazWeb URLs selbstständig umformt.
-	Um einen neuen URL zu aktivieren, muss die "ENTER"-Taste betätigt werden.
-</p>
-<p>
-	Das Suchfeld ermöglicht die Internetsuche, wobei standardmäßig Google verwendet wird. Es braucht
-	nur die Suchanfrage eingetippt und die "ENTER"-Taste betätigt zu werden; auch Linksklick auf
-	das Suchsymbol ist möglich.
-</p>
 
-<h3>"Web"-Anwendungen</h3>
-<p>
-	Der Browser TazWeb ist bestens geeignet, um "Web"-Anwendungen mithilfe eines
-	hübschen Schreibtischsymbols oder über das Standard-SliTaz-Menü
-	zu starten. Dazu braucht nur eine einfache "desktop"-Datei mit einem Text-Editor
-	erstellt zu werden. Es folgt ein Beispiel für einen "Web"-Anwendungsstarter, der
-	<code>scn.desktop</code> heißen könnte:
-</p>
+<p>Über das URL-Feld in der Werkzeugleiste kann die Adresse einer „website“ eingegeben werden.
+Dort wird auch die Adresse der aktuellen „website“ angezeigt.
+In dem URL-Feld kann Auswählen, Kopieren und Ablegen benutzt werden.
+<code>http://</code> braucht darin nicht angegeben zu werden, da TazWeb URLs selbstständig umformt.
+Um einen neuen URL zu aktivieren, muss die „ENTER“-Taste betätigt werden.</p>
+
+<p>Das Suchfeld ermöglicht die Internetsuche, wobei standardmäßig Google verwendet wird.
+Es braucht nur die Suchanfrage eingetippt und die „ENTER“-Taste betätigt zu werden; auch Linksklick
+auf das Suchsymbol ist möglich.</p>
+
+
+<h3>„Web“-Anwendungen</h3>
+
+<p>Der Browser TazWeb ist bestens geeignet, um „Web“-Anwendungen mithilfe eines hübschen
+Schreibtischsymbols oder über das Standard-SliTaz-Menü zu starten.
+Dazu braucht nur eine einfache „desktop“-Datei mit einem Text-Editor erstellt zu werden.
+Es folgt ein Beispiel für einen „Web“-Anwendungsstarter, der <code>scn.desktop</code> heißen
+könnte:</p>
+
 <pre><code>
 [Desktop Entry]
 Type=Application
 Name=SliTaz SCN
 Icon=slitaz-menu
 Exec=tazweb http://scn.slitaz.org/
-</code>
-</pre>
+</code></pre>
+
 
 <h3>Fehler und Entwicklung</h3>
-<p>
-	TazWeb ist ein "open source"-Projekt unter einer BSD-Lizenz und alle Ressourcen werden
-	von SliTaz GNU/Linux bereitgestellt. Für die Verwaltung des Kodes verwenden wir ein "Mercurial repository".
-	Diskussionen und Unterstützung erfolgen über das <code><a href="http://forum.slitaz.org/">Forum</a></code>
-	der SliTaz-Benutzergemeinschaft. Wenn Sie irgendeine Funktion an
-	TazWeb vermissen oder einen Fehler finden, benachrichtigen Sie uns bitte mittels unseres
-	Fehlermeldeverfahrens bei:
-	<code><a href="http://bugs.slitaz.org/">bugs.slitaz.org</a></code>
-</p>
-<p>
-	Wenn Sie helfen und sich an der Entwicklung beteiligen wollen, könnten Sie damit anfangen,
-	eine lokale Kopie des "TazWeb repository" zu erstellen, darin Ihre Korrektur, verbesserte Dokumentation
-	oder Gestaltung ("artwork") einzubringen und diese dann an die
-	"SliTaz mailing list" oder an das <code><a href="http://scn.slitaz.org/">SCN</a></code> schicken.
-	Um das "TazWeb Mercury repository" zu kopieren oder anzusehen kann das folgende Kommando
-	verwendet werden:
-</p>
+
+<p>TazWeb ist ein „open source“-Projekt unter einer BSD-Lizenz und alle Ressourcen werden von
+SliTaz GNU/Linux bereitgestellt.
+Für die Verwaltung des Kodes verwenden wir ein „Mercurial repository.“
+Diskussionen und Unterstützung erfolgen über das <a href="http://forum.slitaz.org/">Forum</a> der
+SliTaz-Benutzergemeinschaft.
+Wenn Sie irgendeine Funktion an TazWeb vermissen oder einen Fehler finden, benachrichtigen Sie uns
+bitte mittels unseres Fehlermeldeverfahrens bei:
+<a href="http://bugs.slitaz.org/">bugs.slitaz.org</a></p>
+
+<p>Wenn Sie helfen und sich an der Entwicklung beteiligen wollen, könnten Sie damit anfangen, eine
+lokale Kopie des „TazWeb repository“ zu erstellen, darin Ihre Korrektur, verbesserte Dokumentation
+oder Gestaltung („artwork“) einzubringen und diese dann an die „SliTaz mailing list“ oder an das
+<a href="http://scn.slitaz.org/">SCN</a> schicken.
+Um das „TazWeb Mercury repository“ zu kopieren oder anzusehen kann das folgende Kommando verwendet
+werden:</p>
+
 <pre><code>
 $ hg clone <a href="http://hg.slitaz.org/tazweb">http://hg.slitaz.org/tazweb</a>
 </code></pre>
 
-<!-- End content -->
-</div>
+</main>
 
-<div id="footer">
+<footer>
 	Copyright &copy; <span class="year"></span> TazWeb contributors
-</div>
+</footer>
 
 </body>
 </html>
-
