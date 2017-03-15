@@ -71,21 +71,46 @@ html_bookmarks() {
 		IFS="|"
 		while read title url null; do
 			echo "<li><a href=\"$url\">$title</a></li>"
-		done < $bm_txt
+		done < ${bm_txt}
 		unset IFS
 
 		echo '</ul>'
 		num=$(wc -l < $bm_txt)
 		html_footer "$(printf "$(ngettext "%d bookmark" "%d bookmarks" "$num")" "$num") - $(date)"
-	} > $bm_html
+	} > ${bm_html}
 
 	# Security fix from old cgi-bin bookmarks.cgi
-	chown $USER:$USER $bm_txt; chmod 0600 $bm_txt
+	chown $USER:$USER ${bm_txt}; chmod 0600 ${bm_txt}
 }
 
-edit_bookmarks() {
-	yad --text-info \
-		--center --width=640 --height=480 --filename=$bm_txt
+# List all bookmarks
+bookmarks_list() {
+	cat ${bm_txt} | while read title url; do
+		echo -e "$title\n$url"
+	done | yad --list \
+		--title="$(gettext 'TazWeb Bookmarks')" \
+		--text-align=center \
+		--text="$(gettext 'Click on a value to edit - Right click to remove a bookmark')\n" \
+		--mouse --width=640 --height=480 \
+		--skip-taskbar \
+		--window-icon=/usr/share/icons/hicolor/32x32/apps/tazweb.png \
+		--editable --print-all \
+		--tooltip-column=2 \
+		--search-column=1 \
+		--column="$(gettext 'Title')" \
+		--column="$(gettext 'URL')"
+}
+
+# Rebuilt bookmarks.txt since some entry may have been edited and remove
+# selected (TRUE) entries.
+bookmarks_handler() {
+	IFS="|"
+	bookmarks_list | while read title url null; do
+		echo "$title|$url" >> ${bm_txt}.tmp
+	done; unset IFS
+	if [ -f "${bm_txt}.tmp" ]; then
+		mv -f ${bm_txt}.tmp ${bm_txt}
+	fi
 }
 
 # Generate cookies.html (for direct view of cookies in TazWeb)
@@ -97,19 +122,18 @@ html_cookies() {
 		IFS="|"
 		while read line; do
 			echo "${line#\#HttpOnly_}"
-		done < $cookies_txt
+		done < ${cookies_txt}
 		unset IFS
 
 		echo '</pre>'
 		num=$(wc -l < $cookies_txt)
 		html_footer "$(printf "$(ngettext "%d cookie" "%d cookies" "$num")" "$num") - $(date)"
-	} > $cookies_html
+	} > ${cookies_html}
 }
 
 clean_cookies() {
-	> $cookies_txt
+	rm ${cookies_txt}; touch ${cookies_txt}
 }
-
 
 #
 # Execute any shell_function
@@ -117,7 +141,7 @@ clean_cookies() {
 case "$1" in
 
 	*_*)
-		cmd=$1; shift; $cmd $@ ;;
+		cmd=${1}; shift; ${cmd} ${@} ;;
 
 	*) grep "[a-z]_*()" $0 | awk '{print $1}' ;;
 

@@ -169,7 +169,7 @@ search_icon_press_cb(GtkWidget *search, GtkEntryIconPosition pos,
 static void
 bookmarks_edit_cb(GtkWidget* widget, WebKitWebView* webview)
 {
-	system("/usr/lib/tazweb/helper.sh edit_bookmarks");
+	system("/usr/lib/tazweb/helper.sh bookmarks_handler &");
 }
 
 static void
@@ -489,12 +489,14 @@ create_toolbar(GtkWidget* urientry, GtkWidget* search, WebKitWebView* webview)
 
 	/* Home button */
 	item = gtk_tool_button_new_from_stock(GTK_STOCK_HOME);
+	gtk_widget_set_tooltip_text(GTK_WIDGET(item), "Home page");
 	g_signal_connect(G_OBJECT(item), "clicked",
 			G_CALLBACK(go_home_cb), webview);
 	gtk_toolbar_insert(GTK_TOOLBAR(toolbar), item, -1);
 
 	/* Bookmark button */
 	item = gtk_tool_button_new_from_stock(GTK_STOCK_PROPERTIES);
+	gtk_widget_set_tooltip_text(GTK_WIDGET(item), "Bookmarks");
 	g_signal_connect(G_OBJECT(item), "clicked",
 			G_CALLBACK(go_bookmarks_cb), webview);
 	gtk_toolbar_insert(GTK_TOOLBAR(toolbar), item, -1);
