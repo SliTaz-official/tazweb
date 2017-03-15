@@ -75,7 +75,8 @@ html_bookmarks() {
 		unset IFS
 
 		echo '</ul>'
-		html_footer "$(wc -l < $bm_txt) $(gettext "Bookmarks") - $(date)"
+		num=$(wc -l < $bm_txt)
+		html_footer "$(printf "$(ngettext "%d bookmark" "%d bookmarks" "$num")" "$num") - $(date)"
 	} > $bm_html
 
 	# Security fix from old cgi-bin bookmarks.cgi
@@ -100,7 +101,8 @@ html_cookies() {
 		unset IFS
 
 		echo '</pre>'
-		html_footer "$(cat $cookies_txt | wc -l) $(gettext "Cookies") - $(date)"
+		num=$(wc -l < $cookies_txt)
+		html_footer "$(printf "$(ngettext "%d cookie" "%d cookies" "$num")" "$num") - $(date)"
 	} > $cookies_html
 }
 

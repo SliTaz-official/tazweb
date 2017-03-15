@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: TazWeb 1.10\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-03-14 13:07+0200\n"
+"POT-Creation-Date: 2017-03-15 05:27+0200\n"
 "PO-Revision-Date: 2017-01-05 22:46+0900\n"
 "Last-Translator: BALLOON a.k.a. Fu-sen. (Keiichi SHIGA) <balloonakafusen　AT "
 "gmail DOT com>\n"
@@ -19,47 +19,58 @@ msgstr ""
 "X-Generator: Poedit 1.8.7.1\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: src/tazweb.c:319 lib/helper.sh:68 lib/helper.sh:78
+#: src/tazweb.c:314 lib/helper.sh:68
 #, fuzzy
 msgid "Bookmarks"
 msgstr "ブックマークへ追加"
 
-#: src/tazweb.c:327
+#: src/tazweb.c:322
 msgid "Add a bookmark"
 msgstr "ブックマークへ追加"
 
-#: src/tazweb.c:334
+#: src/tazweb.c:329
 #, fuzzy
 msgid "Edit bookmarks"
 msgstr "ブックマークへ追加"
 
-#: src/tazweb.c:346
+#: src/tazweb.c:341
 msgid "Print this page"
 msgstr "このページを印刷"
 
-#: src/tazweb.c:353
+#: src/tazweb.c:348
 msgid "View source mode"
 msgstr "ソースモードで表示"
 
-#: src/tazweb.c:365
+#: src/tazweb.c:360
 msgid "View cookies"
 msgstr ""
 
-#: src/tazweb.c:371
+#: src/tazweb.c:366
 msgid "Clean all cookies"
 msgstr ""
 
-#: src/tazweb.c:383
+#: src/tazweb.c:378
 msgid "TazWeb manual"
 msgstr "TazWeb マニュアル"
 
-#: src/tazweb.c:390
+#: src/tazweb.c:385
 msgid "Quit TazWeb"
 msgstr "TazWeb を終了"
 
-#: lib/helper.sh:93 lib/helper.sh:103
+#: lib/helper.sh:79
+#, fuzzy
+msgid "%d bookmark"
+msgid_plural "%d bookmarks"
+msgstr[0] "ブックマークへ追加"
+
+#: lib/helper.sh:94
 msgid "Cookies"
 msgstr ""
+
+#: lib/helper.sh:105
+msgid "%d cookie"
+msgid_plural "%d cookies"
+msgstr[0] ""
 
 #: data/tazweb.desktop.in:4
 msgid "TazWeb Browser"

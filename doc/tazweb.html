@@ -1,1 +1,17 @@
-tazweb.en.html
+<!DOCTYPE html>
+<script>
+var uilang = navigator.language || navigator.userLanguage;
+var lang = uilang.split('-')[0];
+switch (lang) {
+	case 'de':
+	case 'es':
+	case 'fr':
+	case 'pt':
+	case 'ru':
+		found = lang;
+		break;
+	default:
+		found = 'en';
+}
+window.location = 'tazweb.' + found + '.html';
+</script>

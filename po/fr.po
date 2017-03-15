@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: TazWeb 1.6.4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-03-14 13:07+0200\n"
+"POT-Creation-Date: 2017-03-15 05:27+0200\n"
 "PO-Revision-Date: 2017-03-14 19:44+0100\n"
 "Last-Translator: Christophe Lincoln <pankso@slitaz.org>\n"
 "Language-Team: French\n"
@@ -17,45 +17,59 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 1.8.6\n"
 
-#: src/tazweb.c:319 lib/helper.sh:68 lib/helper.sh:78
+#: src/tazweb.c:314 lib/helper.sh:68
 msgid "Bookmarks"
 msgstr "Marque pages"
 
-#: src/tazweb.c:327
+#: src/tazweb.c:322
 msgid "Add a bookmark"
 msgstr "Marquer cette page"
 
-#: src/tazweb.c:334
+#: src/tazweb.c:329
 msgid "Edit bookmarks"
 msgstr "Éditer les marques pages"
 
-#: src/tazweb.c:346
+#: src/tazweb.c:341
 msgid "Print this page"
 msgstr "Imprimer cette page"
 
-#: src/tazweb.c:353
+#: src/tazweb.c:348
 msgid "View source mode"
 msgstr "Code source de la page"
 
-#: src/tazweb.c:365
+#: src/tazweb.c:360
 msgid "View cookies"
 msgstr "Voir les cookies"
 
-#: src/tazweb.c:371
+#: src/tazweb.c:366
 msgid "Clean all cookies"
 msgstr "Nettoyer les cookies"
 
-#: src/tazweb.c:383
+#: src/tazweb.c:378
 msgid "TazWeb manual"
 msgstr "Manuel de TazWeb"
 
-#: src/tazweb.c:390
+#: src/tazweb.c:385
 msgid "Quit TazWeb"
 msgstr "Quitter TazWeb"
 
-#: lib/helper.sh:93 lib/helper.sh:103
+#: lib/helper.sh:79
+#, fuzzy
+msgid "%d bookmark"
+msgid_plural "%d bookmarks"
+msgstr[0] "Marquer cette page"
+msgstr[1] "Marquer cette page"
+
+#: lib/helper.sh:94
 msgid "Cookies"
 msgstr "Cookies"
+
+#: lib/helper.sh:105
+#, fuzzy
+msgid "%d cookie"
+msgid_plural "%d cookies"
+msgstr[0] "Voir les cookies"
+msgstr[1] "Voir les cookies"
 
 #: data/tazweb.desktop.in:4
 msgid "TazWeb Browser"

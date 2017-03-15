@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: TazWeb 1.6.4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-03-14 13:07+0200\n"
-"PO-Revision-Date: 2017-03-14 12:49+0200\n"
+"POT-Creation-Date: 2017-03-15 05:27+0200\n"
+"PO-Revision-Date: 2017-03-15 05:29+0200\n"
 "Last-Translator: Aleksej Bobylev <al.bobylev@gmail.com>\n"
 "Language-Team: Russian\n"
 "Language: ru\n"
@@ -16,46 +16,61 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 1.8.6\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
-#: src/tazweb.c:319 lib/helper.sh:68 lib/helper.sh:78
+#: src/tazweb.c:314 lib/helper.sh:68
 msgid "Bookmarks"
 msgstr "Закладки"
 
-#: src/tazweb.c:327
+#: src/tazweb.c:322
 msgid "Add a bookmark"
 msgstr "Добавить закладку"
 
-#: src/tazweb.c:334
+#: src/tazweb.c:329
 msgid "Edit bookmarks"
 msgstr "Правка закладок"
 
-#: src/tazweb.c:346
+#: src/tazweb.c:341
 msgid "Print this page"
 msgstr "Печать страницы"
 
-#: src/tazweb.c:353
+#: src/tazweb.c:348
 msgid "View source mode"
 msgstr "Исходный код"
 
-#: src/tazweb.c:365
+#: src/tazweb.c:360
 msgid "View cookies"
 msgstr "Просмотр куки"
 
-#: src/tazweb.c:371
+#: src/tazweb.c:366
 msgid "Clean all cookies"
 msgstr "Очистить все куки"
 
-#: src/tazweb.c:383
+#: src/tazweb.c:378
 msgid "TazWeb manual"
 msgstr "Руководство TazWeb"
 
-#: src/tazweb.c:390
+#: src/tazweb.c:385
 msgid "Quit TazWeb"
 msgstr "Закрыть TazWeb"
 
-#: lib/helper.sh:93 lib/helper.sh:103
+#: lib/helper.sh:79
+msgid "%d bookmark"
+msgid_plural "%d bookmarks"
+msgstr[0] "%d закладка"
+msgstr[1] "%d закладки"
+msgstr[2] "%d закладок"
+
+#: lib/helper.sh:94
 msgid "Cookies"
 msgstr "Куки"
+
+#: lib/helper.sh:105
+msgid "%d cookie"
+msgid_plural "%d cookies"
+msgstr[0] "%d куки"
+msgstr[1] "%d куки"
+msgstr[2] "%d куки"
 
 #: data/tazweb.desktop.in:4
 msgid "TazWeb Browser"
@@ -67,7 +82,7 @@ msgstr "Простой, быстрый и маленький браузер SliT
 
 #: data/tazweb.desktop.in:6
 msgid "tazweb"
-msgstr ""
+msgstr "tazweb"
 
 #~ msgid "Zoom in"
 #~ msgstr "Увеличить"
