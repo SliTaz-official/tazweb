@@ -97,7 +97,7 @@ bookmarks_list() {
 		--column="$(gettext 'URL')"
 }
 
-# Rebuilt bookmarks.txt since some entry may have been edited and remove
+# Rebuild bookmarks.txt since some entries may have been edited and remove
 # selected (TRUE) entries.
 bookmarks_handler() {
 	IFS="|"

@@ -1,6 +1,6 @@
 /*
  * TazWeb is a radically simple web browser providing a single window
- * with a single toolbar with buttons, an URL entry and search as well
+ * with a single toolbar with buttons, a URL entry and search as well
  * as a contextual menu, but no menu bar or tabs. Commented line code
  * starts with // and comments are between * *
  *
@@ -574,7 +574,7 @@ main(int argc, char *argv[])
 	argc -= optind;
 	argv += optind;
 
-	/* FreeBSD sytle! */
+	/* FreeBSD style! */
 	TAILQ_INIT(&tabs);
 
 	/* Initialize GTK */
