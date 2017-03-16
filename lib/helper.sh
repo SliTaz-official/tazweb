@@ -85,12 +85,13 @@ html_bookmarks() {
 
 # List all bookmarks
 bookmarks_list() {
+	text=
 	cat ${bm_txt} | while read title url; do
 		echo -e "$title\n$url"
 	done | yad --list \
 		--title="$(gettext 'TazWeb Bookmarks')" \
-		--text-align=center \
 		--text="$(gettext 'Click on a value to edit - Right click to remove a bookmark')\n" \
+		--text-align=center \
 		--mouse --width=640 --height=480 \
 		--skip-taskbar \
 		--window-icon=/usr/share/icons/hicolor/32x32/apps/tazweb.png \

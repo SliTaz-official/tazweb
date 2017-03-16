@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: TazWeb 1.6.4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-03-15 05:27+0200\n"
+"POT-Creation-Date: 2017-03-16 13:23+0100\n"
 "PO-Revision-Date: 2017-03-15 05:29+0200\n"
 "Last-Translator: Aleksej Bobylev <al.bobylev@gmail.com>\n"
 "Language-Team: Russian\n"
@@ -16,7 +16,8 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 1.8.6\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
 #: src/tazweb.c:314 lib/helper.sh:68
 msgid "Bookmarks"
@@ -61,11 +62,28 @@ msgstr[0] "%d закладка"
 msgstr[1] "%d закладки"
 msgstr[2] "%d закладок"
 
-#: lib/helper.sh:94
+#: lib/helper.sh:91
+#, fuzzy
+msgid "TazWeb Bookmarks"
+msgstr "Закладки"
+
+#: lib/helper.sh:93
+msgid "Click on a value to edit - Right click to remove a bookmark"
+msgstr ""
+
+#: lib/helper.sh:100
+msgid "Title"
+msgstr ""
+
+#: lib/helper.sh:101
+msgid "URL"
+msgstr ""
+
+#: lib/helper.sh:119
 msgid "Cookies"
 msgstr "Куки"
 
-#: lib/helper.sh:105
+#: lib/helper.sh:130
 msgid "%d cookie"
 msgid_plural "%d cookies"
 msgstr[0] "%d куки"

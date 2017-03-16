@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: TazWeb 1.10\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-03-15 05:27+0200\n"
+"POT-Creation-Date: 2017-03-16 13:23+0100\n"
 "PO-Revision-Date: 2017-01-05 22:46+0900\n"
 "Last-Translator: BALLOON a.k.a. Fu-sen. (Keiichi SHIGA) <balloonakafusen　AT "
 "gmail DOT com>\n"
@@ -63,11 +63,28 @@ msgid "%d bookmark"
 msgid_plural "%d bookmarks"
 msgstr[0] "ブックマークへ追加"
 
-#: lib/helper.sh:94
+#: lib/helper.sh:91
+#, fuzzy
+msgid "TazWeb Bookmarks"
+msgstr "ブックマークへ追加"
+
+#: lib/helper.sh:93
+msgid "Click on a value to edit - Right click to remove a bookmark"
+msgstr ""
+
+#: lib/helper.sh:100
+msgid "Title"
+msgstr ""
+
+#: lib/helper.sh:101
+msgid "URL"
+msgstr ""
+
+#: lib/helper.sh:119
 msgid "Cookies"
 msgstr ""
 
-#: lib/helper.sh:105
+#: lib/helper.sh:130
 msgid "%d cookie"
 msgid_plural "%d cookies"
 msgstr[0] ""
