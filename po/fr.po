@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: TazWeb 1.6.4\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-03-16 13:23+0100\n"
-"PO-Revision-Date: 2017-03-16 13:27+0100\n"
+"PO-Revision-Date: 2017-03-16 14:40+0100\n"
 "Last-Translator: Christophe Lincoln <pankso@slitaz.org>\n"
 "Language-Team: French\n"
 "Language: fr\n"
@@ -57,8 +57,8 @@ msgstr "Quitter TazWeb"
 #: lib/helper.sh:79
 msgid "%d bookmark"
 msgid_plural "%d bookmarks"
-msgstr[0] "marque page"
-msgstr[1] "marques pages"
+msgstr[0] "%d marque page"
+msgstr[1] "%d marques pages"
 
 #: lib/helper.sh:91
 msgid "TazWeb Bookmarks"
@@ -83,8 +83,8 @@ msgstr "Cookies"
 #: lib/helper.sh:130
 msgid "%d cookie"
 msgid_plural "%d cookies"
-msgstr[0] "Voir le cookie"
-msgstr[1] "Voir les cookies"
+msgstr[0] "%d cookie"
+msgstr[1] "%d cookies"
 
 #: data/tazweb.desktop.in:4
 msgid "TazWeb Browser"

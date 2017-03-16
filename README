@@ -23,10 +23,10 @@ Major features:
 
     * Tabbed browsing (under development: 2.0 next generation)
     * Cookie support
-    * Download manager
+    * Download support
     * Text based config file
     * Search engine entry box
-    * Bookmarks support
+    * Bookmarks manager
     * Print, including to pdf
     * Rich contextual menu
     * Private browsing

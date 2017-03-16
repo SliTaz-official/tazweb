@@ -13,35 +13,60 @@
 
 <main>
 
-<h2>SliTaz Web Browser</h2>
+<h2>TazWeb Browser</h2>
 
-<p>TazWeb is a radically simple and very light web browser providing a single window with a small
-toolbar and a contextual menu, but without any menubar or tabs.
-Navigation is done with a right click anywhere in the browser window or from the toolbar.
-It can also handle bookmarks in a personal home page, provide a source view mode and zoom and
-printing functions.
-TazWeb lets you quickly search the web through a search entry and Google.
-This documentation file is always accessible from the right-hand side of the toolbar.</p>
+<p>TazWeb is a modern, radically simple and very light web browser providing all
+needed functions for daily browsing on the internet. TazWeb is aware of users
+privacy, it handle cookies but will NOT store any passwords or other user info.</p>
 
-<p>The browser's fast, very fast and small, the binary is about 24 Kb and uses the Webkit engine
-for page rendering and therefore supports all the latest web standards as well as Javascript and
-Flash animations or videos.</p>
+<p>TazWeb provides a single window with a small toolbar and a contextual 
+menu, but without any menubar or tabs. Navigation is done with a right click
+anywhere in the browser window or from the toolbar. TazWeb lets you quickly
+search the web through a search entry redirecting to DuckDuck Go secure search
+engine. This documentation file is always accessible from the right-click 
+menu.</p>
 
+<p>The browser's fast, very fast and small, the binary is about 30 Kb and
+uses the WebkitGTK engine for page rendering and therefore supports all the 
+latest web standards as well as Javascript and Flash animations or videos.</p>
+
+<h3>Major features</h3>
+
+<ul>
+	<li>Cookie support</li>
+	<li>Download support</li>
+	<li>Text based config file</li>
+	<li>Search engine entry box</li>
+	<li>Bookmarks manager</li>
+	<li>Print, including to pdf</li>
+	<li>Rich contextual menu</li>
+	<li>Private browsing</li>
+</ul>
 
 <h3>History</h3>
 
-<p>The SliTaz Web Browser was created for the needs of TazPanel which is the SliTaz administration
-and packages manager panel and made with the latest technologies such as HTML 5 and CSS 3 for the
-graphical user interface.
-The content is powered by CGI scripts and the preferred web server is Busybox httpd.</p>
+<p>The SliTaz Web Browser was created for the needs of TazPanel which is 
+the SliTaz administration and packages manager panel and made with the 
+latest technologies such as HTML 5 and CSS 3 for the graphical user interface.
+The content is powered by CGI scripts and the preferred web server is 
+Busybox httpd.</p>
 
 
-<h3>Security and personal data</h3>
+<h3>Security and private browsing</h3>
 
-<p>TazWeb is a very secure browser and doesn't store any personal data, therefore no sessions,
-cookies or history files are created.
-So your websites settings will not be saved and you will have to enter login information each time
-you restart the browser (by the way websites can track you with cookies!).</p>
+<p>TazWeb is a very secure browser and doesn't store any personal data, 
+therefore no sessions, passwords or history files are created but it will
+handle cookies by default.
+So your websites cookies will save your peer site settings but logins
+and passwords will not be saved and you will have to enter login information
+each time you restart the browser (by the way websites can track you 
+with cookies!).</p>
+
+<p>TazWeb provide a private browsing mode who will disable cookies, on-disk
+session and global history. You can use the command line option to start
+TazWeb in private mode:</p>
+
+<pre>$ tazweb --private</pre>
 
 
 <h3>Kiosk mode</h3>
@@ -50,31 +75,39 @@ you restart the browser (by the way websites can track you with cookies!).</p>
 The Kiosk mode will start TazWeb in fullscreen.
 It will not allow users to bookmark a page, download anything or open a URL in a new window.</p>
 
-<pre>
-$ tazweb --kiosk
-</pre>
+<pre>$ tazweb --kiosk</pre>
 
+
+<h3>Raw and minimal mode</h3>
+
+<p>TazWeb have a very modular interface and everything can be disbaled
+to provide a raw webkit window, no toolbar our menu. It provide also
+a command line option to have a small (640x480) window suitable for tiny
+web applications. The option --notoolbar and --nomenu can be used to
+hide toolbar and menu, the --raw option will disbale both:</p>
+
+<pre>$ tazweb --raw</pre>
 
 <h3>Home Page and bookmarks</h3>
 
-<p>TazWeb handles a home page located in your system wide standard configuration directory, the
-path is: /usr/share/webhome.</p>
+<p>TazWeb handles a home page located in your system wide standard 
+configuration directory, the path is: /usr/share/webhome.</p>
 
-<p>The bookmark.txt file is a simple text document with, by default, a list of links.
-You can edit this file with you favorite editor and add bookmark entries or use the Tazweb right
-click menu.
-At first start TazWeb will create and copy your personal bookmarks file to your config
+<p>The bookmark.txt file is a simple text document with, by default, a 
+list of links. You can edit this file with you favorite editor and add 
+bookmark entries or use the Tazweb right click menu. At first start 
+TazWeb will create and copy your personal bookmarks file to your config
 directory.</p>
 
-<p>Bookmarks can be handled by TazWeb and you can easily add a bookmark to your home page with the
-right click menu item: <i>“Add a bookmark”</i>.
+<p>Bookmarks can be handled by TazWeb and you can easily add a bookmark
+to your home page with the right click menu item: <i>“Add a bookmark”</i>.
 Tazweb also lets you manage your bookmarks via a nifty CGI web interface.</p>
 
-<p>Note: You will find the default bookmarks.txt in: /usr/share/tazweb or you can get an original
-copy with the following command in a terminal:</p>
+<p>Note: You will find the default bookmarks.txt in: /usr/share/tazweb 
+or you can get an original copy with the following command in a terminal:</p>
 
 <pre>
-$ cp -f /usr/share/tazweb/bookmarks.html $HOME/.config/tazweb
+$ cp -f /usr/share/tazweb/bookmarks.txt $HOME/.config/tazweb
 </pre>
 
 
@@ -125,7 +158,7 @@ Example of a web application launcher that you could name scn.desktop:</p>
 Type=Application
 Name=SliTaz SCN
 Icon=slitaz-menu
-Exec=tazweb http://scn.slitaz.org/
+Exec=tazweb --notoolbar http://scn.slitaz.org/
 </pre>
 
 

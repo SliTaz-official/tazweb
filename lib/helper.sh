@@ -35,25 +35,20 @@ html_header() {
 <head>
 	<meta charset="UTF-8">
 	<title>$title</title>
-	<style>
-		body { margin: 2% 10%; font-size: 92%; }
-		h1 { color: #CCC; border-bottom: 2px solid #CCC; }
-		ul { padding: 0; }
-		ul a { text-decoration: none; } ul a:hover { text-decoration: underline; }
-		li { list-style-type: none; line-height: 1.4em; padding: 0; }
-		footer { font-size: 80%; border-top: 2px solid #CCC; padding: 5px 0; color: #888; }
-	</style>
+	<link rel="stylesheet" href="/usr/share/doc/tazweb/style.css">
 </head>
 <body>
-	<section id="content">
-		<h1>$title</h1>
+	<header>
+		<h1>$1</h1>
+	</header>
+	<main>
 EOT
 }
 
 # HTML 5 footer: html_footer content
 html_footer() {
 	cat <<EOT
-	</section>
+	</main>
 	<footer>
 		$@
 	</footer>
@@ -118,13 +113,11 @@ bookmarks_handler() {
 html_cookies() {
 	{
 		html_header "$(gettext 'Cookies')"
-		echo '<pre>'
+		echo '<pre style="overflow: auto;">'
 
-		IFS="|"
 		while read line; do
 			echo "${line#\#HttpOnly_}"
 		done < ${cookies_txt}
-		unset IFS
 
 		echo '</pre>'
 		num=$(wc -l < $cookies_txt)

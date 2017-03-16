@@ -1,8 +1,8 @@
-/* CSS style for SliTaz Doc */
+/* CSS style for TazWeb */
 
 body { font: 88% sans-serif; margin: 0; }
-h1 { margin: 0; padding: 8px; color: #fff; font-size: 20px; }
-h2 { color: #444; }
+h1 { margin: 0; padding: 8px; color: #666; font-size: 20px; }
+h2 { color: #666; }
 h3 { color: #666; font-size: 140%; }
 a:hover { text-decoration: none; }
 pre {
@@ -13,9 +13,9 @@ pre {
 }
 
 header {
-	background: #351a0a;
+	background: #ebebeb;
 	height: 40px;
-	border-bottom: 8px solid #d66018;
+	border-bottom: 4px solid #d66018;
 }
 
 main {
