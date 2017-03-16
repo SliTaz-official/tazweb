@@ -19,7 +19,6 @@
 
 #define HOME			g_get_home_dir()
 #define CONFIG			g_strdup_printf("%s/.config/tazweb", HOME)
-#define BMTXT			g_strdup_printf("%s/bookmarks.txt", CONFIG)
 #define BOOKMARKS		g_strdup_printf("%s/bookmarks.txt", CONFIG)
 #define COOKIES			g_strdup_printf("%s/cookies.txt", CONFIG)
 #define DOWNLOADS		g_strdup_printf("%s/Downloads", HOME)
@@ -638,7 +637,7 @@ main(int argc, char *argv[])
 	gtk_init(NULL, NULL);
 
 	/* Get a default bookmarks.txt if missing */
-	if (! g_file_test(BMTXT, G_FILE_TEST_EXISTS)) {
+	if (! g_file_test(BOOKMARKS, G_FILE_TEST_EXISTS)) {
 		system("install -m 0700 -d $HOME/.config/tazweb");
 		system("install -m 0600 /usr/share/tazweb/bookmarks.txt \
 			$HOME/.config/tazweb/bookmarks.txt");

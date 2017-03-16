@@ -408,7 +408,7 @@ create_toolbar(struct tab *ttb)
 
 	/* Bookmarks button */
 	ttb->bookmarks = gtk_tool_button_new_from_stock(GTK_STOCK_PROPERTIES);
-	//gtk_widget_set_tooltip_text(GTK_WIDGET(item), "Bookmarks");
+	gtk_widget_set_tooltip_text(GTK_WIDGET(item), "Bookmarks");
 	gtk_toolbar_insert(GTK_TOOLBAR(toolbar), ttb->bookmarks, -1);
 	g_signal_connect(G_OBJECT(ttb->bookmarks), "clicked",
 		G_CALLBACK(go_bookmarks_cb), ttb);

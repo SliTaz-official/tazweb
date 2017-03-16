@@ -5,7 +5,7 @@ DOCDIR?=$(PREFIX)/share/doc
 DESTDIR?=
 
 PACKAGE=tazweb
-VERSION=1.10
+VERSION=1.11
 LINGUAS?=$(shell grep -v "^\#" po/LINGUAS)
 
 CC?=gcc

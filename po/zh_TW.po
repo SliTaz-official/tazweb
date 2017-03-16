@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: TazWeb 1.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-03-16 13:23+0100\n"
+"POT-Creation-Date: 2017-03-16 22:47+0100\n"
 "PO-Revision-Date: 2014-06-05 15:05+0800\n"
 "Last-Translator: lunglungyu <lunglungyu2004@gmail.com>\n"
 "Language-Team: Traditional Chinese\n"
@@ -16,73 +16,73 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: src/tazweb.c:314 lib/helper.sh:68
+#: src/tazweb.c:313 lib/helper.sh:63
 #, fuzzy
 msgid "Bookmarks"
 msgstr "加入書簽"
 
-#: src/tazweb.c:322
+#: src/tazweb.c:321
 msgid "Add a bookmark"
 msgstr "加入書簽"
 
-#: src/tazweb.c:329
+#: src/tazweb.c:328
 #, fuzzy
 msgid "Edit bookmarks"
 msgstr "加入書簽"
 
-#: src/tazweb.c:341
+#: src/tazweb.c:340
 msgid "Print this page"
 msgstr "列印本頁"
 
-#: src/tazweb.c:348
+#: src/tazweb.c:347
 msgid "View source mode"
 msgstr "源代碼檢視模式"
 
-#: src/tazweb.c:360
+#: src/tazweb.c:359
 msgid "View cookies"
 msgstr ""
 
-#: src/tazweb.c:366
+#: src/tazweb.c:365
 msgid "Clean all cookies"
 msgstr ""
 
-#: src/tazweb.c:378
+#: src/tazweb.c:377
 msgid "TazWeb manual"
 msgstr "TazWeb 手冊"
 
-#: src/tazweb.c:385
+#: src/tazweb.c:384
 msgid "Quit TazWeb"
 msgstr "離開 TazWeb"
 
-#: lib/helper.sh:79
+#: lib/helper.sh:74
 #, fuzzy
 msgid "%d bookmark"
 msgid_plural "%d bookmarks"
 msgstr[0] "加入書簽"
 msgstr[1] "加入書簽"
 
-#: lib/helper.sh:91
+#: lib/helper.sh:87
 #, fuzzy
 msgid "TazWeb Bookmarks"
 msgstr "加入書簽"
 
-#: lib/helper.sh:93
+#: lib/helper.sh:88
 msgid "Click on a value to edit - Right click to remove a bookmark"
 msgstr ""
 
-#: lib/helper.sh:100
+#: lib/helper.sh:96
 msgid "Title"
 msgstr ""
 
-#: lib/helper.sh:101
+#: lib/helper.sh:97
 msgid "URL"
 msgstr ""
 
-#: lib/helper.sh:119
+#: lib/helper.sh:115
 msgid "Cookies"
 msgstr ""
 
-#: lib/helper.sh:130
+#: lib/helper.sh:124
 msgid "%d cookie"
 msgid_plural "%d cookies"
 msgstr[0] ""
