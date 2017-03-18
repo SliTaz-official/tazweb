@@ -2,7 +2,7 @@
  * TazWeb is a radically simple web browser providing a single window
  * with a single toolbar with buttons, a URL entry and search as well
  * as a contextual menu, but no menu bar or tabs. Commented line code
- * starts with // and comments are between * *
+ * starts with // and comments are between * *. IDE: Geany
  *
  * NEXT GENERATION
  *  This is TazWeb NG (2.0) with tabs and cookies support :-)
@@ -22,7 +22,7 @@
 #include <webkit/webkit.h>
 #include <libsoup/soup.h>
 
-#define VERSION			"1.11"
+#define VERSION			"2.0"
 #define GETTEXT_PACKAGE	"tazweb"
 #define WEBHOME			"file:///usr/share/webhome/index.html"
 #define SEARCH			"http://duckduckgo.com/?q=%s&t=slitaz"
