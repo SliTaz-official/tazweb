@@ -200,17 +200,25 @@ search_icon_cb(GtkWidget *search_entry, GtkEntryIconPosition pos,
 	search_entry_cb(search_entry, ttb);
 }
 
-/* Navigation button functions */
+/*
+ *
+ * Navigation functions
+ *
+ */
+
 static void
-go_back_cb(GtkWidget *widget, struct tab *ttb)
+bookmarks_edit_cb()
 {
-	webkit_web_view_go_back(ttb->webview);
+	system("/usr/lib/tazweb/helper.sh bookmarks_handler &");
 }
 
 static void
-go_forward_cb(GtkWidget *widget, struct tab *ttb)
+go_bookmarks_cb(GtkWidget* w, struct tab *ttb)
 {
-	webkit_web_view_go_forward(ttb->webview);
+	system("/usr/lib/tazweb/helper.sh html_bookmarks");
+	uri = g_strdup_printf("file://%s/bookmarks.html", CONFIG);
+	g_assert(uri);
+	webkit_web_view_load_uri(ttb->webview, uri);
 }
 
 static void
@@ -222,12 +230,15 @@ go_home_cb(GtkWidget* w, struct tab *ttb)
 }
 
 static void
-go_bookmarks_cb(GtkWidget* w, struct tab *ttb)
+go_back_cb(GtkWidget *widget, struct tab *ttb)
 {
-	system("/usr/lib/tazweb/helper.sh html_bookmarks");
-	uri = g_strdup_printf("file://%s/bookmarks.html", CONFIG);
-	g_assert(uri);
-	webkit_web_view_load_uri(ttb->webview, uri);
+	webkit_web_view_go_back(ttb->webview);
+}
+
+static void
+go_forward_cb(GtkWidget *widget, struct tab *ttb)
+{
+	webkit_web_view_go_forward(ttb->webview);
 }
 
 /* Setup session cookies */
@@ -255,7 +266,7 @@ cookies_view_cb(GtkWidget* widget, WebKitWebView* webview)
 }
 
 static void
-cookies_clean_cb(GtkWidget* widget, WebKitWebView* webview)
+cookies_clean_cb()
 {
 	system("/usr/lib/tazweb/helper.sh clean_cookies");
 }
@@ -270,14 +281,25 @@ populate_menu_cb(WebKitWebView *ttb, GtkMenu *menu, gpointer data)
 	item = gtk_separator_menu_item_new();
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
 
-	//if (! kiosk) {
+	if (! kiosk) {
 		///* Add a bookmark */
 		//item = gtk_image_menu_item_new_with_label(_("Add a bookmark"));
 		//gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(item),
 		//gtk_image_new_from_stock(GTK_STOCK_ADD, GTK_ICON_SIZE_MENU));
 		//gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
 		//g_signal_connect(item, "activate", G_CALLBACK(add_bookmark_cb), webview);
-	//}
+		
+		/* Edit bookmarks */
+		item = gtk_image_menu_item_new_with_label(_("Edit bookmarks"));
+		gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(item),
+		gtk_image_new_from_stock(GTK_STOCK_EDIT, GTK_ICON_SIZE_MENU));
+		gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
+		g_signal_connect(item, "activate", G_CALLBACK(bookmarks_edit_cb), NULL);
+		
+		/* Separator */
+		item = gtk_separator_menu_item_new();
+		gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
+	}
 
 	///* Printing */
 	//item = gtk_image_menu_item_new_with_label(_("Print this page"));
@@ -303,6 +325,25 @@ populate_menu_cb(WebKitWebView *ttb, GtkMenu *menu, gpointer data)
 	//gtk_image_new_from_stock(GTK_STOCK_HELP, GTK_ICON_SIZE_MENU));
 	//gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
 	//g_signal_connect(item, "activate", G_CALLBACK(tazweb_doc_cb), webview);
+	
+	/* Cookies */
+	if (! private) {
+		//item = gtk_image_menu_item_new_with_label(_("View cookies"));
+		//gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(item),
+		//gtk_image_new_from_stock(GTK_STOCK_HELP, GTK_ICON_SIZE_MENU));
+		//gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
+		//g_signal_connect(item, "activate", G_CALLBACK(cookies_view_cb), webview);
+
+		item = gtk_image_menu_item_new_with_label(_("Clean all cookies"));
+		gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(item),
+		gtk_image_new_from_stock(GTK_STOCK_REMOVE, GTK_ICON_SIZE_MENU));
+		gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
+		g_signal_connect(item, "activate", G_CALLBACK(cookies_clean_cb), NULL);
+
+		/* Separator */
+		item = gtk_separator_menu_item_new();
+		gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
+	}
 
 	/* Quit TazWeb */
 	item = gtk_image_menu_item_new_with_label(_("Quit TazWeb"));

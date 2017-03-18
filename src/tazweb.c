@@ -172,7 +172,7 @@ search_icon_press_cb(GtkWidget *search, GtkEntryIconPosition pos,
  */
 
 static void
-bookmarks_edit_cb(GtkWidget* widget, WebKitWebView* webview)
+bookmarks_edit_cb()
 {
 	system("/usr/lib/tazweb/helper.sh bookmarks_handler &");
 }
@@ -300,7 +300,7 @@ cookies_view_cb(GtkWidget* widget, WebKitWebView* webview)
 }
 
 static void
-cookies_clean_cb(GtkWidget* widget, WebKitWebView* webview)
+cookies_clean_cb()
 {
 	system("/usr/lib/tazweb/helper.sh clean_cookies");
 }
@@ -335,7 +335,7 @@ populate_menu_cb(WebKitWebView *webview, GtkMenu *menu, gpointer data)
 		gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(item),
 		gtk_image_new_from_stock(GTK_STOCK_EDIT, GTK_ICON_SIZE_MENU));
 		gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
-		g_signal_connect(item, "activate", G_CALLBACK(bookmarks_edit_cb), webview);
+		g_signal_connect(item, "activate", G_CALLBACK(bookmarks_edit_cb), NULL);
 
 		/* Separator */
 		item = gtk_separator_menu_item_new();
@@ -372,7 +372,7 @@ populate_menu_cb(WebKitWebView *webview, GtkMenu *menu, gpointer data)
 		gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(item),
 		gtk_image_new_from_stock(GTK_STOCK_REMOVE, GTK_ICON_SIZE_MENU));
 		gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
-		g_signal_connect(item, "activate", G_CALLBACK(cookies_clean_cb), webview);
+		g_signal_connect(item, "activate", G_CALLBACK(cookies_clean_cb), NULL);
 
 		/* Separator */
 		item = gtk_separator_menu_item_new();
