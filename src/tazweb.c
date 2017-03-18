@@ -17,7 +17,7 @@
 #include <webkit/webkit.h>
 #include <libsoup/soup.h>
 
-#define VERSION			"1.11"
+#define VERSION			"1.12"
 #define GETTEXT_PACKAGE	"tazweb"
 #define WEBHOME			"file:///usr/share/webhome/index.html"
 #define SEARCH			"http://duckduckgo.com/?q=%s&t=slitaz"

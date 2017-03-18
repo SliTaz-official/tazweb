@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: TazWeb 1.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-03-16 22:47+0100\n"
+"POT-Creation-Date: 2017-03-18 15:27+0100\n"
 "PO-Revision-Date: 2016-10-04 17:50+0200\n"
 "Last-Translator: tuananh88c25 <tuananh88c25@gmail.com>\n"
 "Language-Team: \n"
@@ -16,41 +16,41 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: src/tazweb.c:313 lib/helper.sh:63
+#: src/tazweb.c:319 lib/helper.sh:63
 #, fuzzy
 msgid "Bookmarks"
 msgstr "Thêm dấu trang"
 
-#: src/tazweb.c:321
+#: src/tazweb.c:327
 msgid "Add a bookmark"
 msgstr "Thêm dấu trang"
 
-#: src/tazweb.c:328
+#: src/tazweb.c:334
 #, fuzzy
 msgid "Edit bookmarks"
 msgstr "Thêm dấu trang"
 
-#: src/tazweb.c:340
+#: src/tazweb.c:346
 msgid "Print this page"
 msgstr "In trang này"
 
-#: src/tazweb.c:347
+#: src/tazweb.c:353
 msgid "View source mode"
 msgstr "Xem nguồn trang"
 
-#: src/tazweb.c:359
+#: src/tazweb.c:365
 msgid "View cookies"
 msgstr ""
 
-#: src/tazweb.c:365
+#: src/tazweb.c:371
 msgid "Clean all cookies"
 msgstr ""
 
-#: src/tazweb.c:377
+#: src/tazweb.c:383
 msgid "TazWeb manual"
 msgstr "Hướng dẫn TazWeb"
 
-#: src/tazweb.c:384
+#: src/tazweb.c:390
 msgid "Quit TazWeb"
 msgstr "Thoát TazWeb"
 

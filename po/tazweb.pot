@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: TazWeb 1.11\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-03-16 22:47+0100\n"
+"POT-Creation-Date: 2017-03-18 15:27+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,39 +18,39 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 
-#: src/tazweb.c:313 lib/helper.sh:63
+#: src/tazweb.c:319 lib/helper.sh:63
 msgid "Bookmarks"
 msgstr ""
 
-#: src/tazweb.c:321
+#: src/tazweb.c:327
 msgid "Add a bookmark"
 msgstr ""
 
-#: src/tazweb.c:328
+#: src/tazweb.c:334
 msgid "Edit bookmarks"
 msgstr ""
 
-#: src/tazweb.c:340
+#: src/tazweb.c:346
 msgid "Print this page"
 msgstr ""
 
-#: src/tazweb.c:347
+#: src/tazweb.c:353
 msgid "View source mode"
 msgstr ""
 
-#: src/tazweb.c:359
+#: src/tazweb.c:365
 msgid "View cookies"
 msgstr ""
 
-#: src/tazweb.c:365
+#: src/tazweb.c:371
 msgid "Clean all cookies"
 msgstr ""
 
-#: src/tazweb.c:377
+#: src/tazweb.c:383
 msgid "TazWeb manual"
 msgstr ""
 
-#: src/tazweb.c:384
+#: src/tazweb.c:390
 msgid "Quit TazWeb"
 msgstr ""
 

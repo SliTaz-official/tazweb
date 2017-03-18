@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: TazWeb 1.6.4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-03-16 22:47+0100\n"
+"POT-Creation-Date: 2017-03-18 15:27+0100\n"
 "PO-Revision-Date: 2014-01-14 21:27+0300\n"
 "Last-Translator: Claudinei Pereira <claudinei@slitaz.org>\n"
 "Language-Team: Portuguese (Brasilian)<i18n@slitaz.org>\n"
@@ -17,41 +17,41 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: src/tazweb.c:313 lib/helper.sh:63
+#: src/tazweb.c:319 lib/helper.sh:63
 #, fuzzy
 msgid "Bookmarks"
 msgstr "Adicionar aos favoritos"
 
-#: src/tazweb.c:321
+#: src/tazweb.c:327
 msgid "Add a bookmark"
 msgstr "Adicionar aos favoritos"
 
-#: src/tazweb.c:328
+#: src/tazweb.c:334
 #, fuzzy
 msgid "Edit bookmarks"
 msgstr "Adicionar aos favoritos"
 
-#: src/tazweb.c:340
+#: src/tazweb.c:346
 msgid "Print this page"
 msgstr "Imprimir esta página"
 
-#: src/tazweb.c:347
+#: src/tazweb.c:353
 msgid "View source mode"
 msgstr "Código-fonte"
 
-#: src/tazweb.c:359
+#: src/tazweb.c:365
 msgid "View cookies"
 msgstr ""
 
-#: src/tazweb.c:365
+#: src/tazweb.c:371
 msgid "Clean all cookies"
 msgstr ""
 
-#: src/tazweb.c:377
+#: src/tazweb.c:383
 msgid "TazWeb manual"
 msgstr "Manual do TazWeb"
 
-#: src/tazweb.c:384
+#: src/tazweb.c:390
 msgid "Quit TazWeb"
 msgstr "Sair do Tazweb"
 

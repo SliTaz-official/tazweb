@@ -68,7 +68,7 @@ install: msgfmt desktop
 	cp -a po/mo/* $(DESTDIR)$(PREFIX)/share/locale
 
 clean:
-	rm -f $(PACKAGE)
+	rm -f $(PACKAGE) $(PACKAGE)-ng
 	rm -rf po/mo
 	rm -f po/*.mo
 	rm -f po/*.*~
