@@ -22,20 +22,26 @@
 #include <webkit/webkit.h>
 #include <libsoup/soup.h>
 
+#define VERSION			"1.11"
+#define GETTEXT_PACKAGE	"tazweb"
+#define WEBHOME			"file:///usr/share/webhome/index.html"
+#define SEARCH			"http://duckduckgo.com/?q=%s&t=slitaz"
 #define HOME			g_get_home_dir()
 #define CONFIG			g_strdup_printf("%s/.config/tazweb", HOME)
 #define BOOKMARKS		g_strdup_printf("%s/bookmarks.txt", CONFIG)
 #define COOKIES			g_strdup_printf("%s/cookies.txt", CONFIG)
 #define DOWNLOADS		g_strdup_printf("%s/Downloads", HOME)
-#define WEBHOME			"file:///usr/share/webhome/index.html"
-#define SEARCH			"http://duckduckgo.com/?q=%s&t=slitaz"
-#define GETTEXT_PACKAGE	"tazweb"
+
+/* User agent string */
+#define UA_TAZWEB		g_strdup_printf("TazWeb/%s (X11; SliTaz GNU/Linux)", VERSION)
+#define UA_COMPAT		"Mozilla/5.0 AppleWebKit/535.22+"
+#define UA				g_strdup_printf("%s %s", UA_TAZWEB, UA_COMPAT)
 
 int		width			= 800;
 int		height			= 600;
 int		private			= 0;
 
-static gchar *useragent = "TazWeb (X11; SliTaz GNU/Linux; U; en_US)";
+static gchar			*useragent;
 static gboolean		notoolbar;
 static gboolean		nomenu;
 static gboolean		kiosk;
@@ -331,6 +337,8 @@ create_browser(struct tab *ttb)
 	
 	/* Webkit settings */
 	settings = webkit_web_view_get_settings (ttb->webview);
+	if (! useragent)
+		useragent = g_strdup_printf("%s", UA);
 	g_object_set(G_OBJECT(settings), "user-agent", useragent, NULL);
 	
 	if (private)
