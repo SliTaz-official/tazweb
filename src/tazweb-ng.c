@@ -281,7 +281,7 @@ populate_menu_cb(WebKitWebView *ttb, GtkMenu *menu, gpointer data)
 	item = gtk_separator_menu_item_new();
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
 	
-	/* Bookmark */
+	/* Bookmarks */
 	//item = gtk_image_menu_item_new_with_label(_("Bookmarks"));
 	//gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(item),
 	//gtk_image_new_from_stock(GTK_STOCK_PROPERTIES, GTK_ICON_SIZE_MENU));
@@ -397,7 +397,7 @@ create_browser(struct tab *ttb)
 		G_CALLBACK(notify_load_status_cb), ttb);
 	
 	
-	// BUGGY We want to be able to open link in new tab from contectual menu
+	// BUGGY We want to be able to open link in new tab from contextual menu
 	////////////////////////////////////////////////////////////////////
 	//g_signal_connect(ttb->webview, "create-web-view",
 	//		G_CALLBACK(create_new_tab), NULL);
