@@ -11,11 +11,13 @@ pre {
 	padding: 10px;
 	border-radius: 4px;
 }
+p { hyphens: auto; }
+li { padding: 3px 0; }
 
 header {
 	background: #ebebeb;
 	height: 40px;
-	border-bottom: 4px solid #d66018;
+	border-bottom: 1px solid #ddd;
 }
 
 main {
@@ -30,10 +32,15 @@ footer {
 	color: #888;
 }
 
-header, main, footer { display: block; } /* for old browsers not fully supported HTML5 */
-
-p { hyphens: auto; }
+header, main, footer { display: block; }
 
 .year:after {
 	content: "2017";
 }
+
+#bookmarks li { 
+	border-top: 1px solid #ddd; 
+	list-style-type: none; 
+}
+
+#bookmarks a { text-decoration: none; }

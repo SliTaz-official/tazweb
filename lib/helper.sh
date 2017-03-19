@@ -61,7 +61,7 @@ EOT
 html_bookmarks() {
 	{
 		html_header "$(gettext 'Bookmarks')"
-		echo '<ul style="list-style-type: none;">'
+		echo '<ul id="bookmarks">'
 
 		IFS="|"
 		while read title url null; do
