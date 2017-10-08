@@ -1,15 +1,15 @@
 # German translations for TazWeb package.
 # Deutsche Übersetzungen für das Paket TazWeb.
-# Copyright (C) 2016 SliTaz
+# Copyright (C) 2017 SliTaz
 # This file is distributed under the same license as the TazWeb package.
-# Hans-Günter Theisgen, 2016.
+# Hans-Günter Theisgen, 2017.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: TazWeb 1.8\n"
+"Project-Id-Version: TazWeb 1.12\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-03-18 15:27+0100\n"
-"PO-Revision-Date: 2016-09-22 21:35+0100\n"
+"POT-Creation-Date: 2017-03-18 15:31+0100\n"
+"PO-Revision-Date: 2017-10-08 07:45+0100\n"
 "Last-Translator: Hans-Günter Theisgen\n"
 "Language-Team: German\n"
 "Language: de\n"
@@ -19,18 +19,16 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
 #: src/tazweb.c:319 lib/helper.sh:63
-#, fuzzy
 msgid "Bookmarks"
-msgstr "Lesezeichen hinzufügen"
+msgstr "Lesezeichen"
 
 #: src/tazweb.c:327
 msgid "Add a bookmark"
 msgstr "Lesezeichen hinzufügen"
 
 #: src/tazweb.c:334
-#, fuzzy
 msgid "Edit bookmarks"
-msgstr "Lesezeichen hinzufügen"
+msgstr "Lesezeichen bearbeiten"
 
 #: src/tazweb.c:346
 msgid "Print this page"
@@ -42,11 +40,11 @@ msgstr "Seitenquelltext anzeigen"
 
 #: src/tazweb.c:365
 msgid "View cookies"
-msgstr ""
+msgstr "'Cookies' ansehen"
 
 #: src/tazweb.c:371
 msgid "Clean all cookies"
-msgstr ""
+msgstr "Alle 'Cookies' löschen"
 
 #: src/tazweb.c:383
 msgid "TazWeb manual"
@@ -57,50 +55,50 @@ msgid "Quit TazWeb"
 msgstr "TazWeb beenden"
 
 #: lib/helper.sh:74
-#, fuzzy
 msgid "%d bookmark"
 msgid_plural "%d bookmarks"
-msgstr[0] "Lesezeichen hinzufügen"
-msgstr[1] "Lesezeichen hinzufügen"
+msgstr[0] "%d Lesezeichen"
+msgstr[1] "%d Lesezeichen"
 
 #: lib/helper.sh:87
-#, fuzzy
 msgid "TazWeb Bookmarks"
-msgstr "Lesezeichen hinzufügen"
+msgstr "TazWeb-Lesezeichen"
 
 #: lib/helper.sh:88
 msgid "Click on a value to edit - Right click to remove a bookmark"
 msgstr ""
+"Zum Bearbeiten auf ein Lesezeichen klicken - "
+"zum Löschen Rechtsklick"
 
 #: lib/helper.sh:96
 msgid "Title"
-msgstr ""
+msgstr "Titel"
 
 #: lib/helper.sh:97
 msgid "URL"
-msgstr ""
+msgstr "URL"
 
 #: lib/helper.sh:115
 msgid "Cookies"
-msgstr ""
+msgstr "'Cookies'"
 
 #: lib/helper.sh:124
 msgid "%d cookie"
 msgid_plural "%d cookies"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%d 'Cookie'"
+msgstr[1] "%d 'Cookies'"
 
 #: data/tazweb.desktop.in:4
 msgid "TazWeb Browser"
-msgstr ""
+msgstr "TazWeb-Browser"
 
 #: data/tazweb.desktop.in:5
 msgid "SliTaz simple, fast and small Web Browser"
-msgstr ""
+msgstr "Der einfache, schnelle und kleine Webbrowser von SliTaz"
 
 #: data/tazweb.desktop.in:6
 msgid "tazweb"
-msgstr ""
+msgstr "tazweb"
 
 #~ msgid "Zoom in"
 #~ msgstr "Vergrößern"
