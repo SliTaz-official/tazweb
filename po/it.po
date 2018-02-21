@@ -1,100 +1,99 @@
 # Italian translations for TazWeb package.
 # Copyright (C) 2018 SliTaz
 # This file is distributed under the same license as the TazWeb package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# Christian Michelini <christian@alklibri.com>, 2018.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: TazWeb 1.12\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-03-18 15:31+0100\n"
-"PO-Revision-Date: 2018-01-30 12:34+0200\n"
-"Language: it\n"
+"POT-Creation-Date: 2018-02-06 02:36+0100\n"
+"PO-Revision-Date: 2018-02-06 02:43+0100\n"
+"Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"Last-Translator: \n"
-"Language-Team: \n"
-"X-Generator: Poedit 1.8.6\n"
-"X-Poedit-SourceCharset: UTF-8\n"
+"X-Generator: Poedit 1.8.7.1\n"
+"Last-Translator: Christian Michelini <christian@alklibri.com>\n"
+"Language: it\n"
 
 #: src/tazweb.c:319 lib/helper.sh:63
 msgid "Bookmarks"
-msgstr ""
+msgstr "Segnalibri"
 
 #: src/tazweb.c:327
 msgid "Add a bookmark"
-msgstr ""
+msgstr "Aggiungi un segnalibro"
 
 #: src/tazweb.c:334
 msgid "Edit bookmarks"
-msgstr ""
+msgstr "Modifica un segnalibro"
 
 #: src/tazweb.c:346
 msgid "Print this page"
-msgstr ""
+msgstr "Stampa questa pagina"
 
 #: src/tazweb.c:353
 msgid "View source mode"
-msgstr ""
+msgstr "Modalità visualizzazione sorgente"
 
 #: src/tazweb.c:365
 msgid "View cookies"
-msgstr ""
+msgstr "Guarda i cookie"
 
 #: src/tazweb.c:371
 msgid "Clean all cookies"
-msgstr ""
+msgstr "Cancella tutti i cookie"
 
 #: src/tazweb.c:383
 msgid "TazWeb manual"
-msgstr ""
+msgstr "Manuale di TazWeb"
 
 #: src/tazweb.c:390
 msgid "Quit TazWeb"
-msgstr ""
+msgstr "Esci da TazWeb"
 
 #: lib/helper.sh:74
 msgid "%d bookmark"
 msgid_plural "%d bookmarks"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%d segnalibro"
+msgstr[1] "%d segnalibri"
 
 #: lib/helper.sh:87
 msgid "TazWeb Bookmarks"
-msgstr ""
+msgstr "Segnalibri di TazWeb"
 
 #: lib/helper.sh:88
 msgid "Click on a value to edit - Right click to remove a bookmark"
-msgstr ""
+msgstr "Clicca su un valore per modificarlo - Tasto destro per rimuovere un segnalibro"
 
 #: lib/helper.sh:96
 msgid "Title"
-msgstr ""
+msgstr "Titolo"
 
 #: lib/helper.sh:97
 msgid "URL"
-msgstr ""
+msgstr "Indirizzo URL"
 
 #: lib/helper.sh:115
 msgid "Cookies"
-msgstr ""
+msgstr "Cookie"
 
 #: lib/helper.sh:124
 msgid "%d cookie"
 msgid_plural "%d cookies"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%d cookie"
+msgstr[1] "%d cookie"
 
 #: data/tazweb.desktop.in:4
 msgid "TazWeb Browser"
-msgstr ""
+msgstr "Navigatore di TazWeb"
 
 #: data/tazweb.desktop.in:5
 msgid "SliTaz simple, fast and small Web Browser"
-msgstr ""
+msgstr "Il navigatore Web semplice, piccolo e veloce di SliTaz"
 
 #: data/tazweb.desktop.in:6
 msgid "tazweb"
-msgstr ""
+msgstr "tazweb"
